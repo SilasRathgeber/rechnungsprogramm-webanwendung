@@ -1,0 +1,11 @@
+   KndNr.                                     Name               Straﬂe  \
+0    1000                          Claus Middelhuﬂ  Van Heukelum Straﬂe   
+1    1001                               Omnifit AG           Parkstraﬂe   
+2    1002                         Jochen Middelhuﬂ           Langmirjen   
+3    1003  Tagwerk - Groﬂhandel f¸r Naturkost GmbH  Robert-Bosch-Straﬂe   
+
+  Hausnummer  Postleitzahl          Ort  Vereinbarter Stundensatz  
+0        12a         27568  Bremerhaven                        25  
+1         15         27580  Bremerhaven                        15  
+2        89a         27578  Bremerhaven                        25  
+3         23         85748     Garching                        25  
