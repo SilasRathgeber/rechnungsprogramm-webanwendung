@@ -5,16 +5,11 @@ from reportlab.lib.units import mm
 from rechnungsprogramm.config import LOGO_PATH, BERLINSANS_PATH
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from pathlib import Path
 
 # PDF-Datei erzeugen
-def built_page():
-    c = canvas.Canvas("rechnung_template.pdf", pagesize=A4)
-    width, height = A4
-
+def zeichne_briefpapier(c, doc):
     # Füllfarbe setzen
     c.setFillColor(black)
-
     # Rechteck zeichnen: (x, y, breite, höhe)
     # Achtung: Der Nullpunkt ist links unten!
     rechteck_höhe = 10
@@ -32,8 +27,9 @@ def built_page():
     c.setFont("BerlinSans", 10)
     c.drawString((logo_abstand_z_l_rand+logo_höhe_u_breite+1.52) * mm, (297-rechteck_höhe-logo_höhe_u_breite/2-3.43) * mm, "Silas Rathgeber")
 
-    # PDF speichern
-    c.save()
+    # Fußzeilentabelle:
+    
+    
 
 if __name__ == "__main__":
     built_page()
