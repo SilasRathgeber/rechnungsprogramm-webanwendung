@@ -8,9 +8,9 @@ python -m venv "Name deiner virtuellen Umgebung"
 
 2. Virtuelle Umgebung aktivieren:
 
-source venv_name/bin/activate
+source venv_name/Scripts/activate
 
-3. AbhÃngigkeiten installieren:
+3. Abhï¿½ngigkeiten installieren:
 
 pip install -r requirements.txt
 
