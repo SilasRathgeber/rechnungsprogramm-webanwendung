@@ -1,3 +1,13 @@
-meine_venv/
+# Python-Cache und Bytecode
+__pycache__/
+*.pyc
+
+# Virtuelle Umgebung (passt, wenn dein Ordner z.B. 'venv' heißt)
 venv/
+meine_venv/
+
+# Editor/IDE Ordner (kannst du weglassen, wenn du willst)
+.vscode/
+.idea/
+
 
