@@ -1,6 +1,6 @@
 import pandas as pd
 import sys
-from rechnungsprogramm.config import *
+from rechnungsprogramm.config import KDNRX, KDNRY
 
 
 def get_excel_file_name():

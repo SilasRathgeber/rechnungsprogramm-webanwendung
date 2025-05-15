@@ -16,6 +16,8 @@ FONT_DIR = ROOT_DIR / "fonts"
 
 BERLINSANS_PATH = FONT_DIR / "BRLNSR.TTF"
 
+CALIBRI_PATH = FONT_DIR / "calibri.ttf"
+
 
 # Wo steht die Kundennummer in der Exceldatei "Liste_Kunden.xlsx"?
 KDNRX = 2
