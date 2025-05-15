@@ -2,7 +2,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
-from rechnungsprogramm.config import LOGO_PATH, BERLINSANS_PATH
+from rechnungsprogramm.config import *
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
@@ -28,7 +28,13 @@ def zeichne_briefpapier(c, doc):
     c.drawString((logo_abstand_z_l_rand+logo_höhe_u_breite+1.52) * mm, (297-rechteck_höhe-logo_höhe_u_breite/2-3.43) * mm, "Silas Rathgeber")
 
     # Fußzeilentabelle:
-    
+    daten = [
+    [FIRMEN_NAME, FIRMEN_ADRESSE_STRASSE, "Bankverbindung:"],     # Kopfzeile
+    ["Steuer-ID: "+FIRMEN_STEUER_ID, FIRMEN_ADRESSE_ORT, FIRMEN_KREDITINSTITUT, ],
+    ["Steuernummer: "+FIRMEN_STEUER_NR, FIRMEN_TEL, "IBAN: "+FIRMEN_IBAN],
+    #["Allgemeiner Support", "40", "25"],
+    #["", "" ,"Gesamtbetrag:", "22,50 €"]
+]
     
 
 if __name__ == "__main__":
