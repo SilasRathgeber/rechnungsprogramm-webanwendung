@@ -1,5 +1,5 @@
 
-from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 from reportlab.lib.units import mm
 from rechnungsprogramm.config import *
 from rechnungsprogramm.table_machine import generate_invoice_head, generate_invoice_content
@@ -10,8 +10,9 @@ def erstelle_rechnung(daten, pfad="rechnung.pdf"):
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
 
     tabelle1 = generate_invoice_head()
+    spacer1 = Spacer(1, 50 * mm)
     tabelle2 = generate_invoice_content()
-    flowables = [tabelle1, tabelle2]
+    flowables = [tabelle1, spacer1, tabelle2]
     doc.build(flowables, onFirstPage=zeichne_briefpapier, onLaterPages=zeichne_briefpapier)
 
 
