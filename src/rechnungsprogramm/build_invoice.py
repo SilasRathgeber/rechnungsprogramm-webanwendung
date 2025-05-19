@@ -3,8 +3,6 @@ from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.units import mm
 from rechnungsprogramm.config import *
 from rechnungsprogramm.table_machine import generate_invoice_head, generate_invoice_content
-import pandas as pd
-
 from rechnungsprogramm.build_template import zeichne_briefpapier
 
 def erstelle_rechnung(daten, pfad="rechnung.pdf"):

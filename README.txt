@@ -18,3 +18,6 @@ source venv_name/Scripts/activate
 
 pip install -r requirements.txt
 
+Todo:
+- Abstandhalter und Text zwischen erster und Zweiter Tabelle
+- Schriftarten und größe korrigieren
