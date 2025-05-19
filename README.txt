@@ -1,5 +1,9 @@
 # Rechnungsprogramm
 
+# Aufruf des Programms noch über: 
+
+PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
+
 ## Einrichtung der virtuellen Umgebung
 
 1. Virtuelle Umgebung erstellen (falls noch nicht vorhanden):

@@ -1,6 +1,6 @@
 import pandas as pd
 import sys
-from rechnungsprogramm.config import KDNRX, KDNRY
+from rechnungsprogramm.config import KDNRX, KDNRY, DATA_DIR
 
 
 def get_excel_file_name():
@@ -23,11 +23,25 @@ def get_kundennummer(df):
     return(KundenNummer)
 
 def get_data_table(df):
-    table = df.iloc[12:0, 28:4]
+    table = df.iloc[0:12, 4:28]
     return table
 
+def get_kunden_daten():
+    # Lies die Kundendaten aus der Kundentabelle anhand der Kundennummer
+    KundenNummer = get_kundennummer(get_excel_data())
 
+    # Lies die Kundenliste ein
+    df = pd.read_excel(DATA_DIR/"Liste_Kunden.xlsx", engine="openpyxl")
 
+    # Speichern der Zeile mit KndNr in einer Variablen
+    Kunden_Zeile = df.loc[df['KndNr.'] == KundenNummer]
+    kopf = list(Kunden_Zeile.columns)
+    daten = Kunden_Zeile.values.tolist()
+    return [kopf] + daten
+
+def get_time_content():
+    daten = get_data_table(get_excel_data())
+    return daten
 
 if __name__ == "__main__":
     get_excel_data()

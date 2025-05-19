@@ -1,4 +1,6 @@
 from pathlib import Path
+from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A4
 
 
 # Datenpfade
@@ -46,3 +48,13 @@ if __name__ == "__main__":
     print("Logo-Datei:", LOGO_PATH)
     print(FONT_DIR)
     print("Logoschriftart:", BERLINSANS_PATH)
+
+
+# Seitenlayout - Seitenränder:
+
+LEFTMARGIN = 25 * mm
+RIGHTMARGIN = 20 * mm
+TOPMARGIN = 55 * mm
+BOTTOMMARGIN = 55 * mm
+PAGEWIDTH = A4[0]
+FRAMEWIDTH = PAGEWIDTH - LEFTMARGIN -RIGHTMARGIN

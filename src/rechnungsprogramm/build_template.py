@@ -1,6 +1,4 @@
-from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
-from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
 from rechnungsprogramm.config import *
 from reportlab.pdfbase import pdfmetrics
@@ -83,9 +81,6 @@ def zeichne_briefpapier(c, doc):
     c.line(x_start, y_pos_loch, x_end_loch, y_pos_loch)
 
     c.restoreState()
-
-
-
 
 
 

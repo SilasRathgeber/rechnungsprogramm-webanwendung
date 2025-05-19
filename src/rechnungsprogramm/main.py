@@ -1,8 +1,10 @@
-# Aufruf des Programms noch über: PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
 
+from tabulate import tabulate
 from rechnungsprogramm.config import *
-from rechnungsprogramm.build_invoice import generate_invoice
+from rechnungsprogramm.build_invoice import erstelle_rechnung
+from rechnungsprogramm.get_data import get_kunden_daten
 from rechnungsprogramm.fonts import registriere_schriftarten
 
 registriere_schriftarten()
-generate_invoice()
+print(tabulate(get_kunden_daten()))
+erstelle_rechnung(get_kunden_daten())
