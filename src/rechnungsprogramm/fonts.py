@@ -4,4 +4,6 @@ from rechnungsprogramm.config import *
 
 def registriere_schriftarten():
     pdfmetrics.registerFont(TTFont("Calibri", CALIBRI_PATH))
-    pdfmetrics.registerFont(TTFont("BerlingSans", BERLINSANS_PATH))
+    pdfmetrics.registerFont(TTFont("CalibriB", CALIBRI_PATH_BOLT))
+    pdfmetrics.registerFont(TTFont("BerlingSans", BERLINSANS_PATH_REGULAR))
+    pdfmetrics.registerFont(TTFont("BerlingSansB", BERLINSANS_PATH_BOLT))

@@ -22,7 +22,7 @@ def zeichne_briefpapier(c, doc):
     c.drawImage(LOGO_PATH,  logo_abstand_z_l_rand * mm, (297-rechteck_höhe-logo_höhe_u_breite-0.5) * mm, width= logo_höhe_u_breite * mm, height= logo_höhe_u_breite * mm, mask=None, preserveAspectRatio=True, anchor='s')
 
     # Schriftart registrieren
-    pdfmetrics.registerFont(TTFont("BerlinSans", BERLINSANS_PATH))
+    pdfmetrics.registerFont(TTFont("BerlinSans", BERLINSANS_PATH_REGULAR))
 
     # Logoschrift setzen
     # Nullpunkt ist links unten! (Grundlinie)

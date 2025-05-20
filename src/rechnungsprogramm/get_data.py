@@ -1,7 +1,8 @@
 import pandas as pd
 import sys
 from rechnungsprogramm.config import KDNRX, KDNRY, DATA_DIR
-
+from tabulate import tabulate
+from openpyxl import load_workbook
 
 
 def get_excel_file_name():
@@ -12,37 +13,44 @@ def get_excel_file_name():
     excel_datei = sys.argv[1]
     return excel_datei
 
-def get_excel_data():
+def get_kundennummer_und_zeitraum():
     excel_dateiname = get_excel_file_name()
     # Lese mit der Pandas-Instanz die Datei ein, und speicher den DataFrame in einer Variable
-    df = pd.read_excel(excel_dateiname, engine="openpyxl")
-    return df
+    df = pd.read_excel(excel_dateiname, engine="openpyxl", sheet_name="Tabelle1", header=None, skiprows=3, nrows=3, usecols="C")
+    return df.values.tolist()
 
-def get_kundennummer(df):
-    # Nimm aus dem gespeicherten DataFrame nur eine bestimmte Zelle und speicher sie
-    KundenNummer = df.iloc[KDNRX, KDNRY]
-    return(KundenNummer)
+def get_period_out_of_excel():
+    excel_dateiname = get_excel_file_name()
+    df = pd.read_excel(excel_dateiname, engine="openpyxl", sheet_name="Tabelle1", header=None, skiprows=11, usecols="A:E")
 
-def get_data_table(df):
-    table = df.iloc[10:26, 0:6]
-    return table
+def get_time_data_out_of_excel():
+    excel_dateiname = get_excel_file_name()
+    df = pd.read_excel(excel_dateiname, engine="openpyxl", sheet_name="Tabelle1", header=None, skiprows=11, usecols="A:E")
+
+    for i, row in df.iterrows():
+        if row.isnull().all():
+            df = df.iloc[:i]  # nur bis zur ersten leeren Zeile
+            break
+    
+    data_dump = df.values.tolist()
+    print(tabulate(data_dump))
+    return data_dump
+
 
 def get_kunden_daten():
     # Lies die Kundendaten aus der Kundentabelle anhand der Kundennummer
-    KundenNummer = get_kundennummer(get_excel_data())
-
+    Kundennummerliste = get_kundennummer_und_zeitraum()
+    KundenNummer = Kundennummerliste[0][0]
     # Lies die Kundenliste ein
-
     df = pd.read_excel(DATA_DIR/"Liste_Kunden.xlsx", engine="openpyxl")
-
     # Speichern der Zeile mit KndNr in einer Variablen
     Kunden_Zeile = df.loc[df['KndNr.'] == KundenNummer]
-    daten = Kunden_Zeile.values.tolist()
+    liste_mit_einem_datensatz = Kunden_Zeile.values.tolist()
+    print(tabulate(liste_mit_einem_datensatz))
+    daten = liste_mit_einem_datensatz[0]
     return daten
 
-def get_time_content():
-    daten = get_data_table(get_excel_data())
-    return daten
+
 
 if __name__ == "__main__":
     get_kunden_daten()

@@ -16,9 +16,13 @@ LOGO_PATH = DATA_DIR / "logo_trans.jpg"
 
 FONT_DIR = ROOT_DIR / "fonts"
 
-BERLINSANS_PATH = FONT_DIR / "BRLNSR.TTF"
+BERLINSANS_PATH_REGULAR = FONT_DIR / "BRLNSR.TTF"
+
+BERLINSANS_PATH_BOLT = FONT_DIR / "BRLNSB.TTF"
 
 CALIBRI_PATH = FONT_DIR / "calibri.ttf"
+
+CALIBRI_PATH_BOLT = FONT_DIR / "calibrib.ttf"
 
 
 # Wo steht die Kundennummer in der Exceldatei "Liste_Kunden.xlsx"?
@@ -47,14 +51,14 @@ if __name__ == "__main__":
     print(DATA_DIR)
     print("Logo-Datei:", LOGO_PATH)
     print(FONT_DIR)
-    print("Logoschriftart:", BERLINSANS_PATH)
+    print("Logoschriftart:", BERLINSANS_PATH_REGULAR)
 
 
 # Seitenlayout - Seitenränder:
 
 LEFTMARGIN = 25 * mm
 RIGHTMARGIN = 20 * mm
-TOPMARGIN = 55 * mm
+TOPMARGIN = 45 * mm
 BOTTOMMARGIN = 55 * mm
 PAGEWIDTH = A4[0]
 FRAMEWIDTH = PAGEWIDTH - LEFTMARGIN -RIGHTMARGIN

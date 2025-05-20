@@ -1,10 +1,10 @@
-
-from tabulate import tabulate
 from rechnungsprogramm.config import *
 from rechnungsprogramm.build_invoice import erstelle_rechnung
-from rechnungsprogramm.get_data import get_kunden_daten
+from rechnungsprogramm.get_data import get_kunden_daten, get_time_data_out_of_excel, get_kundennummer_und_zeitraum
 from rechnungsprogramm.fonts import registriere_schriftarten
 
 registriere_schriftarten()
-print(tabulate(get_kunden_daten()))
-erstelle_rechnung(get_kunden_daten())
+datensatz_aus_kundenliste = get_kunden_daten()
+datensatz_aus_zeitdatei = get_time_data_out_of_excel()
+datensatz_mit_kdr_daten = get_kundennummer_und_zeitraum()
+erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten)
