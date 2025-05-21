@@ -1,4 +1,5 @@
-
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.colors import HexColor
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 from reportlab.lib.units import mm
 from rechnungsprogramm.config import *
@@ -13,9 +14,22 @@ def erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datens
     tabelle1 = generate_invoice_head(datensatz_aus_kundenliste, datensatz_mit_kdr_daten)
     tabelle1.spaceBefore = 0
     tabelle1.spaceAfter = 0
-    spacer1 = Spacer(1, 50 * mm)
+    spacer1 = Spacer(1, 37 * mm)
     tabelle2 = generate_invoice_content(datensatz_aus_zeitdatei, datensatz_aus_kundenliste)
-    flowables = [tabelle1, spacer1, tabelle2]
+    styles = getSampleStyleSheet()
+    text_unter_tabelle = ParagraphStyle(
+        name="text_unter_tabelle",
+        parent=styles["Normal"],           # <- sehr wichtig!
+        fontName="Calibri",
+        fontSize=11,
+        textColor=HexColor("#000000"),
+        spaceAfter=12,
+        leading=25,
+        alignment=0
+    )
+    para = Paragraph(f"Zahlbar ohne Abzüge innerhalb von 14 Tagen nach Erhalt der Rechnung<br/>Als Kleinunternehmer im Sinne von § 19 Abs. 1 UStG wird keine Umsatzsteuer berechnet.<br/>Ich bedanke mich für Ihren Auftrag und freue mich auf die weitere Zusammenarbeit.", text_unter_tabelle)
+    spacer2 = Spacer(1, 10 * mm)
+    flowables = [tabelle1, spacer1, tabelle2, spacer2, para]
     doc.build(flowables, onFirstPage=on_the_first_page, onLaterPages=on_later_pages)
 
 

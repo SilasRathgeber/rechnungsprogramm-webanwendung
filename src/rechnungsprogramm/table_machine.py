@@ -66,7 +66,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     ('VALIGN', (0,0), (0,1), 'TOP'),
     ('TOPPADDING', (0,0), (0,0), -1.00 * mm),
     ('LEFTPADDING', (0,0), (0,1), 3.21 * mm),  
-    ("BOX", (0,0), (-1,-1), 1, colors.red),
+    #("BOX", (0,0), (-1,-1), 1, colors.red),
     ]))
     return tabelle 
 

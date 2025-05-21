@@ -14,7 +14,7 @@ python -m venv "Name deiner virtuellen Umgebung"
 
 source venv_name/Scripts/activate
 
-3. Abh�ngigkeiten installieren:
+3. Abhängigkeiten installieren:
 
 pip install -r requirements.txt
 
