@@ -82,7 +82,21 @@ def zeichne_briefpapier(c, doc):
 
     c.restoreState()
 
+def zeichne_betreff(c, doc):
+    # Betreffzeile:
+    c.setFont("Calibri", 18)
+    page_hight = A4[1]
+    print(page_hight)
+    position_von_oben = page_hight - 98.5 * mm
+    print(position_von_oben)
+    c.drawString(LEFTMARGIN, position_von_oben, "Rechnung")
 
+def on_the_first_page(c, doc):
+    zeichne_briefpapier(c, doc)
+    zeichne_betreff(c, doc)
+
+def on_later_pages(c, doc):
+    zeichne_briefpapier(c, doc)
 
 if __name__ == "__main__":
     zeichne_briefpapier()
