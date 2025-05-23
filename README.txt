@@ -3,6 +3,7 @@
 # Aufruf des Programms noch über: 
 
 PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
+..\..\OneDrive - Silas Rathgeber IT\Eigene Dokumente\Kleingewerbe - Silas Rathgeber IT-Dienstleistungen\Kunden\Claus Middelhuß\Zeiterfassung\2023
 
 ## Einrichtung der virtuellen Umgebung
 
