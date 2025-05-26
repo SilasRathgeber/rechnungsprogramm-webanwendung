@@ -1,6 +1,7 @@
 from pathlib import Path
 from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
+from datetime import date
 
 
 # Datenpfade
@@ -23,6 +24,14 @@ BERLINSANS_PATH_BOLT = FONT_DIR / "BRLNSB.TTF"
 CALIBRI_PATH = FONT_DIR / "calibri.ttf"
 
 CALIBRI_PATH_BOLT = FONT_DIR / "calibrib.ttf"
+
+# Pfade zu Ablageort und Log-Dateien
+
+aktuelles_jahr = str(date.today().year)
+INVOICE_STORAGE = ROOT_DIR.parent.parent / "Ausgangsrechnungen" / aktuelles_jahr
+
+INVOICE_LOG = ROOT_DIR.parent.parent / "Ausgangsrechnungen" / "re_nr_log.txt"
+
 
 
 # Wo steht die Kundennummer in der Exceldatei "Liste_Kunden.xlsx"?

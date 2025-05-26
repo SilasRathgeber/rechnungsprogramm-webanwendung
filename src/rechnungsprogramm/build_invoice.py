@@ -3,14 +3,13 @@ from reportlab.lib.colors import HexColor
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 from reportlab.lib.units import mm
 from rechnungsprogramm.config import *
-from rechnungsprogramm.get_data import get_kunden_daten
 from rechnungsprogramm.table_machine import generate_invoice_head, generate_invoice_content
 from rechnungsprogramm.build_template import on_the_first_page, on_later_pages
 from rechnungsprogramm.generate_pdf_name import generate_file_name
 
 def erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten, rechnungsnummer):
     
-    pfad = generate_file_name(rechnungsnummer)
+    pfad =f"{str(INVOICE_STORAGE)}/{generate_file_name(rechnungsnummer)}"
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
     
     tabelle1 = generate_invoice_head(datensatz_aus_kundenliste, datensatz_mit_kdr_daten, rechnungsnummer)

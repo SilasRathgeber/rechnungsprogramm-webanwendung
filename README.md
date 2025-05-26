@@ -27,7 +27,8 @@ pip install -r requirements.txt
 
 26.05. Aktueller Status: Das Programm ist als Paket installierbar.
 
-- In der config.py wären absolute Pfade praktisch die auf den Ablageort der Rechnungen zeigt
-- und einen absoluten pfad der auf die re_nr_log.txt im OneDrive zeigt
+- die Briefkopftabelle wäre noch schön zum richtigen seitenrand nach rechts zu bringen. Vielleicht mit einer eigenen Tabelle
 
 - Außerdem steht die OOP-risierung noch an.
+
+- Schauen wie man die Dateneingabe einfacher gestallten kann (Mit Apps etc. (Möglicherweise Obsidian oder Anytype oder eigener Webseite))

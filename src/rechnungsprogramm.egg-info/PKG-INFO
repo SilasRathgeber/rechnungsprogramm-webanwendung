@@ -45,7 +45,11 @@ source venv_name/Scripts/activate
 
 pip install -r requirements.txt
 
-Todo:
-- Abstandhalter und Text zwischen erster und Zweiter Tabelle
-- Schriftarten und größe korrigieren
-- Schauen ob der Abstand zum oberen Rand stimmt (oberer RAnd bis erste Tabelle)
+## Was noch zutun ist!!
+
+26.05. Aktueller Status: Das Programm ist als Paket installierbar.
+
+- In der config.py wären absolute Pfade praktisch die auf den Ablageort der Rechnungen zeigt
+- und einen absoluten pfad der auf die re_nr_log.txt im OneDrive zeigt
+
+- Außerdem steht die OOP-risierung noch an.
