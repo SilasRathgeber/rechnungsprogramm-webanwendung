@@ -61,7 +61,7 @@ if __name__ == "__main__":
     print(DATA_DIR)
     print("Logo-Datei:", LOGO_PATH)
     print(FONT_DIR)
-    print("Logoschriftart:", BERLINSANS_PATH_REGULAR)
+    print("Logoschriftart:", KANIT_B_I)
 
 
 # Seitenlayout - Seitenränder:
