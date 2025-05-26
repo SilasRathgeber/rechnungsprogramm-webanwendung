@@ -1,5 +1,9 @@
 # Rechnungsprogramm
 
+# NEU: jetzt per pyproject.toml installieren! Befhel dazu:
+
+pip install -e . #im Root-Verzeichnis des Projekts bzw. im Repository
+
 # Aufruf des Programms noch über: 
 
 PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
