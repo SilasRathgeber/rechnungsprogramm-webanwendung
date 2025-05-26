@@ -22,11 +22,11 @@ def zeichne_briefpapier(c, doc):
     c.drawImage(LOGO_PATH,  logo_abstand_z_l_rand * mm, (297-rechteck_höhe-logo_höhe_u_breite-0.5) * mm, width= logo_höhe_u_breite * mm, height= logo_höhe_u_breite * mm, mask=None, preserveAspectRatio=True, anchor='s')
 
     # Schriftart registrieren
-    pdfmetrics.registerFont(TTFont("BerlinSans", BERLINSANS_PATH_REGULAR))
+    pdfmetrics.registerFont(TTFont("KanitBoltI", KANIT_B_I))
 
     # Logoschrift setzen
     # Nullpunkt ist links unten! (Grundlinie)
-    c.setFont("BerlinSans", 10)
+    c.setFont("KanitBoltI", 10)
     c.drawString((logo_abstand_z_l_rand+logo_höhe_u_breite+1.52) * mm, (297-rechteck_höhe-logo_höhe_u_breite/2-3.43) * mm, "Silas Rathgeber")
 
     # Fußzeilentabelle:
@@ -37,7 +37,7 @@ def zeichne_briefpapier(c, doc):
 
     ## Vorher Paragraph
     styles = getSampleStyleSheet()
-    my_p_style = ParagraphStyle("Footer_Tabelle", parent=styles["Normal"], fontName="Calibri", fontSize=9, leading=9, spaceAfter=0, textColor=colors.HexColor("#3B3838"))
+    my_p_style = ParagraphStyle("Footer_Tabelle", parent=styles["Normal"], fontName="Carlito", fontSize=9, leading=9, spaceAfter=0, textColor=colors.HexColor("#3B3838"))
 
     daten = [
         [Paragraph(Zelle1, my_p_style),
@@ -52,7 +52,7 @@ def zeichne_briefpapier(c, doc):
         ('BACKGROUND', (0, 0), (-1, 0), colors.white),         # Kopfzeile grau
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#3B3838')),    # Text in Kopfzeile weiß
         ('ALIGN', (1, 0), (11, -1), 'LEFT'),                # Alles zentrieren
-        ('FONTNAME', (0, 0), (-1, -1), "Calibri"),      # Kopfzeile fett
+        ('FONTNAME', (0, 0), (-1, -1), "Carlito"),      # Kopfzeile fett
         ('FONTSIZE', (0, 0), (-1, -1), 9),                   # Schriftgröße überall
     ]))
 
@@ -84,7 +84,7 @@ def zeichne_briefpapier(c, doc):
 
 def zeichne_betreff(c, doc):
     # Betreffzeile:
-    c.setFont("Calibri", 18)
+    c.setFont("Carlito", 18)
     page_hight = A4[1]
     #print(page_hight)
     position_von_oben = page_hight - (98.5 * mm + 6.35 * mm)
@@ -92,7 +92,7 @@ def zeichne_betreff(c, doc):
     c.drawString(LEFTMARGIN, position_von_oben, "Rechnung")
 
 def zeichne_anrede(c, doc):
-    c.setFont("Calibri", 11)
+    c.setFont("Carlito", 11)
     position_von_oben = A4[1] - (98.5 * mm + (3* 6.35 * mm))
     #print(position_von_oben)
     c.drawString(LEFTMARGIN, position_von_oben, "Vielen Dank für Ihren Auftrag! Ich berechne Ihnen folgende Dienstleistungen:")

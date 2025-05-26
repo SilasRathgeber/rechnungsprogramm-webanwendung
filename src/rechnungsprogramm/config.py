@@ -15,15 +15,17 @@ DATA_DIR = ROOT_DIR / "data"
 
 LOGO_PATH = DATA_DIR / "logo_trans.jpg"
 
-FONT_DIR = ROOT_DIR / "fonts"
+FONT_DIR = BASE_DIR / "fonts"
 
-BERLINSANS_PATH_REGULAR = FONT_DIR / "BRLNSR.TTF"
+BLOGGER_SANS = FONT_DIR / "BloggerSans.ttf"
 
-BERLINSANS_PATH_BOLT = FONT_DIR / "BRLNSB.TTF"
+CARLITO = FONT_DIR / "Carlito-Regular.ttf"
 
-CALIBRI_PATH = FONT_DIR / "calibri.ttf"
+CARLITO_BOLT = FONT_DIR / "Carlito-Bold.ttf"
 
-CALIBRI_PATH_BOLT = FONT_DIR / "calibrib.ttf"
+ANCIZAR_SERIF_B = FONT_DIR / "AncizarSerif-Bold.ttf"
+
+KANIT_B_I = FONT_DIR / "Kanit-BoldItalic.ttf"
 
 # Pfade zu Ablageort und Log-Dateien
 
@@ -31,7 +33,6 @@ aktuelles_jahr = str(date.today().year)
 INVOICE_STORAGE = ROOT_DIR.parent.parent / "Ausgangsrechnungen" / aktuelles_jahr
 
 INVOICE_LOG = ROOT_DIR.parent.parent / "Ausgangsrechnungen" / "re_nr_log.txt"
-
 
 
 # Wo steht die Kundennummer in der Exceldatei "Liste_Kunden.xlsx"?

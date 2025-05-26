@@ -7,21 +7,21 @@ from rechnungsprogramm.table_machine import generate_invoice_head, generate_invo
 from rechnungsprogramm.build_template import on_the_first_page, on_later_pages
 from rechnungsprogramm.generate_pdf_name import generate_file_name
 
-def erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten, rechnungsnummer):
+def erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten, rechnungsnummer, standard_schriftart, font_table_head):
     
     pfad =f"{str(INVOICE_STORAGE)}/{generate_file_name(rechnungsnummer)}"
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
     
-    tabelle1 = generate_invoice_head(datensatz_aus_kundenliste, datensatz_mit_kdr_daten, rechnungsnummer)
+    tabelle1 = generate_invoice_head(datensatz_aus_kundenliste, datensatz_mit_kdr_daten, rechnungsnummer, standard_schriftart)
     tabelle1.spaceBefore = 0
     tabelle1.spaceAfter = 0
     spacer1 = Spacer(1, 37 * mm)
-    tabelle2 = generate_invoice_content(datensatz_aus_zeitdatei, datensatz_aus_kundenliste)
+    tabelle2 = generate_invoice_content(datensatz_aus_zeitdatei, datensatz_aus_kundenliste, standard_schriftart, font_table_head)
     styles = getSampleStyleSheet()
     text_unter_tabelle = ParagraphStyle(
         name="text_unter_tabelle",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=11,
         textColor=HexColor("#000000"),
         spaceAfter=12,

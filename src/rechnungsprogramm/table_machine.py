@@ -8,7 +8,7 @@ from datetime import datetime, date
 from rechnungsprogramm.config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
 from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
 
-def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: list, rechnungsnummer) -> None:
+def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: list, rechnungsnummer, standard_schriftart) -> None:
     heute = datetime.now()
     deutsches_datum = heute.strftime("%d.%m.%Y")
     STARTDATUMlst = datensatz_mit_kdr_daten[1][0]
@@ -21,7 +21,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     absender_style = ParagraphStyle(
         name="absender_style",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=8,
         textColor=HexColor("#000000"),
         #spaceAfter=12,
@@ -30,7 +30,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     aempfaenger_style = ParagraphStyle(
         name="aempfaenger_style",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=11,
         textColor=HexColor("#000000"),
         #spaceAfter=12,
@@ -39,7 +39,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     invoice_head_style = ParagraphStyle(
         name="invoice_head_style",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=11,
         textColor=HexColor("#000000"),
         #spaceAfter=12,
@@ -71,7 +71,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     return tabelle 
 
 
-def generate_invoice_content(viele_zeilen, kundendaten: list):
+def generate_invoice_content(viele_zeilen, kundendaten: list, standard_schriftart, font_table_head):
 
     STUNDENSATZ = kundendaten[6]
 
@@ -79,7 +79,7 @@ def generate_invoice_content(viele_zeilen, kundendaten: list):
     ueberschriften_rechts = ParagraphStyle(
         name="ueberschriften_rechts",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="CalibriB",
+        fontName=font_table_head,
         fontSize=11,
         textColor=HexColor("#000000"),
         spaceAfter=12,
@@ -89,7 +89,7 @@ def generate_invoice_content(viele_zeilen, kundendaten: list):
     ueberschriften_links = ParagraphStyle(
         name="ueberschriften_links",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="CalibriB",
+        fontName=font_table_head,
         fontSize=11,
         textColor=HexColor("#000000"),
         spaceAfter=12,
@@ -99,7 +99,7 @@ def generate_invoice_content(viele_zeilen, kundendaten: list):
     data_content = ParagraphStyle(
         name="data_content",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=11,
         textColor=HexColor("#000000"),
         spaceAfter=12,
@@ -109,7 +109,7 @@ def generate_invoice_content(viele_zeilen, kundendaten: list):
     style_beschreibung = ParagraphStyle(
         name="style_beschreibung",
         parent=styles["Normal"],           # <- sehr wichtig!
-        fontName="Calibri",
+        fontName=standard_schriftart,
         fontSize=11,
         textColor=HexColor("#000000"),
         spaceAfter=12,
