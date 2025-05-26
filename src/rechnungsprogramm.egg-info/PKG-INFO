@@ -1,0 +1,47 @@
+Metadata-Version: 2.4
+Name: rechnungsprogramm
+Version: 0.1.0
+Summary: Automatisierte Rechnungserstellung aus Excel-Dateien
+Author-email: Silas Rathgeber <it@silas-rathgeber.de>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: openpyxl
+Requires-Dist: pandas
+Requires-Dist: chardet==5.2.0
+Requires-Dist: et_xmlfile==2.0.0
+Requires-Dist: numpy==2.2.5
+Requires-Dist: openpyxl==3.1.5
+Requires-Dist: pandas==2.2.3
+Requires-Dist: pillow==11.2.1
+Requires-Dist: python-dateutil==2.9.0.post0
+Requires-Dist: pytz==2025.2
+Requires-Dist: reportlab==4.4.0
+Requires-Dist: six==1.17.0
+Requires-Dist: tabulate==0.9.0
+Requires-Dist: tzdata==2025.2
+
+# Rechnungsprogramm
+
+# Aufruf des Programms noch über: 
+
+PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
+..\..\OneDrive - Silas Rathgeber IT\Eigene Dokumente\Kleingewerbe - Silas Rathgeber IT-Dienstleistungen\Kunden\Claus Middelhuß\Zeiterfassung\2023
+
+## Einrichtung der virtuellen Umgebung
+
+1. Virtuelle Umgebung erstellen (falls noch nicht vorhanden):
+
+python -m venv "Name deiner virtuellen Umgebung"
+
+2. Virtuelle Umgebung aktivieren:
+
+source venv_name/Scripts/activate
+
+3. Abhängigkeiten installieren:
+
+pip install -r requirements.txt
+
+Todo:
+- Abstandhalter und Text zwischen erster und Zweiter Tabelle
+- Schriftarten und größe korrigieren
+- Schauen ob der Abstand zum oberen Rand stimmt (oberer RAnd bis erste Tabelle)

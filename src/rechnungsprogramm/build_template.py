@@ -86,15 +86,15 @@ def zeichne_betreff(c, doc):
     # Betreffzeile:
     c.setFont("Calibri", 18)
     page_hight = A4[1]
-    print(page_hight)
+    #print(page_hight)
     position_von_oben = page_hight - (98.5 * mm + 6.35 * mm)
-    print(position_von_oben)
+    #print(position_von_oben)
     c.drawString(LEFTMARGIN, position_von_oben, "Rechnung")
 
 def zeichne_anrede(c, doc):
     c.setFont("Calibri", 11)
     position_von_oben = A4[1] - (98.5 * mm + (3* 6.35 * mm))
-    print(position_von_oben)
+    #print(position_von_oben)
     c.drawString(LEFTMARGIN, position_von_oben, "Vielen Dank für Ihren Auftrag! Ich berechne Ihnen folgende Dienstleistungen:")
 
 def on_the_first_page(c, doc):

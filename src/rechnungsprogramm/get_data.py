@@ -17,7 +17,8 @@ def get_kundennummer_und_zeitraum():
     excel_dateiname = get_excel_file_name()
     # Lese mit der Pandas-Instanz die Datei ein, und speicher den DataFrame in einer Variable
     df = pd.read_excel(excel_dateiname, engine="openpyxl", sheet_name="Tabelle1", header=None, skiprows=3, nrows=3, usecols="C")
-    return df.values.tolist()
+    was_steht_da = df.values.tolist()
+    return was_steht_da
 
 def get_period_out_of_excel():
     excel_dateiname = get_excel_file_name()

@@ -6,9 +6,9 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib import colors
 from datetime import datetime, date
 from rechnungsprogramm.config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
-from tabulate import tabulate
+from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
 
-def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: list) -> None:
+def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: list, rechnungsnummer) -> None:
     heute = datetime.now()
     deutsches_datum = heute.strftime("%d.%m.%Y")
     STARTDATUMlst = datensatz_mit_kdr_daten[1][0]
@@ -54,7 +54,7 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
         ], [
         Paragraph(f"{KUNDENNAME}<br/>{KUNDENSTRASSE} {KUNDENHSNR}<br/>{KUNDENPLZ} {KUNDENORT}", aempfaenger_style), 
         Paragraph(f"Rechnungs-Nr.<br/>Kunden-Nr.<br/>Rechnungsdatum<br/>Leistungszeitraum", invoice_head_style), 
-        Paragraph(f">Rechnungsnummer<<br/>{KUNDENNR}<br/>{deutsches_datum}<br/>{STARTDATUM} - {ENDDATUM}", invoice_head_style)
+        Paragraph(f"{rechnungsnummer}<br/>{KUNDENNR}<br/>{deutsches_datum}<br/>{STARTDATUM} - {ENDDATUM}", invoice_head_style)
         ]
 
     col3 = 45 * mm
@@ -162,7 +162,7 @@ def generate_invoice_content(viele_zeilen, kundendaten: list):
          "", 
          "",
          Paragraph(f"Gesamtbetrag:", data_content),
-         Paragraph(f"{GESAMTBETRAG} €".replace(".",","), data_content)
+         Paragraph(f"{GESAMTBETRAG:.2f} €".replace(".",","), data_content)
     ]
     geister_zeile = [
          "","","",""
