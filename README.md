@@ -32,3 +32,5 @@ pip install -r requirements.txt
 - Außerdem steht die OOP-risierung noch an.
 
 - Schauen wie man die Dateneingabe einfacher gestallten kann (Mit Apps etc. (Möglicherweise Obsidian oder Anytype oder eigener Webseite))
+
+- Pfad Configuration möglich machen über eine config.json
