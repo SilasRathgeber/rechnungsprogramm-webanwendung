@@ -71,7 +71,7 @@ INVOICE_LOG = CONFIG_DIR / "re_nr_log.txt"
 DEFAULT_CONFIG = {
     "kundenliste": str(KUNDENLISTE_DEFAULT),
     "invoice_log": str(INVOICE_LOG),
-    "default_logo": str(LOGO_PATH)
+    "logo": str(LOGO_PATH)
 }
 
 # Falls nötig, Verzeichnis & Dateien erzeugen
@@ -90,8 +90,10 @@ def load_config():
         return json.load(f)
 
 CONFIG = load_config()
-
 KUNDENLISTE = Path(CONFIG["kundenliste"])
+INVOICE_LOG = Path(CONFIG["invoice_log"])
+LOGO_PATH = Path(CONFIG["logo"])
+
 
 # Exceldatei erzeugen, falls in der config.json noch der Default-Pfad angegeben ist und falls sie noch nicht vorhanden ist (gleiches für die log-Datei)
 if KUNDENLISTE == KUNDENLISTE_DEFAULT:

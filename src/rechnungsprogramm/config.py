@@ -63,6 +63,7 @@ APP_AUTHOR = "Silas Rathgeber"  # z. B. Silas
 APP_VERSION = "1.0"
 CONFIG_DIR = Path(user_data_dir(APP_NAME, APP_AUTHOR, APP_VERSION))
 CONFIG_FILE = CONFIG_DIR / "rechnungsprogramm_config.json"
+print(f"Die config.json liegt hier:\n{CONFIG_FILE}")
 KUNDENLISTE_DEFAULT = CONFIG_DIR / "Liste_Kunden.xlsx"
 INVOICE_LOG = CONFIG_DIR / "re_nr_log.txt"
 
@@ -91,8 +92,10 @@ def load_config():
 
 CONFIG = load_config()
 KUNDENLISTE = Path(CONFIG["kundenliste"])
+print(f"Verwendete Kundenliste:\n{KUNDENLISTE}")
 INVOICE_LOG = Path(CONFIG["invoice_log"])
 LOGO_PATH = Path(CONFIG["logo"])
+print(f"Verwendetes Logo:\n{LOGO_PATH}")
 
 
 # Exceldatei erzeugen, falls in der config.json noch der Default-Pfad angegeben ist und falls sie noch nicht vorhanden ist (gleiches für die log-Datei)
