@@ -1,20 +1,35 @@
+import sys
 from rechnungsprogramm.config import *
 from rechnungsprogramm.build_invoice import erstelle_rechnung
-from rechnungsprogramm.get_data import get_kunden_daten, get_time_data_out_of_excel, get_kundennummer_und_zeitraum
 from rechnungsprogramm.fonts import registriere_schriftarten
 from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
+from rechnungsprogramm.customer import Customer
+from rechnungsprogramm.time_report import TimeReport
+
+def get_excel_file_name():
+    if len(sys.argv) != 2:
+        print("Bitte eine Excel-Datei als Argument übergeben. (Endung .xlsx)")
+        sys.exit()
+    # Stecke den String, der als erstes Argument übergeben wurde in eine Variable
+    excel_datei = sys.argv[1]
+    return excel_datei
 
 def main():
-    print("Rechnungsprogramm wird ausgeführt...")
+    print(f"\nRechnungsprogramm wird ausgeführt...\n")
     registriere_schriftarten()
     rechnungsnummer = generate_rechnungsnummer()
-    datensatz_aus_kundenliste = get_kunden_daten()
-    datensatz_aus_zeitdatei = get_time_data_out_of_excel()
-    datensatz_mit_kdr_daten = get_kundennummer_und_zeitraum()
+    zeit_protokoll = TimeReport.from_excel(get_excel_file_name())
+    
+
+    kunde = Customer.from_excel(KUNDENLISTE, zeit_protokoll.kundennummer)
+    kunde.print_tabulated()
+    zeit_protokoll.print_time_report()
+    datensatz_aus_zeitdatei = zeit_protokoll.content
+    report_head_infos = [zeit_protokoll.kundennummer, zeit_protokoll.start_day, zeit_protokoll.stop_day]
     standard_schriftart = "Carlito"
     font_table_head = "CarlitoB"
-    erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten, rechnungsnummer, standard_schriftart, font_table_head)
-    
+    erstelle_rechnung(kunde, datensatz_aus_zeitdatei, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
+
 
 if __name__ == "__main__":
     main()

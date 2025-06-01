@@ -7,15 +7,24 @@ from reportlab.lib import colors
 from datetime import datetime, date
 from rechnungsprogramm.config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
 from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
+from rechnungsprogramm.customer import Customer
 
-def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: list, rechnungsnummer, standard_schriftart) -> None:
+def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnummer, standard_schriftart) -> None:
     heute = datetime.now()
     deutsches_datum = heute.strftime("%d.%m.%Y")
-    STARTDATUMlst = datensatz_mit_kdr_daten[1][0]
-    ENDDATUMlst = datensatz_mit_kdr_daten[2][0]
+    STARTDATUMlst = report_head_infos[1]
+    ENDDATUMlst = report_head_infos[2]
+
     STARTDATUM = STARTDATUMlst.strftime("%d.%m.%Y")
     ENDDATUM = ENDDATUMlst.strftime("%d.%m.%Y")
-    KUNDENNR, KUNDENNAME, KUNDENSTRASSE, KUNDENHSNR, KUNDENPLZ, KUNDENORT, KUNDENSTDSATZ = kundendaten_gelistet
+
+    KUNDENNR = kunde.customer_id
+    KUNDENNAME = kunde.name
+    KUNDENSTRASSE = kunde.street
+    KUNDENHSNR = kunde.house_number
+    KUNDENPLZ = kunde.postal_code
+    KUNDENORT = kunde.city
+
     styles = getSampleStyleSheet()
 
     absender_style = ParagraphStyle(
@@ -71,9 +80,11 @@ def generate_invoice_head(kundendaten_gelistet: list, datensatz_mit_kdr_daten: l
     return tabelle 
 
 
-def generate_invoice_content(viele_zeilen, kundendaten: list, standard_schriftart, font_table_head):
+def generate_invoice_content(viele_zeilen, kunde: Customer, standard_schriftart, font_table_head):
 
-    STUNDENSATZ = kundendaten[6]
+    #viele_zeilen = report_content.values.tolist()
+
+    STUNDENSATZ = kunde.fee
 
     styles = getSampleStyleSheet()
     ueberschriften_rechts = ParagraphStyle(

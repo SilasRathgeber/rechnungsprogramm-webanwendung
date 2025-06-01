@@ -4,12 +4,13 @@ src/rechnungsprogramm/__init__.py
 src/rechnungsprogramm/build_invoice.py
 src/rechnungsprogramm/build_template.py
 src/rechnungsprogramm/config.py
+src/rechnungsprogramm/customer.py
 src/rechnungsprogramm/fonts.py
 src/rechnungsprogramm/generate_pdf_name.py
 src/rechnungsprogramm/generate_rechnungsnummer.py
-src/rechnungsprogramm/get_data.py
 src/rechnungsprogramm/main.py
 src/rechnungsprogramm/table_machine.py
+src/rechnungsprogramm/time_report.py
 src/rechnungsprogramm.egg-info/PKG-INFO
 src/rechnungsprogramm.egg-info/SOURCES.txt
 src/rechnungsprogramm.egg-info/dependency_links.txt
