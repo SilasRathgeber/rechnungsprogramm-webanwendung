@@ -9,7 +9,7 @@ from rechnungsprogramm.generate_pdf_name import generate_file_name
 
 def erstelle_rechnung(datensatz_aus_kundenliste, datensatz_aus_zeitdatei, datensatz_mit_kdr_daten, rechnungsnummer, standard_schriftart, font_table_head):
     
-    pfad =f"{str(INVOICE_STORAGE)}/{generate_file_name(rechnungsnummer)}"
+    pfad =f"{generate_file_name(rechnungsnummer)}"
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
     
     tabelle1 = generate_invoice_head(datensatz_aus_kundenliste, datensatz_mit_kdr_daten, rechnungsnummer, standard_schriftart)

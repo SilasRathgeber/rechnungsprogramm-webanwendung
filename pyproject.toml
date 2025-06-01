@@ -36,4 +36,5 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [tool.setuptools.package-data]
-"rechnungsprogramm" = ["fonts/*.ttf"]
+"rechnungsprogramm.fonts" = ["*.ttf"]
+"rechnungsprogramm.assets" =  ["*.jpg"]

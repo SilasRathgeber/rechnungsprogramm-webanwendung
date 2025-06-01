@@ -16,6 +16,7 @@ src/rechnungsprogramm.egg-info/dependency_links.txt
 src/rechnungsprogramm.egg-info/entry_points.txt
 src/rechnungsprogramm.egg-info/requires.txt
 src/rechnungsprogramm.egg-info/top_level.txt
+src/rechnungsprogramm/assets/images.jpg
 src/rechnungsprogramm/fonts/AncizarSerif-Black.ttf
 src/rechnungsprogramm/fonts/AncizarSerif-BlackItalic.ttf
 src/rechnungsprogramm/fonts/AncizarSerif-Bold.ttf

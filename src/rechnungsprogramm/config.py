@@ -15,7 +15,7 @@ ROOT_DIR = SRC_DIR.parent
 
 DATA_DIR = ROOT_DIR / "data"
 
-LOGO_PATH = DATA_DIR / "logo_trans.jpg"
+LOGO_PATH = BASE_DIR / "assets" / "images.jpg"
 
 FONT_DIR = BASE_DIR / "fonts"
 
@@ -65,30 +65,23 @@ CONFIG_DIR = Path(user_data_dir(APP_NAME, APP_AUTHOR, APP_VERSION))
 CONFIG_FILE = CONFIG_DIR / "rechnungsprogramm_config.json"
 KUNDENLISTE_DEFAULT = CONFIG_DIR / "Liste_Kunden.xlsx"
 INVOICE_LOG = CONFIG_DIR / "re_nr_log.txt"
+
 #aktuelles_jahr = str(date.today().year)
 
 DEFAULT_CONFIG = {
     "kundenliste": str(KUNDENLISTE_DEFAULT),
-    "invoice_log": str(INVOICE_LOG)
+    "invoice_log": str(INVOICE_LOG),
+    "logo": str(LOGO_PATH)
 }
 
 # Falls nötig, Verzeichnis & Dateien erzeugen
 def initialize_config():
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Exceldatei erzeugen, falls sie fehlt
-    if not KUNDENLISTE_DEFAULT.exists():
-        df = pd.DataFrame(columns=["KndNr.", "Name", "Straße", "Hausnummer", "Postleitzahl", "Ort", "Vereinbarter Stundensatz"])
-        df.loc[0] = ["1000", "Müller", "Hauptstraße", "12a", "12345", "Berlin", 50]
-        df.to_excel(KUNDENLISTE_DEFAULT, index=False)
-
     # Configdatei erzeugen
     if not CONFIG_FILE.exists():
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(DEFAULT_CONFIG, f, indent=2)
-
-    if not INVOICE_LOG.exists():
-        INVOICE_LOG.write_text(f"0000\n", encoding="utf-8")
 
 
 def load_config():
@@ -97,8 +90,20 @@ def load_config():
         return json.load(f)
 
 CONFIG = load_config()
-
 KUNDENLISTE = Path(CONFIG["kundenliste"])
+INVOICE_LOG = Path(CONFIG["invoice_log"])
+LOGO_PATH = Path(CONFIG["logo"])
+
+
+# Exceldatei erzeugen, falls in der config.json noch der Default-Pfad angegeben ist und falls sie noch nicht vorhanden ist (gleiches für die log-Datei)
+if KUNDENLISTE == KUNDENLISTE_DEFAULT:
+    if not KUNDENLISTE_DEFAULT.exists():
+        df = pd.DataFrame(columns=["KndNr.", "Name", "Straße", "Hausnummer", "Postleitzahl", "Ort", "Vereinbarter Stundensatz"])
+        df.loc[0] = ["1000", "Müller", "Hauptstraße", "12a", "12345", "Berlin", 50]
+        df.to_excel(KUNDENLISTE_DEFAULT, index=False)
+
+    if not INVOICE_LOG.exists():
+        INVOICE_LOG.write_text(f"0000\n", encoding="utf-8")
 
 # Was soll ausgeführt werden, wenn config.py direkt aufgerufen wird:
 if __name__ == "__main__":

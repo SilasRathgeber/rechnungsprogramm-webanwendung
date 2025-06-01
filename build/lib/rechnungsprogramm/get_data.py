@@ -1,8 +1,8 @@
 import pandas as pd
 import sys
-from rechnungsprogramm.config import KDNRX, KDNRY, DATA_DIR
+from rechnungsprogramm.config import DATA_DIR, KUNDENLISTE
 from tabulate import tabulate
-from openpyxl import load_workbook
+
 
 
 def get_excel_file_name():
@@ -43,7 +43,7 @@ def get_kunden_daten():
     Kundennummerliste = get_kundennummer_und_zeitraum()
     KundenNummer = Kundennummerliste[0][0]
     # Lies die Kundenliste ein
-    df = pd.read_excel(DATA_DIR/"Liste_Kunden.xlsx", engine="openpyxl")
+    df = pd.read_excel(KUNDENLISTE, engine="openpyxl")
     # Speichern der Zeile mit KndNr in einer Variablen
     Kunden_Zeile = df.loc[df['KndNr.'] == KundenNummer]
     liste_mit_einem_datensatz = Kunden_Zeile.values.tolist()

@@ -1,9 +1,5 @@
 from rechnungsprogramm.config import INVOICE_LOG
 
-if not INVOICE_LOG.exists():
-    INVOICE_LOG.write_text("0000\n", encoding="utf-8")
-
-
 def generate_rechnungsnummer():
     with open(INVOICE_LOG, "r", encoding="utf-8") as f:
         zeilen = f.readlines()
