@@ -8,7 +8,7 @@ from rechnungsprogramm.build_template import on_the_first_page, on_later_pages
 from rechnungsprogramm.generate_pdf_name import generate_file_name
 from rechnungsprogramm.customer import Customer
 
-def erstelle_rechnung(kunde: Customer, datensatz_aus_zeitdatei, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
+def erstelle_rechnung(kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
     pfad =f"{generate_file_name(rechnungsnummer, report_head_infos)}"
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
@@ -17,7 +17,7 @@ def erstelle_rechnung(kunde: Customer, datensatz_aus_zeitdatei, report_head_info
     tabelle1.spaceBefore = 0
     tabelle1.spaceAfter = 0
     spacer1 = Spacer(1, 37 * mm)
-    tabelle2 = generate_invoice_content(datensatz_aus_zeitdatei, kunde, standard_schriftart, font_table_head)
+    tabelle2 = generate_invoice_content(rechnung, kunde, standard_schriftart, font_table_head)
     styles = getSampleStyleSheet()
     text_unter_tabelle = ParagraphStyle(
         name="text_unter_tabelle",

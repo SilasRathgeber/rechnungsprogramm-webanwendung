@@ -8,6 +8,7 @@ from datetime import datetime, date
 from rechnungsprogramm.config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
 from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
 from rechnungsprogramm.customer import Customer
+from rechnungsprogramm.invoice import Invoice
 
 def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnummer, standard_schriftart) -> None:
     heute = datetime.now()
@@ -80,9 +81,7 @@ def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnum
     return tabelle 
 
 
-def generate_invoice_content(viele_zeilen, kunde: Customer, standard_schriftart, font_table_head):
-
-    #viele_zeilen = report_content.values.tolist()
+def generate_invoice_content(rechnung: Invoice, kunde: Customer, standard_schriftart, font_table_head):
 
     STUNDENSATZ = kunde.fee
 
@@ -136,44 +135,23 @@ def generate_invoice_content(viele_zeilen, kunde: Customer, standard_schriftart,
         Paragraph(f"Gesamt", ueberschriften_rechts),
          ]
     ] 
-    Zeilenanzahl = 0
-    GESAMTBETRAG = 0
-    for i, unterliste in enumerate(viele_zeilen):
-            TAGESDATUM = None
-            BESCHREIBUNG = None
-            START = None
-            STOP = None
-            for j, element in enumerate(unterliste):
-                if j==0:
-                    TAGESDATUM = element.strftime("%d.%m.%Y")
-                if j==2:
-                    BESCHREIBUNG = element
-                if j==3:
-                    START = element
-                if j==4:
-                    STOP = element
-            Zeilenanzahl += 1
-            start_dt = datetime.combine(date.today(), START)
-            stop_dt = datetime.combine(date.today(), STOP)
-            dauer = stop_dt - start_dt
-            dauer_stunden = round(dauer.total_seconds() / 3600, 2)
-            stunden_mal_satz = round(STUNDENSATZ * dauer_stunden, 2)
-            anzeige_start = START.strftime("%H:%M")
-            anzeige_stop = STOP.strftime("%H:%M")
-            GESAMTBETRAG += stunden_mal_satz
-            zeile = [
-                Paragraph(f"{BESCHREIBUNG}<br/><font color=#A6A6A6 size=8>{TAGESDATUM} {anzeige_start} - {anzeige_stop} Uhr</font>", style_beschreibung), 
-                Paragraph(f"{dauer_stunden}".replace(".",","), data_content), 
-                Paragraph(f"{STUNDENSATZ}", data_content),
-                Paragraph(f"{stunden_mal_satz:.2f} €".replace(".",","), data_content)
-            ]
-            tabellen_struktur.append(zeile)
+
+    table_content_raw = rechnung.raise_data_item_table()
+
+    for i, unterliste in enumerate(table_content_raw):
+        zeile = [
+            Paragraph(table_content_raw[i][0], style_beschreibung), 
+            Paragraph(table_content_raw[i][1], data_content), 
+            Paragraph(table_content_raw[i][2], data_content),
+            Paragraph(table_content_raw[i][3], data_content)
+        ]
+        tabellen_struktur.append(zeile)
 
     letzte_zeile = [
          "", 
          "",
          Paragraph(f"Gesamtbetrag:", data_content),
-         Paragraph(f"{GESAMTBETRAG:.2f} €".replace(".",","), data_content)
+         Paragraph(f"{rechnung.total_price:.2f} €".replace(".",","), data_content)
     ]
     geister_zeile = [
          "","","",""
@@ -195,10 +173,10 @@ def generate_invoice_content(viele_zeilen, kunde: Customer, standard_schriftart,
     tabelle.setStyle(TableStyle([
     ('TOPPADDING', (0,0), (-1,-1), 2.21 * mm),
     ('BOTTOMPADDING', (0,0), (-1,-1), 2.21 * mm),   
-    ('LINEBELOW', (0,0), (-1,Zeilenanzahl), 0.5, colors.black),
+    ('LINEBELOW', (0,0), (-1,rechnung.invoice_items), 0.5, colors.black),
     ('VALIGN', (0,0), (-1,-1), 'TOP'),
     ('ALIGN', (1,0), (1,0), 'RIGHT'),
-    ('LINEBELOW', (2,Zeilenanzahl+1), (3,Zeilenanzahl+1), 0.5, colors.black),
-    ('LINEBELOW', (2,Zeilenanzahl+2), (3,Zeilenanzahl+2), 0.5, colors.black),
+    ('LINEBELOW', (2,rechnung.invoice_items+1), (3,rechnung.invoice_items+1), 0.5, colors.black),
+    ('LINEBELOW', (2,rechnung.invoice_items+2), (3,rechnung.invoice_items+2), 0.5, colors.black),
     ]))
     return tabelle 

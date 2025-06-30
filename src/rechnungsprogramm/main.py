@@ -5,6 +5,7 @@ from rechnungsprogramm.fonts import registriere_schriftarten
 from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
 from rechnungsprogramm.customer import Customer
 from rechnungsprogramm.time_report import TimeReport
+from rechnungsprogramm.invoice import Invoice
 
 def get_excel_file_name():
     if len(sys.argv) != 2:
@@ -28,7 +29,8 @@ def main():
     report_head_infos = [zeit_protokoll.kundennummer, zeit_protokoll.start_day, zeit_protokoll.stop_day]
     standard_schriftart = "Carlito"
     font_table_head = "CarlitoB"
-    erstelle_rechnung(kunde, datensatz_aus_zeitdatei, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
+    rechnung = Invoice(kunde, zeit_protokoll)
+    erstelle_rechnung(kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
 
 
 if __name__ == "__main__":
