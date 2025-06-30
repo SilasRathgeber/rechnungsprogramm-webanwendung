@@ -8,6 +8,7 @@ src/rechnungsprogramm/customer.py
 src/rechnungsprogramm/fonts.py
 src/rechnungsprogramm/generate_pdf_name.py
 src/rechnungsprogramm/generate_rechnungsnummer.py
+src/rechnungsprogramm/invoice.py
 src/rechnungsprogramm/main.py
 src/rechnungsprogramm/table_machine.py
 src/rechnungsprogramm/time_report.py
