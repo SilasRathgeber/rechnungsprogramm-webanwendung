@@ -25,7 +25,16 @@ pip install -r requirements.txt
 
 ## Was noch zutun ist!!
 
-26.05. Aktueller Status: Das Programm ist als Paket installierbar.
+01.07.2025 Aktueller Status: Das Programm funktioniert
+
+Verbesserungen:
+
+- Mehr Ausgaben zu 1. Ist die Datei erfolgreich erstellt worden?
+- In Config.json Pfad für Ablage anbieten ansonsten Ablage an Or und Stelle
+- Funktion, die den  Ablageordnet mit der Rechnungsnummer-Log-Datei vergleicht
+- Falls nicht vor dem Erstellen fragt, welche Nummer vergeben werden soll
+
+26.05.2025 Aktueller Status: Das Programm ist als Paket installierbar.
 
 - die Briefkopftabelle wäre noch schön zum richtigen seitenrand nach rechts zu bringen. Vielleicht mit einer eigenen Tabelle
 
