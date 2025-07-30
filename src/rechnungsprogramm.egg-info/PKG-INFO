@@ -20,6 +20,7 @@ Requires-Dist: six==1.17.0
 Requires-Dist: tabulate==0.9.0
 Requires-Dist: tzdata==2025.2
 Requires-Dist: appdirs
+Requires-Dist: flask
 
 # Rechnungsprogramm
 
@@ -48,7 +49,16 @@ pip install -r requirements.txt
 
 ## Was noch zutun ist!!
 
-26.05. Aktueller Status: Das Programm ist als Paket installierbar.
+01.07.2025 Aktueller Status: Das Programm funktioniert
+
+Verbesserungen:
+
+- Mehr Ausgaben zu 1. Ist die Datei erfolgreich erstellt worden?
+- In Config.json Pfad für Ablage anbieten ansonsten Ablage an Or und Stelle
+- Funktion, die den  Ablageordnet mit der Rechnungsnummer-Log-Datei vergleicht
+- Falls nicht vor dem Erstellen fragt, welche Nummer vergeben werden soll
+
+26.05.2025 Aktueller Status: Das Programm ist als Paket installierbar.
 
 - die Briefkopftabelle wäre noch schön zum richtigen seitenrand nach rechts zu bringen. Vielleicht mit einer eigenen Tabelle
 
@@ -57,3 +67,35 @@ pip install -r requirements.txt
 - Schauen wie man die Dateneingabe einfacher gestallten kann (Mit Apps etc. (Möglicherweise Obsidian oder Anytype oder eigener Webseite))
 
 - Pfad Configuration möglich machen über eine config.json
+
+
+## Projektstruktur
+
+build_invoice.py
+	erstelle_rechnungn()
+build_template.py
+	zeichne_briefpapier(c,doc)
+	zeichne_betreff(c, doc)
+	zeichne_anrede(c, doc)
+	on_the_first_page(c, doc)
+	on_later_pages(c, doc)
+config.py
+	initialize_config()
+	load_config()
+fonts.py
+	registriere_schriftarten()
+generate_pdf_name.py
+	generate_file_name()
+generate_rechnungsnummer.py
+	generate_rechnungsnummer()
+get_data.py
+	get_excel_file_name()
+	get_kundennummer_und_zeitraum()
+	get_preiod_out_of_excel()
+	get_time_data_out_of_excel()
+	get_kunden_daten()
+main.py
+	main() 
+table_machine.py
+	generate_invoice_head()
+	generate_invoice_content()
