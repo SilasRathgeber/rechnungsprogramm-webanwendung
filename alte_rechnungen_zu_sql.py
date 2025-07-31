@@ -56,7 +56,8 @@ def folder_route():
 
     for eintrag in all_entries:
         dateiname = eintrag['filename']
-        print(f"\n DATEI: {eintrag['filename']}\n")
+        print(f"DATEI: {eintrag['filename']}")
+
         tabelle0 = eintrag['tables'][0]
         if len(tabelle0) > 0 and len(tabelle0[0]) >= 3:
             beschriftungen = tabelle0[0][1].split("\n")
@@ -78,7 +79,7 @@ def folder_route():
                 f"''"
                 f");"
             )
-            print(data_dict)
+            #print(data_dict)
 
         tabelle1 = eintrag['tables'][1]
         data = [['Bezeichnung', 'Datum', 'Start', 'Stop', 'Stunden', 'Stundensatz', 'Gesamt']]
@@ -86,10 +87,11 @@ def folder_route():
         datum = None
         start_zeit = None
         stop_zeit = None
-
+        zaehler = 0
         try:
             for zeile in tabelle1[1:]:
                 if len(zeile) >= 4 and zeile[0] != "":
+
                     zelle = zeile[0]
                     teile = zelle.split('\n')
                     if len(teile) >= 2:
@@ -137,7 +139,7 @@ def folder_route():
                         f"{stop_sql}, " \
                         f"{sql_value(bezeichnung)});")   
  
-            print(tabulate(data, headers="firstrow", tablefmt="grid"))
+            #print(tabulate(data, headers="firstrow", tablefmt="grid"))
         except IndexError as e:
             print(f"⚠️ Fehler in Datei '{dateiname}': Zeile unvollständig → {e}")
         except Exception as e:
