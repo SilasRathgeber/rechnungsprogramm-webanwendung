@@ -1,4 +1,5 @@
-CREATE TABLE kunden (
+-- Kunden-Tabelle
+CREATE TABLE IF NOT EXISTS kunden (
     id INTEGER PRIMARY KEY,
     name TEXT,
     strasse TEXT,
@@ -7,7 +8,9 @@ CREATE TABLE kunden (
     ort TEXT,
     stundensatz REAL
 );
-CREATE TABLE rechnungen (
+
+-- Rechnungen-Tabelle
+CREATE TABLE IF NOT EXISTS rechnungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     kunde_id INTEGER NOT NULL,
     re_datum TEXT NOT NULL,
@@ -15,7 +18,9 @@ CREATE TABLE rechnungen (
     projekt TEXT,
     FOREIGN KEY (kunde_id) REFERENCES kunden(id)
 );
-CREATE TABLE zeiterfassungen (
+
+-- Zeiterfassungen-Tabelle
+CREATE TABLE IF NOT EXISTS zeiterfassungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     kunde_id INTEGER NOT NULL,
     rechnung_id INTEGER,
@@ -23,7 +28,9 @@ CREATE TABLE zeiterfassungen (
     FOREIGN KEY (kunde_id) REFERENCES kunden(id),
     FOREIGN KEY (rechnung_id) REFERENCES rechnungen(id)
 );
-CREATE TABLE zeiteintraege (
+
+-- Zeiteinträge-Tabelle
+CREATE TABLE IF NOT EXISTS zeiteintraege (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     zeiterfassung_id INTEGER NOT NULL,
     datum TEXT NOT NULL,
