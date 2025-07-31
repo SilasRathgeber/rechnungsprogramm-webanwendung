@@ -79,7 +79,7 @@ def folder_route():
             rechnungen_sql.append(
                 f"INSERT INTO rechnungen (id, kunde_id, re_datum, zeitraum, projekt) VALUES ("
                 f"{rechnungsnummer}, "
-                f"'{kundennummer}', "
+                f"{kundennummer}, "
                 f"'{rechnungsdatum}', "
                 f"'{leistungszeitraum}', "
                 f"''"
@@ -118,12 +118,12 @@ def folder_route():
                                 start_sql = sql_value(start_zeit)
                                 stop_sql = sql_value(stop_zeit)
                         else:
-                            datum = None
+                            datum_sql = sql_value(datum)
                             start_sql = sql_value(start_zeit)
                             stop_sql = sql_value(stop_zeit)
                     else:
                         bezeichnung = teile[0]
-                        datum = None
+                        datum_sql = sql_value(datum)
                         start_sql = sql_value(start_zeit)
                         stop_sql = sql_value(stop_zeit)
                     stunden = zeile[1]
@@ -141,7 +141,7 @@ def folder_route():
 
                     zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung) VALUES (" \
                         f"{zeiterfassung_id}, " \
-                        f"{datum}, " \
+                        f"'{datum_sql}', " \
                         f"{start_sql}, " \
                         f"{stop_sql}, " \
                         f"'{bezeichnung}');")   
