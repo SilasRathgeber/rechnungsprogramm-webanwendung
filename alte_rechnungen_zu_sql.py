@@ -85,11 +85,7 @@ def folder_route():
                 f"''"
                 f");"
             )
-
-            
-
             print(data_dict)
-
 
         tabelle1 = eintrag['tables'][1]
         data = [['Bezeichnung', 'Datum', 'Start', 'Stop', 'Stunden', 'Stundensatz', 'Gesamt']]
@@ -139,22 +135,22 @@ def folder_route():
                         f"{rechnungsnummer}, " \
                         f"'zeitabrechnung');")   
 
+                    zeiterfassung_id = zeiterfassung_id+1
+
                     zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung) VALUES (" \
                         f"{zeiterfassung_id}, " \
-                        f"'{datum_sql}', " \
+                        f"{datum_sql}, " \
                         f"{start_sql}, " \
                         f"{stop_sql}, " \
                         f"'{bezeichnung}');")   
  
-            
-            
             print(tabulate(data, headers="firstrow", tablefmt="grid"))
         except IndexError as e:
             print(f"⚠️ Fehler in Datei '{dateiname}': Zeile unvollständig → {e}")
         except Exception as e:
             print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
 
-    zeiterfassung_id = zeiterfassung_id+1
+
 
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
@@ -163,9 +159,6 @@ def folder_route():
             f.write(cmd + "\n")
         for cmd in zeiteintraege_sql:
             f.write(cmd + "\n")
-
-    
-
 
 if __name__ == "__main__":
     folder_route()
