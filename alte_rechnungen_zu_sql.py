@@ -76,9 +76,15 @@ def folder_route():
                 f"{kundennummer}, "
                 f"'{rechnungsdatum}', "
                 f"'{leistungszeitraum}', "
-                f"''"
+                f"'NULL'"
                 f");"
             )
+            zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, typ) VALUES (" \
+                f"{zeiterfassung_id}, " \
+                f"{kundennummer}, " \
+                f"{rechnungsnummer}, " \
+                f"'zeitabrechnung');")   
+
             #print(data_dict)
 
         tabelle1 = eintrag['tables'][1]
@@ -91,7 +97,6 @@ def folder_route():
         try:
             for zeile in tabelle1[1:]:
                 if len(zeile) >= 4 and zeile[0] != "":
-
                     zelle = zeile[0]
                     teile = zelle.split('\n')
                     if len(teile) >= 2:
@@ -121,17 +126,9 @@ def folder_route():
                     stundensatz = zeile[2]
                     gesamt = zeile[3]
 
-                    zeile = [bezeichnung, datum, start_zeit, stop_zeit, stunden , stundensatz, gesamt]
+                    zeile = [bezeichnung, datum, start_zeit, stop_zeit, stunden, stundensatz, gesamt]
                     data.append(zeile)  
                      
-                    zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, typ) VALUES (" \
-                        f"{zeiterfassung_id}, " \
-                        f"{kundennummer}, " \
-                        f"{rechnungsnummer}, " \
-                        f"'zeitabrechnung');")   
-
-                    zeiterfassung_id += 1
-
                     zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung) VALUES (" \
                         f"{zeiterfassung_id}, " \
                         f"{datum_sql}, " \
@@ -145,6 +142,7 @@ def folder_route():
         except Exception as e:
             print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
 
+        zeiterfassung_id += 1
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
             f.write(cmd + "\n")
