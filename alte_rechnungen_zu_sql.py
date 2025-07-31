@@ -78,11 +78,7 @@ def folder_route():
                 f"''"
                 f");"
             )
-
-            
-
             print(data_dict)
-
 
         tabelle1 = eintrag['tables'][1]
         data = [['Bezeichnung', 'Datum', 'Start', 'Stop', 'Stunden', 'Stundensatz', 'Gesamt']]
@@ -141,15 +137,11 @@ def folder_route():
                         f"{stop_sql}, " \
                         f"{sql_value(bezeichnung)});")   
  
-            
-            
             print(tabulate(data, headers="firstrow", tablefmt="grid"))
         except IndexError as e:
             print(f"⚠️ Fehler in Datei '{dateiname}': Zeile unvollständig → {e}")
         except Exception as e:
             print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
-
-    
 
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
