@@ -45,14 +45,14 @@ def folder_route():
     folder_list.append("C:/Users/silas/OneDrive - Silas Rathgeber IT/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen/2024")
     folder_list.append("C:/Users/silas/OneDrive - Silas Rathgeber IT/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen/2025")
     all_entries = []
-    for item in folder_list:
-        data = read_tables_from_folder(item)
-        all_entries.extend(data)
-
     zeiteintraege_sql = []
     rechnungen_sql = []
     zeiterfassungen_sql = []
     zeiterfassung_id = 3
+
+    for item in folder_list:
+        data = read_tables_from_folder(item)
+        all_entries.extend(data)
 
     for eintrag in all_entries:
         dateiname = eintrag['filename']
