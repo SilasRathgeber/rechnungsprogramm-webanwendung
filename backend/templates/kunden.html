@@ -6,7 +6,7 @@
       <title>Meine Webseite</title>
   </head>
   <body>
-    <h1>Gib einen neuen Kunden ein bitte:</h1>
+    <h1>Rechnungsprogramm</h1>
     <form method="POST" action="/kunden">
       <input type="text" name="name" placeholder="Name" required>
       <input type="text" name="strasse" placeholder="Straße">
@@ -14,8 +14,20 @@
       <input type="text" name="plz" placeholder="PLZ">
       <input type="text" name="ort" placeholder="Ort">
       <input type="number" step="0.01" name="stundensatz" placeholder="Stundensatz">
-      <button type="submit">Kunde speichern</button>
+      <button type="submit">Kunde Hinzufügen</button>
     </form>
+    <br>
+
+    <hr>
+    <h2>Bestehende Kunden</h2>
+    <ul>
+      {% for kunde in kunden %}
+        <li>{{ kunde[0] }}, {{ kunde[1] }} – {{ kunde[2] }} {{ kunde[3] }}, {{ kunde[4] }} {{ kunde[5] }}, {{ kunde[6] }} €/h</li>
+      {% else %}
+        <li>Keine Kunden gefunden.</li>
+      {% endfor %}
+    </ul>
+    <hr>  
     <form method="POST" action="/kunden">
       <select name="kunde_loeschen_id">
         <!-- Options mit Kunden-IDs zum Löschen -->
@@ -25,13 +37,5 @@
       </select>
       <button type="submit" name="aktion" value="loeschen">Kunde löschen</button>
     </form>
-    <h2>Bestehende Kunden</h2>
-    <ul>
-      {% for kunde in kunden %}
-        <li>{{ kunde[0] }} – {{ kunde[1] }} {{ kunde[2] }}, {{ kunde[3] }} {{ kunde[4] }}, {{ kunde[5] }} €/h</li>
-      {% else %}
-        <li>Keine Kunden gefunden.</li>
-      {% endfor %}
-    </ul>
   </body>
 </html>

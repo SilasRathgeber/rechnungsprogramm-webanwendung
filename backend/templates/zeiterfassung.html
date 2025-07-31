@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Rechnungsprogramm Zeiterfassung</title>
+  </head>
+    <body>
+        <h1>Rechnungsprogramm Zeiterfassung</h1>
+        <form method="POST" action="/kunden">
+            <select name="kunde_ausw_id">
+                <!-- Options mit Kunden-IDs zum Löschen -->
+                {% for kunde in kunden %}
+                <option value="{{ kunde[0] }}">{{ kunde[1] }} (ID: {{ kunde[0] }})</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="aktion" value="erfassung_erstellen">Zeiterfassung Erstellen</button>
+            <ul>
+                {% for zeiterfassung in zeiterfassungen %}
+                    <li>{{ zeiterfassung[0] }}, {{ zeiterfassung[1] }}, {{ zeiterfassung[2] }}</li>
+                {% else %}
+                    <li>Keine Zeiterfassung gefunden.</li>
+                {% endfor %}
+            </ul>
+        </form>
+    </body>
+</html>
