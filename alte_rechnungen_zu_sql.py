@@ -36,12 +36,12 @@ def read_tables_from_folder(folder_path):
                 "filename": filename,
                 "tables": tables
             })
-
-    #pprint.pprint(all_data)
-    #print(f"/n")
-    #print(json.dumps(all_data, indent=4, ensure_ascii=False))
     return all_data
 
+def sql_value(val):
+    if val is None or val.strip() == "":
+        return "NULL"
+    return f"'{val}'"
 
 def folder_route():
     folder_list=[]
@@ -59,6 +59,7 @@ def folder_route():
     zeiteintraege_sql = []
     rechnungen_sql = []
     zeiterfassungen_sql = []
+    zeiterfassung_id = 3
 
     for eintrag in all_entries:
         dateiname = eintrag['filename']
@@ -85,13 +86,17 @@ def folder_route():
                 f");"
             )
 
-            zeiterfassung_id = 3
+            
 
             print(data_dict)
 
 
         tabelle1 = eintrag['tables'][1]
         data = [['Bezeichnung', 'Datum', 'Start', 'Stop', 'Stunden', 'Stundensatz', 'Gesamt']]
+
+        datum = None
+        start_zeit = None
+        stop_zeit = None
 
         try:
             for zeile in tabelle1[1:]:
@@ -107,18 +112,20 @@ def folder_route():
                             if len(zeiten_teile) == 2:
                                 start_zeit = zeiten_teile[0].strip()
                                 stop_zeit = zeiten_teile[1].strip()
+                                start_sql = sql_value(start_zeit)
+                                stop_sql = sql_value(stop_zeit)
                             else:
-                                start_zeit = ""
-                                stop_zeit = ""
+                                start_sql = sql_value(start_zeit)
+                                stop_sql = sql_value(stop_zeit)
                         else:
-                            datum = ""
-                            start_zeit = ""
-                            stop_zeit = ""
+                            datum = None
+                            start_sql = sql_value(start_zeit)
+                            stop_sql = sql_value(stop_zeit)
                     else:
                         bezeichnung = teile[0]
-                        datum = ""
-                        start_zeit = ""
-                        stop_zeit = ""
+                        datum = None
+                        start_sql = sql_value(start_zeit)
+                        stop_sql = sql_value(stop_zeit)
                     stunden = zeile[1]
                     stundensatz = zeile[2]
                     gesamt = zeile[3]
@@ -135,8 +142,8 @@ def folder_route():
                     zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung) VALUES (" \
                         f"{zeiterfassung_id}, " \
                         f"{datum}, " \
-                        f"{start_zeit}, " \
-                        f"{stop_zeit}, " \
+                        f"{start_sql}, " \
+                        f"{stop_sql}, " \
                         f"'{bezeichnung}');")   
  
             
