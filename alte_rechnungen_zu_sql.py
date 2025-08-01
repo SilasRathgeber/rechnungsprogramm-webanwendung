@@ -33,22 +33,27 @@ def read_tables_from_folder(folder_path):
 
 def sql_value(val):
     if val is None or val.strip() == "":
-        return "NULL"
+        return "'NULL'"
     return f"'{val}'"
 
 def clean_number_string(s: str) -> str:
     if not s or not s.strip():
-        return "NULL"
+        return "'NULL'"
     s = s.strip()
     match = re.search(r"[\d.,]+", s)
     if not match:
-        return "NULL"
+        return "'NULL'"
     num = match.group().replace(",", ".")
     try:
         return str(float(num))
     except ValueError:
-        return "NULL"
+        return "'NULL'"
 
+def erste_zahl(s):
+    match = re.search(r"\d+(?:[\.,]\d+)?", s)  # sucht ganze Zahl oder Kommazahl
+    if match:
+        return float(match.group().replace(",", "."))
+    return float("inf")  # wenn keine Zahl gefunden, ganz nach hinten sortieren
 
 def folder_route():
     folder_list=[]
@@ -80,6 +85,7 @@ def folder_route():
             data_dict = dict(zip(beschriftungen, werte))
 
             rechnungsnummer = data_dict.get("Rechnungs-Nr.")
+            print(f"Rechnungsnummer zu {dateiname}: {rechnungsnummer}")
             kundennummer = data_dict.get("Kunden-Nr.")
             rechnungsdatum = data_dict.get("Rechnungsdatum")
             leistungszeitraum = data_dict.get("Leistungszeitraum")
@@ -168,6 +174,9 @@ def folder_route():
         #     print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
 
         zeiterfassung_id += 1
+
+        rechnungen_sql = sorted(rechnungen_sql, key=erste_zahl)
+    
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
             f.write(cmd + "\n")
