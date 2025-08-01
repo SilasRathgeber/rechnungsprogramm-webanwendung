@@ -36,6 +36,21 @@ def sql_value(val):
         return "NULL"
     return f"'{val}'"
 
+def clean_number_string(s: str) -> float | None:
+    if not s or not s.strip():
+        return None
+    # Entferne alles außer Ziffern, Kommas, Punkten
+    s = s.strip()
+    match = re.search(r"[\d.,]+", s)
+    if not match:
+        return None
+    num = match.group().replace(",", ".")
+    try:
+        return float(num)
+    except ValueError:
+        return None
+
+
 def folder_route():
     folder_list=[]
     folder_list.append("C:/Users/silas/OneDrive - Silas Rathgeber IT/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen/2020")
@@ -94,53 +109,64 @@ def folder_route():
         start_zeit = None
         stop_zeit = None
         zaehler = 0
-        try:
-            for zeile in tabelle1[1:]:
-                if len(zeile) >= 4 and zeile[0] != "":
-                    zelle = zeile[0]
-                    teile = zelle.split('\n')
-                    if len(teile) >= 2:
-                        bezeichnung = teile[0]
-                        zeitangabe_teile = teile[1].split(' ', 1)
-                        if len(zeitangabe_teile) == 2:
-                            datum = zeitangabe_teile[0]
-                            zeiten_teile = zeitangabe_teile[1].replace('–', '-').replace('—', '-').split('-', 1)
-                            if len(zeiten_teile) == 2:
-                                start_zeit = zeiten_teile[0].strip()
-                                stop_zeit = zeiten_teile[1].strip()
-                                start_sql = sql_value(start_zeit)
-                                stop_sql = sql_value(stop_zeit)
-                            else:
-                                start_sql = sql_value(start_zeit)
-                                stop_sql = sql_value(stop_zeit)
-                        else:
-                            datum_sql = sql_value(datum)
-                            start_sql = sql_value(start_zeit)
-                            stop_sql = sql_value(stop_zeit)
-                    else:
-                        bezeichnung = teile[0]
-                        datum_sql = sql_value(datum)
-                        start_sql = sql_value(start_zeit)
-                        stop_sql = sql_value(stop_zeit)
-                    stunden = zeile[1]
-                    stundensatz = zeile[2]
-                    gesamt = zeile[3]
+        #try:
+        for zeile in tabelle1[1:]:
+            if len(zeile) < 4 or zeile[0] in ("", "Summe:", "/"):
+                continue  # Überspringe ungültige Zeile
 
-                    zeile = [bezeichnung, datum, start_zeit, stop_zeit, stunden, stundensatz, gesamt]
-                    data.append(zeile)  
-                     
-                    zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung) VALUES (" \
-                        f"{zeiterfassung_id}, " \
-                        f"{datum_sql}, " \
-                        f"{start_sql}, " \
-                        f"{stop_sql}, " \
-                        f"{sql_value(bezeichnung)});")   
- 
-            #print(tabulate(data, headers="firstrow", tablefmt="grid"))
-        except IndexError as e:
-            print(f"⚠️ Fehler in Datei '{dateiname}': Zeile unvollständig → {e}")
-        except Exception as e:
-            print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
+            zelle = zeile[0]
+            teile = zelle.split('\n', 1)
+            bezeichnung = teile[0].strip()
+            datum = start_zeit = stop_zeit = None
+
+            if len(zeile) == 5:
+                bezeichnung = zeile[1].strip()
+                datum = zeile[0]
+                datum_sql = sql_value(datum)
+                # Zahlen bereinigen
+                stunden = clean_number_string(zeile[2])
+                stundensatz = clean_number_string(zeile[3])
+                gesamt = clean_number_string(zeile[4])
+            else:
+                if len(teile) == 2:
+                    zeitinfo = teile[1].strip()
+
+                    # Beispiel: "01.08.2025 08:00 - 12:00"
+                    if " " in zeitinfo:
+                        datum_part, zeiten = zeitinfo.split(" ", 1)
+                        datum = datum_part.strip()
+                        if "25 + 29.04.25" in zeitinfo:
+                            datum="29.05.25"
+                        zeiten = zeitinfo.split("+", 1)[0].strip()
+                        zeiten = zeiten.replace("–", "-").replace("—", "-").replace("Uhr", "")
+                        if "-" in zeiten:
+                            start_zeit, stop_zeit = [t.strip() for t in zeiten.split("-", 1)]
+                            start_zeit = start_zeit.split(" ")[1].strip()
+
+                # SQL-Werte vorbereiten (ggf. auch None zulassen)
+                datum_sql = sql_value(datum)
+                start_sql = sql_value(start_zeit)
+                stop_sql = sql_value(stop_zeit)
+
+                # Zahlen bereinigen
+                stunden = clean_number_string(zeile[1])
+                stundensatz = clean_number_string(zeile[2])
+                gesamt = clean_number_string(zeile[3])
+                
+            zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden stundensatz, gesamt) VALUES (" \
+                f"{zeiterfassung_id}, " \
+                f"{datum_sql}, " \
+                f"{start_sql}, " \
+                f"{stop_sql}, " \
+                f"{sql_value(bezeichnung)}, " \
+                f"{stunden}, " \
+                f"{stundensatz} , "\
+                f"{gesamt});")   
+
+        # except IndexError as e:
+        #     print(f"⚠️ Fehler in Datei '{dateiname}': Zeile unvollständig → {e}")
+        # except Exception as e:
+        #     print(f"❌ Allgemeiner Fehler in Datei '{dateiname}': {e}")
 
         zeiterfassung_id += 1
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
