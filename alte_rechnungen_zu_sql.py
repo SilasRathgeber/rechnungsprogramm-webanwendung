@@ -153,14 +153,14 @@ def folder_route():
                 stundensatz = clean_number_string(zeile[2])
                 gesamt = clean_number_string(zeile[3])
                 
-            zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden stundensatz, gesamt) VALUES (" \
+            zeiteintraege_sql.append(f"INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden, stundensatz, gesamt) VALUES (" \
                 f"{zeiterfassung_id}, " \
                 f"{datum_sql}, " \
                 f"{start_sql}, " \
                 f"{stop_sql}, " \
                 f"{sql_value(bezeichnung)}, " \
                 f"{stunden}, " \
-                f"{stundensatz} , "\
+                f"{stundensatz}, "\
                 f"{gesamt});")   
 
         # except IndexError as e:
