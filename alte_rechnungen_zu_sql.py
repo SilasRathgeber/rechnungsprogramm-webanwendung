@@ -36,19 +36,18 @@ def sql_value(val):
         return "NULL"
     return f"'{val}'"
 
-def clean_number_string(s: str) -> float | None:
+def clean_number_string(s: str) -> str:
     if not s or not s.strip():
-        return None
-    # Entferne alles außer Ziffern, Kommas, Punkten
+        return "NULL"
     s = s.strip()
     match = re.search(r"[\d.,]+", s)
     if not match:
-        return None
+        return "NULL"
     num = match.group().replace(",", ".")
     try:
-        return float(num)
+        return str(float(num))
     except ValueError:
-        return None
+        return "NULL"
 
 
 def folder_route():
