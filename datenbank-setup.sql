@@ -10,25 +10,21 @@ CREATE TABLE IF NOT EXISTS kunden (
 );
 
 -- Rechnungen-Tabelle
-CREATE TABLE rechnungen (
+CREATE TABLE IF NOT EXISTS rechnungen (
     id INTEGER PRIMARY KEY,
     kunde_id INTEGER NOT NULL,
     re_datum TEXT NOT NULL,
     abrechnungsart TEXT CHECK(abrechnungsart IN ('projekt', 'zeit')) NOT NULL,
-    bezahlt INTEGER NOT NULL DEFAULT 0
+    projekt TEXT,
+    honorar REAL,
+    bezahlt INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (kunde_id) REFERENCES kunden(id),
+    CHECK (
+        (abrechnungsart = 'projekt' AND honorar IS NOT NULL AND projekt IS NOT NULL) OR
+        (abrechnungsart = 'zeit' AND honorar IS NULL AND projekt IS NULL)
+    )
 );
-CREATE TABLE rechnungen_zeit (
-    rechnung_id INTEGER PRIMARY KEY,
-    zeitraum_von TEXT NOT NULL,
-    zeitraum_bis TEXT NOT NULL,
-    FOREIGN KEY (rechnung_id) REFERENCES rechnungen(id)
-);
-CREATE TABLE rechnungen_projekt (
-    rechnung_id INTEGER PRIMARY KEY,
-    projekt TEXT NOT NULL,
-    honorar REAL NOT NULL,
-    FOREIGN KEY (rechnung_id) REFERENCES rechnungen(id)
-);
+
 -- Zeiterfassungen-Tabelle
 CREATE TABLE IF NOT EXISTS zeiterfassungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

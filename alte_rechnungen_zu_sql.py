@@ -66,7 +66,6 @@ def folder_route():
     all_entries = []
     zeiteintraege_sql = []
     rechnungen_sql = []
-    rechnungen_zeit_sql = []
     zeiterfassungen_sql = []
     zeiterfassung_id = 3
 
@@ -102,24 +101,17 @@ def folder_route():
                 f"{kundennummer}, "
                 f"'{rechnungsdatum}', "
                 f"'zeit', "
-                f"'1'"
+                f"1"
                 f");"
             )
-            rechnungen_zeit_sql.append(
-                f"INSERT INTO rechnungen_zeit (rechnung_id, zeitraum_von, zeitraum_bis) VALUES ("
-                f"{rechnungsnummer}, "
-                f"{von}, "
-                f"{bis} "
-                f");"    
-            ) 
             zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, von, bis) VALUES (" \
                 f"{zeiterfassung_id}, " \
                 f"{kundennummer}, " \
                 f"{rechnungsnummer}, " \
                 f"{von}, " \
-                f"{bis}, " \
-                f"'zeitabrechnung');")   
-
+                f"{bis} " \
+                f");"   
+            )
             #print(data_dict)
 
         tabelle1 = eintrag['tables'][1]
@@ -194,8 +186,6 @@ def folder_route():
     
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
-            f.write(cmd + "\n")
-        for cmd in rechnungen_zeit_sql:
             f.write(cmd + "\n")
         for cmd in zeiterfassungen_sql:
             f.write(cmd + "\n")
