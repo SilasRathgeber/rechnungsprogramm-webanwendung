@@ -66,6 +66,7 @@ def folder_route():
     all_entries = []
     zeiteintraege_sql = []
     rechnungen_sql = []
+    rechnungen_zeit_sql = []
     zeiterfassungen_sql = []
     zeiterfassung_id = 3
 
@@ -89,20 +90,34 @@ def folder_route():
             kundennummer = data_dict.get("Kunden-Nr.")
             rechnungsdatum = data_dict.get("Rechnungsdatum")
             leistungszeitraum = data_dict.get("Leistungszeitraum")
+
+            zeitraum = leistungszeitraum.replace("–", "-").replace("—", "-")
+            von = zeitraum.split("-")[0].strip()
+            bis = zeitraum.split("-")[1].strip()
+            print(f"von: {von}| bis: {bis}|")
             
             rechnungen_sql.append(
-                f"INSERT INTO rechnungen (id, kunde_id, re_datum, zeitraum, projekt) VALUES ("
+                f"INSERT INTO rechnungen (id, kunde_id, re_datum, abrechnungsart, bezahlt) VALUES ("
                 f"{rechnungsnummer}, "
                 f"{kundennummer}, "
                 f"'{rechnungsdatum}', "
-                f"'{leistungszeitraum}', "
-                f"'NULL'"
+                f"'zeit', "
+                f"'1'"
                 f");"
             )
+            rechnungen_zeit_sql.append(
+                f"INSERT INTO rechnungen_zeit (rechnung_id, zeitraum_von, zeitraum_bis) VALUES ("
+                f"{rechnungsnummer}, "
+                f"{von}, "
+                f"{bis} "
+                f");"    
+            ) 
             zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, typ) VALUES (" \
                 f"{zeiterfassung_id}, " \
                 f"{kundennummer}, " \
                 f"{rechnungsnummer}, " \
+                f"{von}, " \
+                f"{bis}, " \
                 f"'zeitabrechnung');")   
 
             #print(data_dict)
@@ -179,6 +194,8 @@ def folder_route():
     
     with open("daten_aus_rechnungen_import.sql", "w", encoding="utf-8") as f:
         for cmd in rechnungen_sql:
+            f.write(cmd + "\n")
+        for cmd in rechnungen_zeit_sql:
             f.write(cmd + "\n")
         for cmd in zeiterfassungen_sql:
             f.write(cmd + "\n")
