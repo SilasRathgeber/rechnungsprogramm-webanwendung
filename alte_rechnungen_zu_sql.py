@@ -92,8 +92,8 @@ def folder_route():
             leistungszeitraum = data_dict.get("Leistungszeitraum")
 
             zeitraum = leistungszeitraum.replace("–", "-").replace("—", "-")
-            von = zeitraum.split("-")[0].strip()
-            bis = zeitraum.split("-")[1].strip()
+            von = sql_value(zeitraum.split("-")[0].strip())
+            bis = sql_value(zeitraum.split("-")[1].strip())
             print(f"von: {von}| bis: {bis}|")
             
             rechnungen_sql.append(
