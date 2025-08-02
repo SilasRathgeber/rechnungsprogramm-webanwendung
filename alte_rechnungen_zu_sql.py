@@ -112,7 +112,7 @@ def folder_route():
                 f"{bis} "
                 f");"    
             ) 
-            zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, typ) VALUES (" \
+            zeiterfassungen_sql.append(f"INSERT INTO zeiterfassungen (id, kunde_id, rechnung_id, von, bis) VALUES (" \
                 f"{zeiterfassung_id}, " \
                 f"{kundennummer}, " \
                 f"{rechnungsnummer}, " \
