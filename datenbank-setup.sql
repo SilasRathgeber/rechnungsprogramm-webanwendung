@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS rechnungen (
     re_datum TEXT NOT NULL,
     zeitraum TEXT,
     projekt TEXT,
+    bezahlt INTEGER,
     FOREIGN KEY (kunde_id) REFERENCES kunden(id)
 );
 
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS zeiterfassungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     kunde_id INTEGER NOT NULL,
     rechnung_id INTEGER,
-    typ TEXT NOT NULL,
+    von TEXT NOT NULL,
+    bis TEXT NOT NULL,
     FOREIGN KEY (kunde_id) REFERENCES kunden(id),
     FOREIGN KEY (rechnung_id) REFERENCES rechnungen(id)
 );

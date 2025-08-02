@@ -7,21 +7,33 @@
   </head>
     <body>
         <h1>Rechnungsprogramm Zeiterfassung</h1>
-        <form method="POST" action="/kunden">
+        <form method="POST" action="/zeiterfassung">
             <select name="kunde_ausw_id">
-                <!-- Options mit Kunden-IDs zum Löschen -->
                 {% for kunde in kunden %}
                 <option value="{{ kunde[0] }}">{{ kunde[1] }} (ID: {{ kunde[0] }})</option>
                 {% endfor %}
             </select>
-            <button type="submit" name="aktion" value="erfassung_erstellen">Zeiterfassung Erstellen</button>
-            <ul>
-                {% for zeiterfassung in zeiterfassungen %}
-                    <li>{{ zeiterfassung[0] }}, {{ zeiterfassung[1] }}, {{ zeiterfassung[2] }}</li>
-                {% else %}
-                    <li>Keine Zeiterfassung gefunden.</li>
-                {% endfor %}
-            </ul>
+            <button type="submit" name="aktion" value="filtern">Zeiterfassung anzeigen</button>
         </form>
+
+        <br>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                {% for col in columns %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>
