@@ -1,0 +1,10 @@
+    #zeiterfassung-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #zeiterfassung-table tbody tr:hover {
+        background-color: #e0e0e0;
+    }
+    #zeiterfassung-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

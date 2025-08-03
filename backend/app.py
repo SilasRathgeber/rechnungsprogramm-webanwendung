@@ -3,6 +3,9 @@ import sqlite3
 import os
 from backend.kunden.routes import kunden_bp
 from backend.zeiterfassung.routes import zeiterfassung_bp
+import logging
+logging.basicConfig(level=logging.INFO)
+
 
 app = Flask(__name__, template_folder="templates")
 app.register_blueprint(kunden_bp)

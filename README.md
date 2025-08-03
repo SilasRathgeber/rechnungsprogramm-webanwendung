@@ -75,3 +75,11 @@ main.py
 table_machine.py
 	generate_invoice_head()
 	generate_invoice_content()
+
+
+02.08.2025
+
+Ideen Datenbankänderungen
+- Rechnungen ein Feld "verschickt" "nicht verschickt"
+- FOREIGN KEY (zeiterfassung_id) REFERENCES zeiterfassungen(id) ON DELETE CASCADE !Einbauen!
+- stundensatz muss in zeiterfassungen - > weil sich der ändern kann mit der Zeit

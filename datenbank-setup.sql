@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS zeiteintraege (
     endzeit TEXT NOT NULL,
     beschreibung TEXT,
     stunden REAL,
-    stundensatz REAL,
     gesamt REAL,
     FOREIGN KEY (zeiterfassung_id) REFERENCES zeiterfassungen(id)
 );
