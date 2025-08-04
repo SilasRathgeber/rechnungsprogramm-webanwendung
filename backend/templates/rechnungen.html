@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Rechnungen</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <h1>Rechnungen</h1>
+
+    <!-- templates/rechnung_vorschau.html -->
+     <p>{{datei_name}}</p>
+<iframe src="{{ url_for('static', filename='pdf/' + datei_name) }}"
+        width="20%" height="300px"></iframe>
+
+  </body>
+</html>

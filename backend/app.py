@@ -3,13 +3,15 @@ import sqlite3
 import os
 from backend.kunden.routes import kunden_bp
 from backend.zeiterfassung.routes import zeiterfassung_bp
+from backend.rechnungen.routes import rechnungen_bp
 import logging
 logging.basicConfig(level=logging.INFO)
 
 
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__, template_folder="templates", static_folder="static")
 app.register_blueprint(kunden_bp)
 app.register_blueprint(zeiterfassung_bp)
+app.register_blueprint(rechnungen_bp)
 app.debug = True
 
 if __name__ == '__main__':

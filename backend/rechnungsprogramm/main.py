@@ -29,8 +29,9 @@ def main(zeiterfassungs_id):
     standard_schriftart = "Carlito"
     font_table_head = "CarlitoB"
     rechnung = Invoice(kunde, zeit_protokoll)
-    erstelle_rechnung(kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
+    datei_name = erstelle_rechnung(kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
 
+    return datei_name
 
 if __name__ == "__main__":
     main()

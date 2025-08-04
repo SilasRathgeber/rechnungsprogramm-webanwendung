@@ -5,7 +5,7 @@ from backend.config import db_path
 from backend.common import get_all_kunden, get_all_zeiterfassungen, get_zeiterfassungen_fuer_kunden, load_zeiterfassung_by_id
 from datetime import datetime
 import logging
-from backend.rechnungsprogramm.main import main
+
 logger = logging.getLogger(__name__)
 
 
@@ -106,11 +106,11 @@ def bearbeiten():
                     #return "Fehler: Kein Stundensatz gefunden.", 400
                 stundensatz = result[0]
 
-                gesamt = stunden * stundensatz
-
+                gesamt = round(stunden * stundensatz, 2)
+                stunden_round=round(stunden, 1)
                 cursor.execute(
                     "INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden, gesamt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (zeiterfassungs_id, datum, start_zeit, end_zeit, beschreibung, stunden, gesamt)
+                    (zeiterfassungs_id, datum, start_zeit, end_zeit, beschreibung, stunden_round, gesamt)
                 )
 
         if aktion == "EintragLöschen":
@@ -119,9 +119,7 @@ def bearbeiten():
                     "DELETE FROM zeiteintraege WHERE id = ?", (zeiteintrag_id,)
                 )
         
-        if aktion == "RechnungErstellen":
-            zeiterfassungs_id = request.form.get("id")
-            main(zeiterfassungs_id)
+
 
 
     with sqlite3.connect(db_path) as conn:

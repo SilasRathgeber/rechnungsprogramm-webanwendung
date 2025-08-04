@@ -10,7 +10,8 @@ from rechnungsprogramm.customer import Customer
 
 def erstelle_rechnung(kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
-    pfad =f"backend/static/pdf/{generate_file_name(rechnungsnummer, report_head_infos)}"
+    datei_name = generate_file_name(rechnungsnummer, report_head_infos)
+    pfad =f"backend/static/pdf/{datei_name}"
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
     
     tabelle1 = generate_invoice_head(kunde, report_head_infos, rechnungsnummer, standard_schriftart)
@@ -34,6 +35,7 @@ def erstelle_rechnung(kunde: Customer, rechnung, report_head_infos, rechnungsnum
     flowables = [tabelle1, spacer1, tabelle2, spacer2, para]
     doc.build(flowables, onFirstPage=on_the_first_page, onLaterPages=on_later_pages)
 
+    return datei_name
 
 if __name__ == "__main__":
     erstelle_rechnung()
