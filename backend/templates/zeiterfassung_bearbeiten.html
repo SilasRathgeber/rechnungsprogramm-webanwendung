@@ -7,28 +7,26 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">   
       <style>
         tr.selected {
-        background-color: #d0e7ff; /* Hervorhebung */
-        }
-        tr:hover {
-        cursor: pointer;
-        background-color: #e8f0fe;
+        background-color: #357bc5 !important; /* Hervorhebung */
         }
     </style>
   </head>
   <body>
-    <h1>Zeiterfassung Bearbeiten</h1>
-    <br>
-    <h2>Zeiterfassungs-ID: {{ zeiterfassungs_id }} für: {{ kunde }}</h2>
-    <br>
     <form method="GET" action="/zeiterfassung">
         <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
         <button>Zurück zu den Zeiterfassungen</button>
     </form>
-    <br><br>
+    <br>
     <a href="{{ url_for('kunden.kunden_seite') }}">
         <button>Zu den Kunden</button>
     </a>
-    <br>
+    <h1>Zeiterfassung Bearbeiten</h1>
+    <table id="kunde-table">
+        <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
+        <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
+        <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
+        <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
+    </table>
     <hr>
     <table border="1" cellpadding="5" cellspacing="0" id="zeiteintraege-table">
         <thead>
@@ -54,7 +52,7 @@
         <input type="date" name="datum">
         <input type="time" name="start_zeit">
         <input type="time" name="end_zeit">
-        <input type="text" name="beschreibung"  required>
+        <input type="text" size="60" name="beschreibung"  required>
         <button type="submit" name="aktion" value="neuerEintrag">Eintrag Hinzufügen</button>
     </form>
     <br>
@@ -62,6 +60,11 @@
         <input type="hidden" name="eintrag_id" id="selectedIdInputLoesche" value="">
         <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
         <button id="editButton" type="submit" name="aktion" value="EintragLöschen">Eintrag Löschen</button>
+    </form>
+    <br>
+    <form id="RechnungErstellen" method="POST" action="/zeiterfassung/bearbeiten">
+        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+        <button id="editButton" type="submit" name="aktion" value="RechnungErstellen">Rechnung Erstellen</button>
     </form>
     <script>
         const table = document.getElementById('zeiteintraege-table');

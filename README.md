@@ -83,3 +83,5 @@ Ideen Datenbankänderungen
 - Rechnungen ein Feld "verschickt" "nicht verschickt"
 - FOREIGN KEY (zeiterfassung_id) REFERENCES zeiterfassungen(id) ON DELETE CASCADE !Einbauen!
 - stundensatz muss in zeiterfassungen - > weil sich der ändern kann mit der Zeit
+- Anzahl Zeiteintraege bei Zeiterfassungstabelle anzeigen
+- Monatsauswahl bei Zeiterfassungserstellungsformular

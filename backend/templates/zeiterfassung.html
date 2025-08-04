@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         tr.selected {
-        background-color: #d0e7ff; /* Hervorhebung */
-        }
-        tr:hover {
-        cursor: pointer;
-        background-color: #e8f0fe;
+        background-color: #cc0022 !important; /* Hervorhebung */
         }
     </style>
     </head>
     <body>
+    <a href="{{ url_for('kunden.kunden_seite') }}">
+        <button>Zu den Kunden</button>
+    </a>
+    <br>
     <h1>Rechnungsprogramm Zeiterfassung</h1>
     <form method="POST" action="/zeiterfassung" id="kundeFilterForm">
         <input type="hidden" name="aktion" value="filtern">       
@@ -49,10 +49,7 @@
         <input type="hidden" name="id" id="selectedIdInput" value="">
         <button type="submit" id="editButton" disabled>Zeiterfassung bearbeiten</button>
     </form>
-    <br>
-    <a href="{{ url_for('kunden.kunden_seite') }}">
-        <button>Zu den Kunden</button>
-    </a>
+
     <hr>
     <table border="1" cellpadding="5" cellspacing="0" id="zeiterfassung-table">
         <thead>

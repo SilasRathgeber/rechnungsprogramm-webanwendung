@@ -117,7 +117,11 @@ def bearbeiten():
                 conn.execute(
                     "DELETE FROM zeiteintraege WHERE id = ?", (zeiteintrag_id,)
                 )
-    
+        
+        if aktion == "RechnungErstellen":
+            return render_template("fehler.html", msg="okay hier könnte eine Vorschau der Rechnung stehen"), 400
+
+
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT k.* FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))

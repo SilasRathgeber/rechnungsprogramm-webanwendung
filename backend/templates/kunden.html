@@ -7,11 +7,10 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   </head>
   <body>
-    <h1>Rechnungsprogramm Kunden</h1>
     <a href="{{ url_for('zeiterfassung.zeiterfassung_seite') }}">
-        <button>Zur Zeiterfassung</button>
+        <button>Zur Zeiterfassung ></button>
     </a>
-    <br><br>
+    <h1>Rechnungsprogramm Kunden</h1>
     <form method="POST" action="/kunden">
       <input type="text" name="name" placeholder="Name" required>
       <input type="text" name="strasse" placeholder="Straße">
