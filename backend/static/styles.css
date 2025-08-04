@@ -1,0 +1,26 @@
+
+
+#zeiterfassung-table tbody tr:nth-child(even) {
+    background-color: #b6b6b6a9;
+}
+
+#zeiterfassung-table tbody tr:hover {
+    background-color: #c58f8f;
+}
+
+#zeiteintraege-table tbody tr:nth-child(even) {
+    background-color: #b6b6b6a9;
+}
+
+#zeiteintraege-table tbody tr:hover {
+    background-color: #7ca1da;
+}
+
+#kunde-table th{
+    text-align: right;
+}
+
+.kunde {
+    font-size: 1.3rem;
+    font-weight:bold;
+}

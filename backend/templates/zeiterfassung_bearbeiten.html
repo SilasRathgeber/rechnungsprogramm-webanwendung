@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Rechnungsprogramm</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">   
+      <style>
+        tr.selected {
+        background-color: #357bc5 !important; /* Hervorhebung */
+        }
+    </style>
+  </head>
+  <body>
+    <form method="GET" action="/zeiterfassung">
+        <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
+        <button>Zurück zu den Zeiterfassungen</button>
+    </form>
+    <br>
+    <a href="{{ url_for('kunden.kunden_seite') }}">
+        <button>Zu den Kunden</button>
+    </a>
+    <h1>Zeiterfassung Bearbeiten</h1>
+    <table id="kunde-table">
+        <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
+        <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
+        <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
+        <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
+    </table>
+    <hr>
+    <table border="1" cellpadding="5" cellspacing="0" id="zeiteintraege-table">
+        <thead>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+            <tr data-id="{{ row['id'] }}">
+                {% for col in columns %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <form method="POST" action="/zeiterfassung/bearbeiten">
+        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+        <input type="date" name="datum">
+        <input type="time" name="start_zeit">
+        <input type="time" name="end_zeit">
+        <input type="text" size="60" name="beschreibung"  required>
+        <button type="submit" name="aktion" value="neuerEintrag">Eintrag Hinzufügen</button>
+    </form>
+    <br>
+    <form id="wegDamit" method="POST" action="/zeiterfassung/bearbeiten">
+        <input type="hidden" name="eintrag_id" id="selectedIdInputLoesche" value="">
+        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+        <button id="editButton" type="submit" name="aktion" value="EintragLöschen">Eintrag Löschen</button>
+    </form>
+    <br>
+    <form id="RechnungErstellen" method="POST" action="/zeiterfassung/bearbeiten">
+        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+        <button id="editButton" type="submit" name="aktion" value="RechnungErstellen">Rechnung Erstellen</button>
+    </form>
+    <script>
+        const table = document.getElementById('zeiteintraege-table');
+        const editButton = document.getElementById('editButton');
+        const selectedIdInput = document.getElementById('selectedIdInput');
+        let selectedRow = null;
+
+        const selectedIdInputs = [
+            document.getElementById('selectedIdInput'),
+            document.getElementById('selectedIdInputLoesche'),
+            // weitere falls vorhanden
+        ];
+
+        table.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                if (selectedRow) selectedRow.classList.remove('selected');
+                row.classList.add('selected');
+                selectedRow = row;
+
+                let zellen = row.querySelectorAll('td');
+                let idAusZelle = zellen[0].textContent.trim(); // oder andere Spalte
+                
+                console.log("ID aus Zelle:", idAusZelle);
+
+                selectedIdInputs.forEach(input => {
+                if(input) input.value = idAusZelle;
+                });
+
+                editButton.disabled = false;
+                // und andere Buttons ggf. auch aktivieren
+            });
+        });
+
+        ['wegDamit'].forEach(formId => {
+            const form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Hidden input im gleichen Formular suchen:
+                    const hiddenInput = form.querySelector('input[type="hidden"]');
+                    if (!hiddenInput || !hiddenInput.value) {
+                        e.preventDefault();
+                        alert('Bitte zuerst eine Zeile auswählen!');
+                    }
+                });
+            }
+        });
+        // Optional: Falls kein Eintrag ausgewählt ist, Button deaktivieren
+        // (z.B. beim Laden oder nach Formular-Submit)
+    </script>
+  </body>
+</html>

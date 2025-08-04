@@ -17,9 +17,11 @@ def get_all_zeiterfassungen():
     c.execute("""
         SELECT
             z.*,
-            r.zeitraum,
             r.projekt,
-            r.kunde_id AS rechnung_kunde_id
+            r.kunde_id AS rechnung_kunde_id,
+            r.abrechnungsart,
+            r.honorar,
+            r.re_datum AS rechnungsdatum
         FROM
             zeiterfassungen z
         LEFT JOIN
@@ -39,16 +41,22 @@ def get_zeiterfassungen_fuer_kunden(kunde_id):
     c = conn.cursor()
     c.execute("""
         SELECT
-            z.*,
-            r.zeitraum,
-            r.projekt,
-            r.kunde_id AS rechnung_kunde_id
+            z.id,
+            z.kunde_id,
+            z.rechnung_id,
+            z.von,
+            z.bis,
+            r.kunde_id AS rechnung_kunde_id,
+            r.abrechnungsart,
+            r.re_datum AS rechnungsdatum
         FROM
             zeiterfassungen z
         LEFT JOIN
             rechnungen r ON z.rechnung_id = r.id
         WHERE
             z.kunde_id = ?
+        ORDER BY
+            r.re_datum IS NOT NULL, r.re_datum DESC
     """, (kunde_id,))
     rows = c.fetchall()
     conn.close()
@@ -57,3 +65,19 @@ def get_zeiterfassungen_fuer_kunden(kunde_id):
     data = [dict(row) for row in rows]
 
     return columns, data
+
+def load_zeiterfassung_by_id(id):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM zeiteintraege WHERE zeiterfassung_id = ?", (id,))
+    columns = [desc[0] for desc in cursor.description]
+    rows = cursor.fetchall()
+    conn.close()
+
+    data = []
+    for row in rows:
+        data.append(dict(zip(columns, row)))
+    return columns, data
+
+
+
