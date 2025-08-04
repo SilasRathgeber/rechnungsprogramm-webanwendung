@@ -5,6 +5,7 @@ from backend.config import db_path
 from backend.common import get_all_kunden, get_all_zeiterfassungen, get_zeiterfassungen_fuer_kunden, load_zeiterfassung_by_id
 from datetime import datetime
 import logging
+from backend.rechnungsprogramm.main import main
 logger = logging.getLogger(__name__)
 
 
@@ -119,7 +120,8 @@ def bearbeiten():
                 )
         
         if aktion == "RechnungErstellen":
-            return render_template("fehler.html", msg="okay hier könnte eine Vorschau der Rechnung stehen"), 400
+            zeiterfassungs_id = request.form.get("id")
+            main(zeiterfassungs_id)
 
 
     with sqlite3.connect(db_path) as conn:
