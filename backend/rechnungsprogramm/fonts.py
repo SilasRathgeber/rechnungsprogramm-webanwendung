@@ -1,6 +1,6 @@
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from rechnungsprogramm.config import *
+from .config import *
 
 def registriere_schriftarten():
     #pdfmetrics.registerFont(TTFont("Calibri", CALIBRI_PATH))

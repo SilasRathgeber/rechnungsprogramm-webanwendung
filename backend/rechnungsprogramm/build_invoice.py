@@ -2,11 +2,11 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 from reportlab.lib.units import mm
-from rechnungsprogramm.config import *
-from rechnungsprogramm.table_machine import generate_invoice_head, generate_invoice_content
-from rechnungsprogramm.build_template import on_the_first_page, on_later_pages
-from rechnungsprogramm.generate_pdf_name import generate_file_name
-from rechnungsprogramm.customer import Customer
+from .config import *
+from .table_machine import generate_invoice_head, generate_invoice_content
+from .build_template import on_the_first_page, on_later_pages
+from .generate_pdf_name import generate_file_name
+from .customer import Customer
 
 def erstelle_rechnung(kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     

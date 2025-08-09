@@ -1,11 +1,11 @@
 import sys
-from backend.rechnungsprogramm.config import *
-from backend.rechnungsprogramm.build_invoice import erstelle_rechnung
-from backend.rechnungsprogramm.fonts import registriere_schriftarten
-from backend.rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
-from backend.rechnungsprogramm.customer import Customer
-from backend.rechnungsprogramm.time_report import TimeReport
-from backend.rechnungsprogramm.invoice import Invoice
+from .config import *
+from .build_invoice import erstelle_rechnung
+from .fonts import registriere_schriftarten
+from .generate_rechnungsnummer import generate_rechnungsnummer
+from .customer import Customer
+from .time_report import TimeReport
+from .invoice import Invoice
 
 def get_excel_file_name():
     if len(sys.argv) != 2:

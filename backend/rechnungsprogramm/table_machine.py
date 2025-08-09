@@ -5,10 +5,10 @@ from reportlab.lib.units import mm
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib import colors
 from datetime import datetime, date
-from rechnungsprogramm.config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
-from rechnungsprogramm.generate_rechnungsnummer import generate_rechnungsnummer
-from rechnungsprogramm.customer import Customer
-from rechnungsprogramm.invoice import Invoice
+from .config import FRAMEWIDTH, FIRMEN_ADRESSE_ORT, FIRMEN_ADRESSE_STRASSE, FIRMEN_NAME
+from .generate_rechnungsnummer import generate_rechnungsnummer
+from .customer import Customer
+from .invoice import Invoice
 
 def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnummer, standard_schriftart) -> None:
     heute = datetime.now()

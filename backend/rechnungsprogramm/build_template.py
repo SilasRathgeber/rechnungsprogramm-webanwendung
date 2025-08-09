@@ -1,12 +1,12 @@
 from reportlab.lib.colors import black
 from reportlab.lib.units import mm
-from rechnungsprogramm.config import *
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, TableStyle, Paragraph
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.styles import getSampleStyleSheet
+from .config import *
 
 # PDF-Datei erzeugen
 def zeichne_briefpapier(c, doc):

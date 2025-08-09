@@ -1,8 +1,8 @@
 from datetime import datetime, date
 from reportlab.platypus import Paragraph
 from decimal import Decimal, ROUND_HALF_UP
-from rechnungsprogramm.customer import Customer
-from rechnungsprogramm.time_report import TimeReport
+from .customer import Customer
+from .time_report import TimeReport
 
 class Invoice:
     def __init__(self, customer: Customer, time_report: TimeReport):

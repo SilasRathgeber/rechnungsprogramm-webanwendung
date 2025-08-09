@@ -1,4 +1,4 @@
-from rechnungsprogramm.config import INVOICE_LOG
+from .config import INVOICE_LOG
 
 def generate_rechnungsnummer():
     with open(INVOICE_LOG, "r", encoding="utf-8") as f:
