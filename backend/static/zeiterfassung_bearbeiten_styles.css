@@ -1,0 +1,128 @@
+body {
+    display: grid;
+    grid-template-rows: 50px auto;
+    grid-template-columns: 1fr;
+    /* height: 100vh; */
+    background: rgb(90, 95, 112);
+    margin: 20px;
+    font-family: "Lato";
+}
+body header {
+    grid-area: 1/1/2/2;
+    background: lightblue;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+header > *{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+body main {
+    grid-area: 2/1/3/2;
+    background-color: rgb(106, 155, 187);
+    display: grid;
+    grid-template-columns: 45% 55%;
+    grid-template-rows: 110px auto;
+    gap: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+.right {
+    grid-area: 1/2/2/3;
+    display: grid;
+    grid-template-rows: 1;
+    grid-template-columns: 1;
+}
+
+main #kunde-table{
+    grid-area: 1/1/2/2;
+    display: block;
+    border-bottom: 0px solid grey;
+    padding-bottom: 10px;
+}
+
+
+tr.selected {
+background-color: #357bc5 !important; /* Hervorhebung */
+}
+
+#zeiteintraege-table tbody tr:nth-child(even) {
+    background-color: #b6b6b6a9;
+}
+#zeiteintraege-table tbody tr:nth-child(odd) {
+    background-color: #dfdfdfa9;
+}
+#zeiteintraege-table tbody tr:hover {
+    background-color: #7ca1da;
+}
+#zeiteintraege-table th,
+#zeiteintraege-table td {
+    border: 0px solid black;
+}
+#zeiteintraege-table th{
+    background-color: azure;
+}
+#zeiteintraege-table th:nth-child(1),
+#zeiteintraege-table td:nth-child(1) {
+    width: 15px;
+    font-size: 10px;
+    font-style: italic;
+}
+#zeiteintraege-table th:nth-child(5),
+#zeiteintraege-table td:nth-child(5) {
+    width: 80%;
+}
+#zeiteintraege-table th:nth-child(7),
+#zeiteintraege-table td:nth-child(7) {
+    white-space: nowrap;
+    text-align: right;
+}
+.left {
+    border-right: 2px solid rgb(165, 164, 132);
+    grid-area: 2/1/3/2;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    grid-template-columns: 1fr;
+}
+
+.left > *{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.left #zeiteintraege-table {
+    overflow: hidden;
+    border-radius: 8px; 
+    border-spacing: 0;  
+    border-collapse: separate; /*Verhindert doppelte Rahmen*/
+    border: 1px solid #ccc;   /* Rahmen um die ganze Tabelle */
+    grid-area: 1/1/2/2;              /* Tabelle füllt die Grid-Zelle */
+    display: table;
+    margin-top: 10px;
+    min-width: 0;    /* Tabellenbreite passt sich Inhalt an */
+    justify-self: start;   /* linksbündig */
+    justify-self: center;
+    /* padding-left: 30px; */
+    margin-right: 10px;
+    height: max-content;
+}
+.left .mular_hinzu{
+    border: 0px solid black;
+    grid-area: 2/1/3/2;
+}
+.left .action-button{
+    border: 0px solid black;
+    grid-area: 3/1/4/2;
+    display: flex;
+    /* justify-content: center;  horizontal zentrieren */
+    align-items: center;      /* vertikal zentrieren */
+    gap: 10px;     
+}

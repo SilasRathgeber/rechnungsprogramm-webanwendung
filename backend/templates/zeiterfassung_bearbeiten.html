@@ -1,71 +1,81 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Rechnungsprogramm</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">   
-      <style>
-        tr.selected {
-        background-color: #357bc5 !important; /* Hervorhebung */
-        }
-    </style>
-  </head>
-  <body>
-    <form method="GET" action="/zeiterfassung">
-        <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
-        <button>Zurück zu den Zeiterfassungen</button>
-    </form>
-    <br>
-    <a href="{{ url_for('kunden.kunden_seite') }}">
-        <button>Zu den Kunden</button>
-    </a>
-    <h1>Zeiterfassung Bearbeiten</h1>
-    <table id="kunde-table">
-        <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
-        <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
-        <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
-        <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
-    </table>
-    <hr>
-    <table border="1" cellpadding="5" cellspacing="0" id="zeiteintraege-table">
-        <thead>
-            <tr>
-                {% for col in columns %}
-                <th>{{ col }}</th>
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <form method="GET" action="/zeiterfassung">
+            <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
+            <button> &lt; Zurück zu den Zeiterfassungen</button>
+        </form>
+        <a href="{{ url_for('kunden.kunden_seite') }}">
+            <button>Kundenverwaltung</button>
+        </a>
+        <h2 class="ZE_ueberschrift">ID: {{ zeiterfassungs_id }} für {{ kunde[1] }}</h2>
+    </header>
+    <main>
+        <table id="kunde-table">
+            <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
+            <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
+            <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
+            <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
+        </table> 
+
+        <div class="left">            
+            <table cellpadding="5" cellspacing="0" id="zeiteintraege-table">
+                <thead>
+                    <tr>
+                        {% for col in columns if col != 'zeiterfassung_id' %}
+                        <th>
+                            {% if col == 'id' %} ID{% endif %}
+                            {% if col == 'datum' %} Datum{% endif %}
+                            {% if col == 'startzeit' %} Startzeit{% endif %}
+                            {% if col == 'endzeit' %} Endzeit{% endif %}
+                            {% if col == 'beschreibung' %} Beschreibung{% endif %}
+                            {% if col == 'stunden' %} Stunden{% endif %}
+                            {% if col == 'gesamt' %} Gesamt{% endif %}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in data %}
+                    <tr data-id="{{ row['id'] }}">
+                        {% for col in columns if col != 'zeiterfassung_id' %}
+                        <td>
+                            {{ row[col] }}
+                            {% if col == 'startzeit' %} Uhr{% endif %}
+                            {% if col == 'endzeit' %} Uhr{% endif %}
+                            {% if col == 'stunden' %} h{% endif %}
+                            {% if col == 'gesamt' %} €{% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for row in data %}
-            <tr data-id="{{ row['id'] }}">
-                {% for col in columns %}
-                <td>{{ row[col] }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <form method="POST" action="/zeiterfassung/bearbeiten">
-        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
-        <input type="date" name="datum">
-        <input type="time" name="start_zeit">
-        <input type="time" name="end_zeit">
-        <input type="text" size="60" name="beschreibung"  required>
-        <button type="submit" name="aktion" value="neuerEintrag">Eintrag Hinzufügen</button>
-    </form>
-    <br>
-    <form id="wegDamit" method="POST" action="/zeiterfassung/bearbeiten">
-        <input type="hidden" name="eintrag_id" id="selectedIdInputLoesche" value="">
-        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
-        <button id="editButton" type="submit" name="aktion" value="EintragLöschen">Eintrag Löschen</button>
-    </form>
-    <br>
-    <form id="RechnungErstellen" method="POST" action="/rechnungen">
-        <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
-        <button id="editButton" type="submit" name="aktion" value="RechnungErstellen">Rechnung Erstellen</button>
-    </form>
+                </tbody>
+            </table>
+            <form class="mular_hinzu" method="POST" action="/zeiterfassung/bearbeiten">
+                <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+                <input type="date" name="datum">
+                <input type="time" name="start_zeit">
+                <input type="time" name="end_zeit">
+                <input type="text" size="60" name="beschreibung"  required>
+                <button type="submit" name="aktion" value="neuerEintrag">Eintrag Hinzufügen</button>
+            </form>
+            <div class="action-button">
+                <form id="wegDamit" method="POST" action="/zeiterfassung/bearbeiten">
+                    <input type="hidden" name="eintrag_id" id="selectedIdInputLoesche" value="">
+                    <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+                    <button id="editButton" type="submit" name="aktion" value="EintragLöschen">Eintrag Löschen</button>
+                </form>
+                <form id="RechnungErstellen" method="POST" action="/rechnungen">
+                    <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
+                    <button id="editButton" type="submit" name="aktion" value="RechnungErstellen">Rechnung Erstellen</button>
+                </form>
+            </div>
+        </div>
+        <div class="right">
+
+        </div>   
+    </main>
     <script>
         const table = document.getElementById('zeiteintraege-table');
         const editButton = document.getElementById('editButton');
@@ -114,5 +124,4 @@
         // Optional: Falls kein Eintrag ausgewählt ist, Button deaktivieren
         // (z.B. beim Laden oder nach Formular-Submit)
     </script>
-  </body>
-</html>
+{% endblock %}

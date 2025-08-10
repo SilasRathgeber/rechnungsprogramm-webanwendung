@@ -4,10 +4,23 @@
 
 pip install -e . #im Root-Verzeichnis des Projekts bzw. im Repository
 
-# Aufruf des Programms noch über: 
+# Weiterentwickeln? Dann das hier machen: 
 
-PYTHONPATH=src python -m rechnungsprogramm.main data/zeiterfassung_januar.xlsx
-..\..\OneDrive - Silas Rathgeber IT\Eigene Dokumente\Kleingewerbe - Silas Rathgeber IT-Dienstleistungen\Kunden\Claus Middelhuß\Zeiterfassung\2023
+sudo systemctl stop rechnungsprogramm-webanwendung-flask.service
+
+cd ~/rechnungsprogramm-webanwendung
+
+source venv/bin/activate
+
+export FLASK_APP=wsgi.py
+export FLASK_ENV=development
+
+flask run --debug
+
+# Fertig mit Entwickeln? Dann das hier machen:
+
+sudo systemctl start rechnungsprogramm-webanwendung-flask
+
 
 ## Einrichtung der virtuellen Umgebung
 
