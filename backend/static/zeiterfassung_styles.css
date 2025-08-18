@@ -1,3 +1,59 @@
-tr.selected {
-background-color: #cc0022 !important; /* Hervorhebung */
+.zeiterfassung tr.selected {
+background-color: #a34051a2 !important; /* Hervorhebung */
+}
+
+#zeiterfassung-table tbody tr:nth-child(even) {
+    background-color: #b6b6b66c;
+}
+
+#zeiterfassung-table tbody tr:hover {
+    background-color: #747fb1;
+}
+.zeiterfassung main{
+    display: grid;
+    /* place-items: center; */
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px, auto;
+}
+
+.zeiterfassung .upper-main{
+    grid-area: 1/1/2/2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* width: 50%;  */
+}
+.zeiterfassung .horizont-linie{
+    border: none;       /* Standardborder entfernen */
+    height: 2px;        /* Höhe der Linie */
+    background-color: #333333b2; /* Farbe der Linie */
+    margin: 10px 0; 
+}
+
+.zeiterfassung .tab-content{
+    grid-area: 2/1/3/2;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 150px, auto;
+    /* width: 50%; */
+
+}
+.zeiterfassung .tool-buttons{
+    grid-area: 1/1/2/2;
+    display: flex;
+    flex-direction:row;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.zeiterfassung #zeiterfassung-table{
+    border-collapse: collapse;
+}
+.zeiterfassung #zeiterfassung-table th{
+    border-left: 0.2px;
+    border-right: 0.2px;
+    font-size: 15px;
+ }
+.zeiterfassung #zeiterfassung-table .z_content{
+    border-top: 0.4px solid rgb(92, 92, 92);
+    border-bottom: 0.4px solid rgb(92, 92, 92);
 }

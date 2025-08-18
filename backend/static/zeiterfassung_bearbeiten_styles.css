@@ -1,55 +1,40 @@
-body {
-    display: grid;
-    grid-template-rows: 50px auto;
-    grid-template-columns: 1fr;
-    /* height: 100vh; */
-    background: rgb(90, 95, 112);
-    margin: 20px;
-    font-family: "Lato";
-}
-.ZE_ueberschrift{
+.zeiterfassung_bearbeiten .ZE_ueberschrift{
     font-size: 18px;
 }
-.ZE_ueberschrift > em{
+.zeiterfassung_bearbeiten .ZE_ueberschrift > em{
     font-style: italic;
     font-size: 25px !important;
 }
-body header {
-    grid-area: 1/1/2/2;
-    background: lightblue;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-header > *{
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-body main {
+.zeiterfassung_bearbeiten main {
     grid-area: 2/1/3/2;
-    background-color: rgb(106, 155, 187);
-    display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 50% auto;
     grid-template-rows: 110px auto;
     gap: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
-
-
-.right {
-    grid-area: 1/2/2/3;
+.zeiterfassung_bearbeiten .right {
+    grid-area: 1/2/4/3;
     display: grid;
-    grid-template-rows: 1;
-    grid-template-columns: 1;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    width: 100%;
+    height: 100%;
+    
 }
-
-main #kunde-table{
+.zeiterfassung_bearbeiten .right .right-wraper{
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    flex-direction: column; 
+}
+iframe{
+    max-width: 90%;
+    width: 1fr;
+    height: 900px;
+    transform-origin: top left;
+    border: none;
+}
+.zeiterfassung_bearbeiten main #kunde-table{
     grid-area: 1/1/2/2;
     display: block;
     border-bottom: 0px solid grey;
@@ -57,42 +42,42 @@ main #kunde-table{
 }
 
 
-tr.selected {
+.zeiterfassung_bearbeiten tr.selected {
 background-color: #357bc5 !important; /* Hervorhebung */
 }
 
-#zeiteintraege-table tbody tr:nth-child(even) {
+.zeiterfassung_bearbeiten #zeiteintraege-table tbody tr:nth-child(even) {
     background-color: #b6b6b6a9;
 }
-#zeiteintraege-table tbody tr:nth-child(odd) {
+.zeiterfassung_bearbeiten #zeiteintraege-table tbody tr:nth-child(odd) {
     background-color: #dfdfdfa9;
 }
-#zeiteintraege-table tbody tr:hover {
+.zeiterfassung_bearbeiten #zeiteintraege-table tbody tr:hover {
     background-color: #7ca1da;
 }
-#zeiteintraege-table th,
+.zeiterfassung_bearbeiten #zeiteintraege-table th,
 #zeiteintraege-table td {
     border: 0px solid black;
 }
-#zeiteintraege-table th{
+.zeiterfassung_bearbeiten #zeiteintraege-table th{
     background-color: azure;
 }
-#zeiteintraege-table th:nth-child(1),
-#zeiteintraege-table td:nth-child(1) {
+.zeiterfassung_bearbeiten #zeiteintraege-table th:nth-child(1),
+.zeiterfassung_bearbeiten #zeiteintraege-table td:nth-child(1) {
     width: 15px;
-    font-size: 10px;
+    font-size: 50%;
     font-style: italic;
 }
-#zeiteintraege-table th:nth-child(5),
-#zeiteintraege-table td:nth-child(5) {
+.zeiterfassung_bearbeiten #zeiteintraege-table th:nth-child(5),
+.zeiterfassung_bearbeiten #zeiteintraege-table td:nth-child(5) {
     width: auto;
 }
-#zeiteintraege-table th:nth-child(7),
-#zeiteintraege-table td:nth-child(7) {
+.zeiterfassung_bearbeiten #zeiteintraege-table th:nth-child(7),
+.zeiterfassung_bearbeiten #zeiteintraege-table td:nth-child(7) {
     white-space: nowrap;
     text-align: right;
 }
-.left {
+.zeiterfassung_bearbeiten .left {
     border-right: 2px solid rgb(165, 164, 132);
     grid-area: 2/1/3/2;
     display: grid;
@@ -100,12 +85,12 @@ background-color: #357bc5 !important; /* Hervorhebung */
     grid-template-columns: 1fr;
 }
 
-.left > *{
+.zeiterfassung_bearbeiten .left > *{
     margin-bottom: 10px;
     margin-top: 10px;
 }
 
-.left #zeiteintraege-table {
+.zeiterfassung_bearbeiten .left #zeiteintraege-table {
     overflow: hidden;
     border-radius: 8px; 
     border-spacing: 0;  
@@ -122,12 +107,13 @@ background-color: #357bc5 !important; /* Hervorhebung */
     height: max-content;
     max-width: 100%;
     width: 100%;
+    font-size: 95%;
 }
-.left .mular_hinzu{
+.zeiterfassung_bearbeiten .left .mular_hinzu{
     border: 0px solid black;
     grid-area: 2/1/3/2;
 }
-.left .action-button{
+.zeiterfassung_bearbeiten .left .action-button{
     border: 0px solid black;
     grid-area: 3/1/4/2;
     display: flex;

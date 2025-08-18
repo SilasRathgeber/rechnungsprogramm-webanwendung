@@ -32,7 +32,7 @@ class Customer:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT k.id, k.name, k.strasse, k.hausnummer, k.plz, k.ort, k.stundensatz
+                SELECT k.id, k.name, k.strasse, k.hausnummer, k.plz, k.ort, k.aktueller_stundensatz
                 FROM kunden k
                 JOIN zeiterfassungen z ON z.kunde_id = k.id
                 WHERE z.id = ?

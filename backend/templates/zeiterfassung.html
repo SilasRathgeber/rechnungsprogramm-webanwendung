@@ -1,121 +1,166 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <a href="{{ url_for('kunden.kunden_seite') }}">
-        <button>Zu den Kunden</button>
-    </a>
-    <br>
-    <h1>Rechnungsprogramm Zeiterfassung</h1>
-    <form method="POST" action="/zeiterfassung" id="kundeFilterForm">
-        <input type="hidden" name="aktion" value="filtern">       
-        <select name="kunde_ausw_id" required onchange="if(this.value) this.form.submit();">
-            <option value="" disabled {% if not kunde_ausw_id %}selected{% endif %}>
-                Bitte Kunden wählen...
-            </option>
-            {% for kunde in kunden %}
-                <option value="{{ kunde[0] }}" {% if kunde_ausw_id == kunde[0]|string %}selected{% endif %}>
-                    {{ kunde[1] }} (ID: {{ kunde[0] }})
-                </option>
-                </option>
-            {% endfor %}
-        </select>
-    </form>
-    <br>
-    <form id="newZeitForm" method="POST" action="/zeiterfassung">
-        <input type="date" id="startDate" name="StartDatum" required>
-        <input type="date" id="endDate" name="EndDatum" required>
-        <input type="hidden" name="kunde_ausw_id" value="{{ kunde_ausw_id }}">
-        <button type="submit" name="aktion" value="neuErfassung"  id="newErfassung">Neue Zeiterfassung erstellen</button>
-    </form>
-    <br>
-    <form id="loescheZeitform" method="POST" action="/zeiterfassung">
-        <input type="hidden" name="id" id="selectedIdInputLoesche" value="">
-        <input type="hidden" name="kunde_ausw_id" value="{{ kunde_ausw_id }}">
-        <button type="submit" name="aktion" value="löschErfassung"  id="löschErfassung">Zeiterfassung löschen</button>
-    </form>
-    <br>
-    <form id="editForm" method="GET" action="/zeiterfassung/bearbeiten">
-        <input type="hidden" name="id" id="selectedIdInput" value="">
-        <input type="hidden" name="von" id="selectedVonInput" value="">
-        <input type="hidden" name="bis" id="selectedBisInput" value="">
-        <button type="submit" id="editButton" disabled>Zeiterfassung bearbeiten</button>
-    </form>
+<body class="zeiterfassung">
+    <header id="erfassung-header" data-kundennummer="{{ kunde_ausw_id|default(1000) }}">
+        <a href="{{ url_for('kunden.kunden_seite') }}">
+            <button>&lt; Kunden</button>
+        </a>
+        <h2>Erfassungen</h2>
+    </header>
+    <main>
+        <div id="upper-main" class="upper-main">
+            <form method="POST" action="/zeiterfassung" id="kundeFilterForm">
+                <input type="hidden" name="aktion" value="filtern">       
+                <select name="kunde_ausw_id" required onchange="if(this.value) this.form.submit();">
+                    <option value="" disabled {% if not kunde_ausw_id %}selected{% endif %}>
+                        Bitte Kunden wählen...
+                    </option>
+                    {% for kunde in kunden %}
+                        <option value="{{ kunde[0] }}" {% if kunde_ausw_id == kunde[0]|string %}selected{% endif %}>
+                            {{ kunde[1] }} (ID: {{ kunde[0] }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+            <div id="tab-buttons" class="tab-buttons">
+                <button data-tab="1">Zeiterfassungen</button>
+                <button data-tab="2">Projekte</button>
+            </div>
+            <h3>{% if kunden_name %}{{ kunden_name or '' }}{% endif %}</h3>
+            <hr class="horizont-linie">
+        </div>
+        <div id="kundenbereich" class="tab-content">
+            <div id="tab-1" class="tab-content">
+                <div class="tool-buttons">
+                        <form id="newZeitForm" method="POST" action="/zeiterfassung">
+                            <input type="date" id="startDate" name="StartDatum" required>
+                            <input type="date" id="endDate" name="EndDatum" required>
+                            <input type="hidden" name="kunde_ausw_id" value="{{ kunde_ausw_id }}">
+                            <button type="submit" name="aktion" value="neuErfassung"  id="newErfassung">Erstellen</button>
+                        </form>
+                        <form id="loescheZeitform" method="POST" action="/zeiterfassung">
+                            <input type="hidden" name="id" id="selectedIdInputLoesche" value="">
+                            <input type="hidden" name="kunde_ausw_id" value="{{ kunde_ausw_id }}">
+                            <button type="submit" name="aktion" value="löschErfassung"  id="löschErfassung">Löschen</button>
+                        </form>
+                        <form id="editForm" method="GET" action="/zeiterfassung/bearbeiten">
+                            <input type="hidden" name="id" id="selectedIdInput" value="">
+                            <button type="submit" id="editButton" disabled>Bearbeiten</button>
+                        </form>
+                    </div>
+                <table cellpadding="14" cellspacing="" id="zeiterfassung-table">
+                    <thead>
+                    <tr>
+                        {% for col in columns if col != 'rechnung_kunde_id' and col != 'abrechnungsart'%}
+                        <th>
+                            {% if col == 'id' %} ID{% endif %}
+                            {% if col == 'kunde_id' %}KdNr.{% endif %}
+                            {% if col == 'rechnung_id' %}Rechnungsnummer{% endif %}
+                            {% if col == 'von' %}von{% endif %}
+                            {% if col == 'bis' %}bis{% endif %}
+                            {% if col == 'rechnungsdatum' %}Rechnungsdatum{% endif %}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in data %}
+                    <tr class="z_content" data-id="{{ row['id'] }}">
+                        {% for col in columns if col != 'rechnung_kunde_id' and col != 'abrechnungsart'%}
+                        <td>{{ row[col] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div id="tab-2" class="tab-content">
+                Inhalt von Tab 2
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='js/zeiterfassung.js') }}">
 
-    <hr>
-    <table border="1" cellpadding="5" cellspacing="0" id="zeiterfassung-table">
-        <thead>
-        <tr>
-            {% for col in columns %}
-            <th>{{ col }}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in data %}
-        <tr data-id="{{ row['id'] }}">
-            {% for col in columns %}
-            <td>{{ row[col] }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    
-    <script>
-        const table = document.getElementById('zeiterfassung-table');
-        const editButton = document.getElementById('editButton');
-        let selectedRow = null;
+            
 
-        const selectedIdInputs = {
-            id: document.getElementById('selectedIdInput'),
-            loesch: document.getElementById('selectedIdInputLoesche'),
-            von: document.getElementById('selectedVonInput'),
-            bis: document.getElementById('selectedBisInput'),
-            // weitere falls vorhanden
-        };
+            // // Beispiel: Kundennummer vom Backend einsetzen
+            // const kundennummer = {{ kunde_ausw_id|default(1000) }};  
 
-        table.querySelectorAll('tbody tr').forEach(row => {
-            row.addEventListener('click', () => {
-                if (selectedRow) selectedRow.classList.remove('selected');
-                row.classList.add('selected');
-                selectedRow = row;
-                
-                let zellen = row.querySelectorAll('td');
+            // // Letzte Ziffer extrahieren
+            // const letzteZiffer = kundennummer % 10;  
 
-                selectedIdInputs.id.value  = zellen[0].textContent.trim();
-                selectedIdInputs.loesch.value = zellen[0].textContent.trim();
-                selectedIdInputs.von.value = zellen[3].textContent.trim(); 
-                selectedIdInputs.bis.value = zellen[4].textContent.trim();
+            // // Farbberechnung: wir drehen den Farbwinkel (Hue) abhängig von letzter Ziffer
+            // const hue = (letzteZiffer * 36) % 360; // 10 mögliche Werte, verteilt über Farbrad
+            // const color = `hsla(${hue}, 40%, 80%, 0.7)`;
 
-                editButton.disabled = false;
-                // und andere Buttons ggf. auch aktivieren
-            });
-        });
+            // document.getElementById("kundenbereich").style.backgroundColor = color;
+            // document.getElementById("upper-main").style.backgroundColor = color;
 
-        ['editForm', 'loescheZeitform'].forEach(formId => {
-            const form = document.getElementById(formId);
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    // Hidden input im gleichen Formular suchen:
-                    const hiddenInput = form.querySelector('input[type="hidden"]');
-                    if (!hiddenInput || !hiddenInput.value) {
-                        e.preventDefault();
-                        alert('Bitte zuerst eine Zeile auswählen!');
-                    }
-                });
-            }
-        });
-        const lösch_button = document.getElementById('loescheZeitform')
-        lösch_button.addEventListener('submit', function(e) {
-            const wirklichLoeschen = confirm("Willst du das wirklich löschen?");
-            if (!wirklichLoeschen){
-                e.preventDefault();
-            }
-        })
+            // const buttons = document.querySelectorAll(".tab-buttons button");
+            // const contents = document.querySelectorAll(".tab-content > .tab-content");
+
+            // // Standardmäßig ersten Tab anzeigen
+            // contents.forEach(c => c.style.display = "none");
+            // document.getElementById("tab-1").style.display = "block";
+
+            
+
+            // buttons.forEach(btn => {
+            //     btn.addEventListener("click", () => {
+            //         contents.forEach(c => c.style.display = "none"); // alle ausblenden
+            //         document.getElementById(`tab-${btn.dataset.tab}`).style.display = "block"; // gewählten anzeigen
+            //     });
+            // });
+
+            // const table = document.getElementById('zeiterfassung-table');
+            // const editButton = document.getElementById('editButton');
+            // let selectedRow = null;
+
+            // const selectedIdInputs = {
+            //     id: document.getElementById('selectedIdInput'),
+            //     loesch: document.getElementById('selectedIdInputLoesche'),
+            //     // weitere falls vorhanden
+            // };
+
+            // table.querySelectorAll('tbody tr').forEach(row => {
+            //     row.addEventListener('click', () => {
+            //         if (selectedRow) selectedRow.classList.remove('selected');
+            //         row.classList.add('selected');
+            //         selectedRow = row;
+                    
+            //         let zellen = row.querySelectorAll('td');
+
+            //         selectedIdInputs.id.value  = zellen[0].textContent.trim();
+            //         selectedIdInputs.loesch.value = zellen[0].textContent.trim();
+
+            //         editButton.disabled = false;
+            //         // und andere Buttons ggf. auch aktivieren
+            //     });
+            // });
+
+            // ['editForm', 'loescheZeitform'].forEach(formId => {
+            //     const form = document.getElementById(formId);
+            //     if (form) {
+            //         form.addEventListener('submit', function(e) {
+            //             // Hidden input im gleichen Formular suchen:
+            //             const hiddenInput = form.querySelector('input[type="hidden"]');
+            //             if (!hiddenInput || !hiddenInput.value) {
+            //                 e.preventDefault();
+            //                 alert('Bitte zuerst eine Zeile auswählen!');
+            //             }
+            //         });
+            //     }
+            // });
+            // const lösch_button = document.getElementById('loescheZeitform')
+            // lösch_button.addEventListener('submit', function(e) {
+            //     const wirklichLoeschen = confirm("Willst du das wirklich löschen?");
+            //     if (!wirklichLoeschen){
+            //         e.preventDefault();
+            //     }
+            // })
 
         
-        // Optional: Falls kein Eintrag ausgewählt ist, Button deaktivieren
-        // (z.B. beim Laden oder nach Formular-Submit)
-    </script>
+        </script>
+    </main>
+</body>
 {% endblock %}

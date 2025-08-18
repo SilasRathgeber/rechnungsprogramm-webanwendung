@@ -1,13 +1,30 @@
-
-
-#zeiterfassung-table tbody tr:nth-child(even) {
-    background-color: #b6b6b6a9;
+body {
+    background: rgb(90, 95, 112);
+    margin: 20px;
+    font-family: "Lato";
+    display: grid;
+    grid-template-rows: 50px auto;
+    grid-template-columns: 1fr;
+    /* height: 100vh; */
 }
-
-#zeiterfassung-table tbody tr:hover {
-    background-color: #c58f8f;
+header {
+    background: lightblue;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
-
+header > *{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+main {
+    background-color: rgb(106, 155, 187);
+    display: grid;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 
 #kunde-table th{
@@ -17,4 +34,38 @@
 .kunde {
     font-size: 1.3rem;
     font-weight:bold;
+}
+button {
+    padding: 0.7vh 1.1vh;      /* vertikal/horizontal größer */
+    font-size: 90%;         /* etwas größere Schrift */
+    border-radius: 8px;        /* eckige Kanten */
+    border: 1.5px solid #0000006b;  /* sichtbarer Rahmen */
+    background-color: #b1b1b1ce;
+    color: #050505;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial;
+}
+
+select option:disabled {
+    color: #999 !important;        /* graue Schrift für deaktivierte Optionen */
+    background-color: #f0f0f0 !important;  /* optional */
+    cursor: not-allowed !important;
+}
+
+select {
+    font-size: 16px;
+    padding: 0.4vb 0.5vb;
+    border: 2px solid #90e7e3af;
+    border-radius: 4px; /* abgerundete Ecken */
+    background-color: #f0f0f0;
+    color: #333;
+}
+input{
+    font-size: 16px;
+    padding: 0.4vb 0.5vb;
+    border: 2px solid #007bff9c;
+    border-radius: 4px; /* abgerundete Ecken */
+    background-color: #f0f0f0;
+    color: #333;
 }

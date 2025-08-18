@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, redirect, url_for
 import sqlite3
 import os
 from backend.config import db_path
-from backend.common import get_all_kunden, get_all_zeiterfassungen, get_zeiterfassungen_fuer_kunden, load_zeiterfassung_by_id, date_from_ISO_to_norml
+from backend.common import *
 from datetime import datetime
 import logging
 from backend.rechnungsprogramm.main import main
@@ -17,10 +17,12 @@ def zeiterfassung_seite():
     kunden = get_all_kunden()         # Dropdown-Daten
     columns, data = [], []            # Tabellenstruktur
     kunde_ausw_id = None              # Vorauswahl
+    kunden_name = ""
 
     if request.method == "POST":
         aktion = request.form.get("aktion")
         kunde_ausw_id = request.form.get("kunde_ausw_id")  # immer lesen
+        kunden_name = get_kundenname(kunde_ausw_id)
 
         if aktion == "filtern":
             if kunde_ausw_id:
@@ -46,9 +48,6 @@ def zeiterfassung_seite():
             if zeiterfassung_id:
                 with sqlite3.connect(db_path) as conn:
                     conn.execute(
-                        "DELETE FROM zeiteintraege WHERE zeiterfassung_id = ?", (zeiterfassung_id,)
-                    )
-                    conn.execute(
                         "DELETE FROM zeiterfassungen WHERE id = ?", (zeiterfassung_id,)
                     )
             # Tabelle nach Löschung neu laden
@@ -60,13 +59,15 @@ def zeiterfassung_seite():
 
         if kunde_ausw_id:
             columns, data = get_zeiterfassungen_fuer_kunden(kunde_ausw_id)
+            kunden_name = get_kundenname(kunde_ausw_id)
             
     return render_template(
         'zeiterfassung.html',
         kunden=kunden,
         columns=columns,
         data=data,
-        kunde_ausw_id=kunde_ausw_id
+        kunde_ausw_id=kunde_ausw_id,
+        kunden_name = kunden_name
     )
 
 
@@ -75,11 +76,6 @@ def bearbeiten():
     datei_name = None
     if request.method == "GET":
         zeiterfassungs_id = request.args.get('id')
-        zeiterfassung_von = request.args.get('von')
-        zeiterfassung_bis = request.args.get('bis')
-        zeiterfassung_von_lesbar = date_from_ISO_to_norml(zeiterfassung_von)
-        zeiterfassung_bis_lesbar = date_from_ISO_to_norml(zeiterfassung_bis)
-        logger.info(f"zeiterfassung_von aus args: {zeiterfassung_von}")
     else:
         zeiterfassungs_id = request.form.get('id')
 
@@ -104,7 +100,7 @@ def bearbeiten():
             # Stundensatz aus zeiterfassungen lesen
             with sqlite3.connect(db_path) as conn:
                 cursor = conn.cursor()  # <- MUSS innerhalb des Blocks sein
-                cursor.execute("SELECT k.stundensatz FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))
+                cursor.execute("SELECT k.aktueller_stundensatz FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))
                 result = cursor.fetchone()
                 logger.info(f"Ergebnis der Datenabfrage für stundensatz: {result}")
                 if result is None:
@@ -135,6 +131,12 @@ def bearbeiten():
         cursor = conn.cursor()
         cursor.execute("SELECT k.* FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))
         kunde = cursor.fetchone()
+        cursor.execute("SELECT von, bis FROM zeiterfassungen WHERE id = ?", (zeiterfassungs_id,))
+        result = cursor.fetchone()
+        if result:
+            von, bis = result
+            von=date_from_ISO_to_norml(von)
+            bis=date_from_ISO_to_norml(bis)
     # GET: Lade die Daten für das Formular
     # z.B. hole aus DB die Zeiterfassung mit der ID
     logger.info(f"Inhalt zeiterfassung_id: {zeiterfassungs_id}")
@@ -148,8 +150,8 @@ def bearbeiten():
         columns=columns, 
         data=data, 
         zeiterfassungs_id=zeiterfassungs_id, 
-        zeiterfassung_von=zeiterfassung_von_lesbar,
-        zeiterfassung_bis=zeiterfassung_bis_lesbar,
         kunde=kunde,
-        datei_name=datei_name
+        datei_name=datei_name,
+        zeiterfassung_von=von,
+        zeiterfassung_bis=bis
         )

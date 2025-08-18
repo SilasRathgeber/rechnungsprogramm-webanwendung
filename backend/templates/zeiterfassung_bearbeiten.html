@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <header>
+<body class="zeiterfassung_bearbeiten">
+    <header id="erfassung-header" data-kundennummer="{{ kunde[0]|default(1000) }}">
         <form method="GET" action="/zeiterfassung">
             <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
-            <button> &lt; Zurück zu den Zeiterfassungen</button>
+            <button> &lt; Erfassungen</button>
         </form>
         <a href="{{ url_for('kunden.kunden_seite') }}">
-            <button>Kundenverwaltung</button>
+            <button>Kunden</button>
         </a>
         <h2 class="ZE_ueberschrift">ID: <em>{{ zeiterfassungs_id }}</em> für: <em>{{ kunde[1] }}</em> von: <em>{{ zeiterfassung_von }}</em> bis: <em>{{ zeiterfassung_bis }}</em></h2>
     </header>
@@ -23,7 +24,7 @@
             <table cellpadding="5" cellspacing="0" id="zeiteintraege-table">
                 <thead>
                     <tr>
-                        {% for col in columns if col != 'zeiterfassung_id' %}
+                        {% for col in columns if col != 'zeiterfassung_id' and col != 'stundensatz' %}
                         <th>
                             {% if col == 'id' %} ID{% endif %}
                             {% if col == 'datum' %} Datum{% endif %}
@@ -39,7 +40,7 @@
                 <tbody>
                 {% for row in data %}
                     <tr data-id="{{ row['id'] }}">
-                        {% for col in columns if col != 'zeiterfassung_id' %}
+                        {% for col in columns if col != 'zeiterfassung_id' and col != 'stundensatz' %}
                         <td>
                             {{ row[col] }}
                             {% if col == 'startzeit' %} Uhr{% endif %}
@@ -73,15 +74,17 @@
             </div>
         </div>
         <div class="right">
-            {% if datei_name %}
-                <p>{{datei_name}}</p>
-                <iframe src="{{ url_for('static', filename='pdf/' ~ datei_name) }}" width="20%" height="300px"></iframe>
-            {% else %}
-                <p>Kein PDF verfügbar</p>
-            {% endif %}
+            <div class="right-wraper"
+                {% if datei_name %}
+                    <p>{{datei_name}}</p>
+                    <iframe src="{{ url_for('static', filename='pdf/' ~ datei_name) }}" width="100%" height="100%"></iframe>
+                {% else %}
+                    <p>Kein PDF verfügbar</p>
+                {% endif %}
+            </div>
         </div>   
     </main>
-    <script>
+    <script src="{{ url_for('static', filename='js/zeiterfassung.js') }}">
         const table = document.getElementById('zeiteintraege-table');
         const editButton = document.getElementById('editButton');
         const selectedIdInput = document.getElementById('selectedIdInput');
@@ -129,4 +132,5 @@
         // Optional: Falls kein Eintrag ausgewählt ist, Button deaktivieren
         // (z.B. beim Laden oder nach Formular-Submit)
     </script>
+</body>
 {% endblock %}

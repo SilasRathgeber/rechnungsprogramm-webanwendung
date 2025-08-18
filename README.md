@@ -15,7 +15,7 @@ source venv/bin/activate
 export FLASK_APP=wsgi.py
 export FLASK_ENV=development
 
-flask run --debug
+flask run --host=0.0.0.0 --port=5000 --debug
 
 # Fertig mit Entwickeln? Dann das hier machen:
 
@@ -93,8 +93,5 @@ table_machine.py
 02.08.2025
 
 Ideen Datenbankänderungen
-- Rechnungen ein Feld "verschickt" "nicht verschickt"
-- FOREIGN KEY (zeiterfassung_id) REFERENCES zeiterfassungen(id) ON DELETE CASCADE !Einbauen!
-- stundensatz muss in zeiterfassungen - > weil sich der ändern kann mit der Zeit
 - Anzahl Zeiteintraege bei Zeiterfassungstabelle anzeigen
 - Monatsauswahl bei Zeiterfassungserstellungsformular
