@@ -7,6 +7,13 @@ body {
     margin: 20px;
     font-family: "Lato";
 }
+.ZE_ueberschrift{
+    font-size: 18px;
+}
+.ZE_ueberschrift > em{
+    font-style: italic;
+    font-size: 25px !important;
+}
 body header {
     grid-area: 1/1/2/2;
     background: lightblue;
@@ -78,7 +85,7 @@ background-color: #357bc5 !important; /* Hervorhebung */
 }
 #zeiteintraege-table th:nth-child(5),
 #zeiteintraege-table td:nth-child(5) {
-    width: 80%;
+    width: auto;
 }
 #zeiteintraege-table th:nth-child(7),
 #zeiteintraege-table td:nth-child(7) {
@@ -113,6 +120,8 @@ background-color: #357bc5 !important; /* Hervorhebung */
     /* padding-left: 30px; */
     margin-right: 10px;
     height: max-content;
+    max-width: 100%;
+    width: 100%;
 }
 .left .mular_hinzu{
     border: 0px solid black;

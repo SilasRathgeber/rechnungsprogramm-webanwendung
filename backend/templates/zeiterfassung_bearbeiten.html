@@ -9,7 +9,7 @@
         <a href="{{ url_for('kunden.kunden_seite') }}">
             <button>Kundenverwaltung</button>
         </a>
-        <h2 class="ZE_ueberschrift">ID: {{ zeiterfassungs_id }} für {{ kunde[1] }}</h2>
+        <h2 class="ZE_ueberschrift">ID: <em>{{ zeiterfassungs_id }}</em> für: <em>{{ kunde[1] }}</em> von: <em>{{ zeiterfassung_von }}</em> bis: <em>{{ zeiterfassung_bis }}</em></h2>
     </header>
     <main>
         <table id="kunde-table">
@@ -66,14 +66,19 @@
                     <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
                     <button id="editButton" type="submit" name="aktion" value="EintragLöschen">Eintrag Löschen</button>
                 </form>
-                <form id="RechnungErstellen" method="POST" action="/rechnungen">
+                <form id="RechnungErstellen" method="POST" action="/zeiterfassung/bearbeiten">
                     <input type="hidden" name="id" value="{{ zeiterfassungs_id }}">
-                    <button id="editButton" type="submit" name="aktion" value="RechnungErstellen">Rechnung Erstellen</button>
+                    <button id="editButton" type="submit" name="aktion" value="RechnungVorschau">Vorschau</button>
                 </form>
             </div>
         </div>
         <div class="right">
-
+            {% if datei_name %}
+                <p>{{datei_name}}</p>
+                <iframe src="{{ url_for('static', filename='pdf/' ~ datei_name) }}" width="20%" height="300px"></iframe>
+            {% else %}
+                <p>Kein PDF verfügbar</p>
+            {% endif %}
         </div>   
     </main>
     <script>

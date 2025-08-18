@@ -1,6 +1,7 @@
 import sqlite3
 from flask import render_template
 from backend.config import db_path
+from datetime import datetime
 
 def get_all_kunden():
     conn = sqlite3.connect(db_path)
@@ -79,5 +80,8 @@ def load_zeiterfassung_by_id(id):
         data.append(dict(zip(columns, row)))
     return columns, data
 
-
+def date_from_ISO_to_norml(date):
+    datum_obj = datetime.strptime(date, "%Y-%m-%d")
+    datum_lesbar = datum_obj.strftime("%d.%m.%Y")
+    return datum_lesbar
 

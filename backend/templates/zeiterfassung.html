@@ -36,6 +36,8 @@
     <br>
     <form id="editForm" method="GET" action="/zeiterfassung/bearbeiten">
         <input type="hidden" name="id" id="selectedIdInput" value="">
+        <input type="hidden" name="von" id="selectedVonInput" value="">
+        <input type="hidden" name="bis" id="selectedBisInput" value="">
         <button type="submit" id="editButton" disabled>Zeiterfassung bearbeiten</button>
     </form>
 
@@ -63,14 +65,15 @@
     <script>
         const table = document.getElementById('zeiterfassung-table');
         const editButton = document.getElementById('editButton');
-        const selectedIdInput = document.getElementById('selectedIdInput');
         let selectedRow = null;
 
-        const selectedIdInputs = [
-            document.getElementById('selectedIdInput'),
-            document.getElementById('selectedIdInputLoesche'),
+        const selectedIdInputs = {
+            id: document.getElementById('selectedIdInput'),
+            loesch: document.getElementById('selectedIdInputLoesche'),
+            von: document.getElementById('selectedVonInput'),
+            bis: document.getElementById('selectedBisInput'),
             // weitere falls vorhanden
-        ];
+        };
 
         table.querySelectorAll('tbody tr').forEach(row => {
             row.addEventListener('click', () => {
@@ -79,11 +82,11 @@
                 selectedRow = row;
                 
                 let zellen = row.querySelectorAll('td');
-                let idAusZelle = zellen[0].textContent.trim(); // oder andere Spalte
 
-                selectedIdInputs.forEach(input => {
-                    if(input) input.value = idAusZelle;
-                });
+                selectedIdInputs.id.value  = zellen[0].textContent.trim();
+                selectedIdInputs.loesch.value = zellen[0].textContent.trim();
+                selectedIdInputs.von.value = zellen[3].textContent.trim(); 
+                selectedIdInputs.bis.value = zellen[4].textContent.trim();
 
                 editButton.disabled = false;
                 // und andere Buttons ggf. auch aktivieren

@@ -2,9 +2,10 @@ from flask import Blueprint, request, render_template, redirect, url_for
 import sqlite3
 import os
 from backend.config import db_path
-from backend.common import get_all_kunden, get_all_zeiterfassungen, get_zeiterfassungen_fuer_kunden, load_zeiterfassung_by_id
+from backend.common import get_all_kunden, get_all_zeiterfassungen, get_zeiterfassungen_fuer_kunden, load_zeiterfassung_by_id, date_from_ISO_to_norml
 from datetime import datetime
 import logging
+from backend.rechnungsprogramm.main import main
 
 logger = logging.getLogger(__name__)
 
@@ -71,9 +72,14 @@ def zeiterfassung_seite():
 
 @zeiterfassung_bp.route("/zeiterfassung/bearbeiten", methods=["GET", "POST"])
 def bearbeiten():
+    datei_name = None
     if request.method == "GET":
         zeiterfassungs_id = request.args.get('id')
-        logger.info(f"zeiterfassung_id aus args: {zeiterfassungs_id}")
+        zeiterfassung_von = request.args.get('von')
+        zeiterfassung_bis = request.args.get('bis')
+        zeiterfassung_von_lesbar = date_from_ISO_to_norml(zeiterfassung_von)
+        zeiterfassung_bis_lesbar = date_from_ISO_to_norml(zeiterfassung_bis)
+        logger.info(f"zeiterfassung_von aus args: {zeiterfassung_von}")
     else:
         zeiterfassungs_id = request.form.get('id')
 
@@ -119,6 +125,9 @@ def bearbeiten():
                     "DELETE FROM zeiteintraege WHERE id = ?", (zeiteintrag_id,)
                 )
         
+        if aktion == "RechnungVorschau":
+            zeiterfassungs_id = request.form.get("id")
+            datei_name = main(zeiterfassungs_id)
 
 
 
@@ -131,9 +140,16 @@ def bearbeiten():
     logger.info(f"Inhalt zeiterfassung_id: {zeiterfassungs_id}")
     columns, data = load_zeiterfassung_by_id(zeiterfassungs_id)
     logger.info(f"Inhalt von data und columns: {columns, data}")
+
+
+
     return render_template(
         "zeiterfassung_bearbeiten.html", 
         columns=columns, 
         data=data, 
         zeiterfassungs_id=zeiterfassungs_id, 
-        kunde=kunde)
+        zeiterfassung_von=zeiterfassung_von_lesbar,
+        zeiterfassung_bis=zeiterfassung_bis_lesbar,
+        kunde=kunde,
+        datei_name=datei_name
+        )
