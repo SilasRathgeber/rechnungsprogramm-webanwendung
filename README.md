@@ -95,3 +95,7 @@ table_machine.py
 Ideen Datenbankänderungen
 - Anzahl Zeiteintraege bei Zeiterfassungstabelle anzeigen
 - Monatsauswahl bei Zeiterfassungserstellungsformular
+- Stundensatz auf Zeiterfassung/bearbeiten funktion/formular 
+
+wo bin ich stehen geblieben am 23.08.25:
+im template zeiterfassung_bearbeiten.html ein Form erstellen, mit dem man den Stundensatz anpassen kann

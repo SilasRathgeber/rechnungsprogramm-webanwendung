@@ -19,7 +19,10 @@ def get_excel_file_name():
 def main(zeiterfassungs_id, vorschau: int):
     print(f"\nRechnungsprogramm wird ausgeführt...\n")
     registriere_schriftarten()
-    rechnungsnummer = generate_rechnungsnummer()
+    if vorschau == 1:
+        rechnungsnummer = "0"
+    elif vorschau == 0:
+        rechnungsnummer = generate_rechnungsnummer()
     jetzt = datetime.now()
     rechnungsdatum = jetzt.date()
     zeit_protokoll = TimeReport.from_sql(zeiterfassungs_id)

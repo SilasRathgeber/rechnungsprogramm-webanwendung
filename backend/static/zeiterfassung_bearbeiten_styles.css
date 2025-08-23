@@ -121,3 +121,7 @@ background-color: #357bc5 !important; /* Hervorhebung */
     align-items: center;      /* vertikal zentrieren */
     gap: 10px;     
 }
+
+.zeiterfassung_bearbeiten .left .stundensatz{
+    grid-area: 1/1/2/2;
+}

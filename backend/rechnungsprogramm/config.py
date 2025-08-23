@@ -58,7 +58,7 @@ DEFAULT_CONFIG = {
     "kundenliste": str(KUNDENLISTE_DEFAULT),
     "invoice_log": str(INVOICE_LOG),
     "logo": str(LOGO_PATH),
-    "firmen_name": "Max Mustermann",
+    "firmen_name": "Silas Rathgeber",
     "firmen_adresse_strasse": "Musterstraße 1",
     "firmen_adresse_ort": "12345 Musterstadt",
     "firmen_tel": "0123 4567890",
@@ -92,8 +92,8 @@ def load_config():
         return json.load(f)
 
 CONFIG = load_config()
-KUNDENLISTE = Path(CONFIG["kundenliste"])
-print(f"Verwendete Kundenliste:\n{KUNDENLISTE}")
+# KUNDENLISTE = Path(CONFIG["kundenliste"])
+# print(f"Verwendete Kundenliste:\n{KUNDENLISTE}")
 INVOICE_LOG = Path(CONFIG["invoice_log"])
 LOGO_PATH = Path(CONFIG["logo"])
 print(f"Verwendetes Logo:\n{LOGO_PATH}")
@@ -111,14 +111,14 @@ FIRMEN_KREDITINSTITUT = CONFIG["firmen_kreditinstitut"]
 
 
 # Exceldatei erzeugen, falls in der config.json noch der Default-Pfad angegeben ist und falls sie noch nicht vorhanden ist (gleiches für die log-Datei)
-if KUNDENLISTE == KUNDENLISTE_DEFAULT:
-    if not KUNDENLISTE_DEFAULT.exists():
-        df = pd.DataFrame(columns=["KndNr.", "Name", "Straße", "Hausnummer", "Postleitzahl", "Ort", "Vereinbarter Stundensatz"])
-        df.loc[0] = ["1000", "Müller", "Hauptstraße", "12a", "12345", "Berlin", 50]
-        df.to_excel(KUNDENLISTE_DEFAULT, index=False)
+# if KUNDENLISTE == KUNDENLISTE_DEFAULT:
+#     if not KUNDENLISTE_DEFAULT.exists():
+#         df = pd.DataFrame(columns=["KndNr.", "Name", "Straße", "Hausnummer", "Postleitzahl", "Ort", "Vereinbarter Stundensatz"])
+#         df.loc[0] = ["1000", "Müller", "Hauptstraße", "12a", "12345", "Berlin", 50]
+#         df.to_excel(KUNDENLISTE_DEFAULT, index=False)
 
-    if not INVOICE_LOG.exists():
-        INVOICE_LOG.write_text(f"0000\n", encoding="utf-8")
+#     if not INVOICE_LOG.exists():
+#         INVOICE_LOG.write_text(f"0000\n", encoding="utf-8")
 
 # Was soll ausgeführt werden, wenn config.py direkt aufgerufen wird:
 if __name__ == "__main__":

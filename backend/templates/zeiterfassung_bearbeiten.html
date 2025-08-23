@@ -19,6 +19,17 @@
             <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
             <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
         </table> 
+        <form class="stundensatz">
+            <label for="zahl">Stundensatz:</label>
+            <input
+                id="zahl"
+                type="number"
+                step="0.01"
+                min="0"
+                max="1000"
+                value="0.00"
+            />
+        </form>
 
         <div class="left">            
             <table cellpadding="5" cellspacing="0" id="zeiteintraege-table">
