@@ -123,7 +123,7 @@ def bearbeiten():
         
         if aktion == "RechnungVorschau":
             zeiterfassungs_id = request.form.get("id")
-            datei_name = main(zeiterfassungs_id)
+            datei_name = main(zeiterfassungs_id, 1)
 
 
 

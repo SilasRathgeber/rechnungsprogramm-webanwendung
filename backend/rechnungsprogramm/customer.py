@@ -4,14 +4,13 @@ from backend.config import db_path
 import sqlite3
 
 class Customer:
-    def __init__(self, customer_id, name, street, house_number, postal_code, city, fee):
+    def __init__(self, customer_id, name, street, house_number, postal_code, city):
         self.customer_id = customer_id
         self.name = name
         self.street = street
         self.house_number = house_number
         self.postal_code = postal_code
         self.city = city
-        self.fee = fee
 
     @classmethod
     def from_excel(cls, kundenliste_path: str, kundennummer: str):
@@ -24,7 +23,6 @@ class Customer:
             house_number = row['Hausnummer'],
             postal_code=row['Postleitzahl'],
             city=row['Ort'],
-            fee=row['Vereinbarter Stundensatz']
             )
     
     @classmethod
@@ -47,7 +45,6 @@ class Customer:
                 house_number=row[3],
                 postal_code=row[4],
                 city=row[5],
-                fee=row[6]
             )
 
     def print_tabulated(self):
@@ -58,6 +55,5 @@ class Customer:
             self.house_number,
             self.postal_code,
             self.city,
-            self.fee
         ]]
         print(tabulate(data, tablefmt="fancy_grid"))

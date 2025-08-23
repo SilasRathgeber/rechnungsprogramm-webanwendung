@@ -7,11 +7,12 @@ from datetime import datetime
 
 
 class TimeReport:
-    def __init__(self, kundennummer, start_day, stop_day, content: list):
+    def __init__(self, kundennummer, start_day, stop_day, content: list, stundensatz):
         self.kundennummer = kundennummer
         self.start_day = start_day
         self.stop_day = stop_day
         self.content = content
+        self.stundensatz = stundensatz
 
     @classmethod
     def from_excel(cls, time_report_path: str):
@@ -35,7 +36,7 @@ class TimeReport:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                    SELECT kunde_id, von, bis
+                    SELECT kunde_id, von, bis, stundensatz
                     FROM zeiterfassungen 
                     WHERE id = ?
                 """, (zeiterfassungs_id,))
@@ -64,7 +65,7 @@ class TimeReport:
 
                 # Startzeit und Endzeit in time-Objekte umwandeln, falls nicht None oder leer
                 def parse_time(t):
-                    if t is None or t == '':
+                    if t is None or t == '' or t.upper() == 'NULL':
                         return None
                     try:
                         return datetime.strptime(t, "%H:%M").time()  # Format anpassen, je nach DB
@@ -77,8 +78,49 @@ class TimeReport:
                 content.append([datum, None, beschreibung, start, stop])
 
 
-            kundennummer, start_day_str, stop_day_str = zeiterfassung_row
+            kundennummer, start_day_str, stop_day_str, stundensatz = zeiterfassung_row
+            
 
+            cursor.execute("""
+            SELECT k.aktueller_stundensatz
+            FROM zeiterfassungen z
+            JOIN kunden k ON z.kunde_id = k.id
+            WHERE z.id = ?;
+            """, (zeiterfassungs_id,))
+            row = cursor.fetchone()
+            aktueller_stundensatz = float(row[0]) if row and row[0] is not None else 0.0
+
+            
+            if stundensatz in ('', 'NULL', None) and aktueller_stundensatz not in ('', 'NULL', None):
+                print("Hallo aus if stundensatz ist Null aber aktueller_stundensatz ist nicht Null")
+                # Wenn in stundensatz von zeiterfassungen nichts drinnen steht, nimm den Stundensatz aus der kundentabelle aus "aktueller_stundensatz"
+                stundensatz = aktueller_stundensatz
+                cursor.execute("""
+                UPDATE zeiterfassungen
+                SET stundensatz = ?
+                WHERE id = ?
+                """, (aktueller_stundensatz, zeiterfassungs_id))
+                conn.commit()
+            elif stundensatz not in (None, '', 'NULL', '0.0') and stundensatz != 0.0 and aktueller_stundensatz != stundensatz:
+                print("Hallo aus stundensatz ist nicht null und aktueller_stundensatz ist nicht gleich stundensatz")
+                print("stundensatz aus zeiterfassung:", stundensatz)
+                print("aktueller_stundensatz aus kunde:", aktueller_stundensatz)
+                cursor.execute("""
+                UPDATE kunden
+                SET aktueller_stundensatz = ?
+                WHERE id = (
+                    SELECT kunde_id
+                    FROM zeiterfassungen
+                    WHERE id = ?
+                );
+                """, (stundensatz, zeiterfassungs_id))
+
+                conn.commit()
+
+            
+            
+
+            stundensatz = float(row[0]) if row and row[0] is not None else 0.0
             start_day = datetime.strptime(start_day_str, "%Y-%m-%d")
             stop_day = datetime.strptime(stop_day_str, "%Y-%m-%d")
 
@@ -86,7 +128,8 @@ class TimeReport:
             kundennummer=kundennummer,
             start_day=start_day,
             stop_day=stop_day,
-            content=content
+            content=content,
+            stundensatz=stundensatz
         )
 
     def print_time_report(self):

@@ -5,12 +5,14 @@ from .customer import Customer
 from .time_report import TimeReport
 
 class Invoice:
-    def __init__(self, customer: Customer, time_report: TimeReport):
+    def __init__(self, customer: Customer, time_report: TimeReport, rechnungsdatum: date):
         self.customer = customer
         self.time_report = time_report
+        self.stundensatz = time_report.stundensatz
         self.total_hours = Decimal(0.0)
         self.total_price = Decimal(0.0)
         self.invoice_items = 0
+        self.rechnungsdatum = rechnungsdatum
 
     def raise_data_item_table(self):
         tabelle = []
@@ -23,8 +25,14 @@ class Invoice:
                 for j, element in enumerate(unterliste):
                     if j==0:
                         if isinstance(element, str):
-                            element = datetime.strptime(element, "%y-%m-%d")
-                        TAGESDATUM = element.strftime("%d.%m.%Y")
+                            if not element or element.upper() == "NULL":
+                                element = None   # oder ein Default-Datum setzen
+                            else:
+                                element = datetime.strptime(element, "%d.%m.%y")
+                        if element is None:
+                            TAGESDATUM = ""   # oder ein Platzhalter, z. B. "-"
+                        else:
+                            TAGESDATUM = element.strftime("%d.%m.%Y")
                     if j==2:
                         BESCHREIBUNG = element
                     if j==3:
@@ -32,21 +40,25 @@ class Invoice:
                     if j==4:
                         STOP = element
                 self.invoice_items += 1
-                start_dt = datetime.combine(date.today(), START)
-                stop_dt = datetime.combine(date.today(), STOP)
-                dauer = stop_dt - start_dt
-                dauer_stunden = Decimal(str(dauer.total_seconds() / 3600))
-                satz = Decimal(str(self.customer.fee))
-                stunden_mal_satz = (satz * dauer_stunden).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                anzeige_start = START.strftime("%H:%M")
-                anzeige_stop = STOP.strftime("%H:%M")
-                self.total_price += stunden_mal_satz
-                self.total_hours += dauer_stunden
+                if START is None or STOP is None:
+                    start_dt = None   # oder überspringen
+                    stop_dt = None
+                else:
+                    start_dt = datetime.combine(date.today(), START)
+                    stop_dt = datetime.combine(date.today(), STOP)
+                    dauer = stop_dt - start_dt
+                    dauer_stunden = Decimal(str(dauer.total_seconds() / 3600))
+                    satz = Decimal(str(self.stundensatz))
+                    stunden_mal_satz = (satz * dauer_stunden).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                    anzeige_start = START.strftime("%H:%M")
+                    anzeige_stop = STOP.strftime("%H:%M")
+                    self.total_price += stunden_mal_satz
+                    self.total_hours += dauer_stunden
 
                 zeile = [
                     f"{BESCHREIBUNG}<br/><font color=#A6A6A6 size=8>{TAGESDATUM} {anzeige_start} - {anzeige_stop} Uhr</font>",
                     f"{dauer_stunden}".replace(".",","),
-                    f"{self.customer.fee}",
+                    f"{self.time_report.stundensatz}",
                     f"{stunden_mal_satz:.2f} €".replace(".",",")
                 ]
                 tabelle.append(zeile)

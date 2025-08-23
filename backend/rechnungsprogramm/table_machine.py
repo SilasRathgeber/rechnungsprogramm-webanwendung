@@ -10,9 +10,9 @@ from .generate_rechnungsnummer import generate_rechnungsnummer
 from .customer import Customer
 from .invoice import Invoice
 
-def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnummer, standard_schriftart) -> None:
+def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnummer, standard_schriftart, rechnung: Invoice) -> None:
     heute = datetime.now()
-    deutsches_datum = heute.strftime("%d.%m.%Y")
+    deutsches_datum = rechnung.rechnungsdatum.strftime("%d.%m.%Y")
     STARTDATUMlst = report_head_infos[1]
     ENDDATUMlst = report_head_infos[2]
 
@@ -83,7 +83,7 @@ def generate_invoice_head(kunde: Customer, report_head_infos: list, rechnungsnum
 
 def generate_invoice_content(rechnung: Invoice, kunde: Customer, standard_schriftart, font_table_head):
 
-    STUNDENSATZ = kunde.fee
+    STUNDENSATZ = rechnung.stundensatz
 
     styles = getSampleStyleSheet()
     ueberschriften_rechts = ParagraphStyle(

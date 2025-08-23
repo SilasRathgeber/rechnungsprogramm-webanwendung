@@ -7,14 +7,22 @@ from .table_machine import generate_invoice_head, generate_invoice_content
 from .build_template import on_the_first_page, on_later_pages
 from .generate_pdf_name import generate_file_name
 from .customer import Customer
+from .find_speicherpfad import *
 
-def erstelle_rechnung(kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
+def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
-    datei_name = generate_file_name(rechnungsnummer, report_head_infos)
-    pfad =f"backend/static/pdf/{datei_name}"
+    if vorschau == 1:
+        datei_name = "Vorschaudatei.pdf"
+        os.makedirs("backend/static/pdf/", exist_ok=True)
+        pfad= f"backend/static/pdf/{datei_name}"
+    else:    
+        datei_name = generate_file_name(rechnungsnummer, report_head_infos)
+        base_pfad = find_pfad(rechnung.rechnungsdatum)
+        pfad = f"{base_pfad}/{datei_name}"
+
     doc = SimpleDocTemplate(pfad, pagesize=A4, leftMargin=LEFTMARGIN, rightMargin=RIGHTMARGIN, topMargin=TOPMARGIN, bottomMargin=BOTTOMMARGIN)
     
-    tabelle1 = generate_invoice_head(kunde, report_head_infos, rechnungsnummer, standard_schriftart)
+    tabelle1 = generate_invoice_head(kunde, report_head_infos, rechnungsnummer, standard_schriftart, rechnung)
     tabelle1.spaceBefore = 0
     tabelle1.spaceAfter = 0
     spacer1 = Spacer(1, 37 * mm)
