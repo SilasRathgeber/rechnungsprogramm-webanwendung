@@ -8,7 +8,7 @@
 .zeiterfassung_bearbeiten main {
     grid-area: 2/1/3/2;
     grid-template-columns: 50% auto;
-    grid-template-rows: 110px auto;
+    grid-template-rows: 1fr;
     gap: 0;
 }
 
@@ -36,9 +36,15 @@ iframe{
 }
 .zeiterfassung_bearbeiten main #kunde-table{
     grid-area: 1/1/2/2;
-    display: block;
+    display: flex;
     border-bottom: 0px solid grey;
     padding-bottom: 10px;
+    flex-direction: row; 
+}
+.zeiterfassung_bearbeiten .stundensatz{
+    grid-area: 1/1/2/2;
+    display: flex;
+    flex-direction: row; 
 }
 
 
@@ -81,7 +87,7 @@ background-color: #357bc5 !important; /* Hervorhebung */
     border-right: 2px solid rgb(165, 164, 132);
     grid-area: 2/1/3/2;
     display: grid;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: 110px auto auto auto;
     grid-template-columns: 1fr;
 }
 
@@ -96,7 +102,7 @@ background-color: #357bc5 !important; /* Hervorhebung */
     border-spacing: 0;  
     border-collapse: separate; /*Verhindert doppelte Rahmen*/
     border: 1px solid #ccc;   /* Rahmen um die ganze Tabelle */
-    grid-area: 1/1/2/2;              /* Tabelle füllt die Grid-Zelle */
+    grid-area: 2/1/3/2;              /* Tabelle füllt die Grid-Zelle */
     display: table;
     margin-top: 10px;
     min-width: 0;    /* Tabellenbreite passt sich Inhalt an */
@@ -111,17 +117,14 @@ background-color: #357bc5 !important; /* Hervorhebung */
 }
 .zeiterfassung_bearbeiten .left .mular_hinzu{
     border: 0px solid black;
-    grid-area: 2/1/3/2;
+    grid-area: 3/1/4/2;
 }
 .zeiterfassung_bearbeiten .left .action-button{
     border: 0px solid black;
-    grid-area: 3/1/4/2;
+    grid-area: 4/1/5/2;
     display: flex;
     /* justify-content: center;  horizontal zentrieren */
     align-items: center;      /* vertikal zentrieren */
     gap: 10px;     
 }
 
-.zeiterfassung_bearbeiten .left .stundensatz{
-    grid-area: 1/1/2/2;
-}

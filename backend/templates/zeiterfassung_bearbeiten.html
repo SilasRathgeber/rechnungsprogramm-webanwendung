@@ -13,25 +13,26 @@
         <h2 class="ZE_ueberschrift">ID: <em>{{ zeiterfassungs_id }}</em> für: <em>{{ kunde[1] }}</em> von: <em>{{ zeiterfassung_von }}</em> bis: <em>{{ zeiterfassung_bis }}</em></h2>
     </header>
     <main>
-        <table id="kunde-table">
-            <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
-            <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
-            <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
-            <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
-        </table> 
-        <form class="stundensatz">
-            <label for="zahl">Stundensatz:</label>
-            <input
-                id="zahl"
-                type="number"
-                step="0.01"
-                min="0"
-                max="1000"
-                value="0.00"
-            />
-        </form>
+        <div class="left"></div>
+            <table id="kunde-table">
+                <tr><th>Zeiterfassungs-ID:</th><td>{{ zeiterfassungs_id }}</td></tr>
+                <tr><th>Firma:</th><td class="kunde">{{ kunde[1] }}</td></tr>
+                <tr><th>Adresse:</th><td>{{ kunde[2] ~ ' ' ~ kunde[3] ~ ' ' ~ kunde[4] ~ ' ' ~ kunde[5] }}</td></tr>
+                <tr><th>Stundensatz:</th><td>{{ kunde[6] }} €</td></tr>
+            </table> 
+            <form class="stundensatz">
+                <label for="zahl">Stundensatz:</label>
+                <input
+                    id="zahl"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="1000"
+                    value="0.00"
+                />
+            </form>
 
-        <div class="left">            
+                    
             <table cellpadding="5" cellspacing="0" id="zeiteintraege-table">
                 <thead>
                     <tr>
