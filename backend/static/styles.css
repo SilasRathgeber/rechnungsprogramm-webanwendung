@@ -1,11 +1,12 @@
 body {
     background: rgb(90, 95, 112);
-    margin: 20px;
+    /* margin: 20px; */
     font-family: "Lato";
     display: grid;
-    grid-template-rows: 50px auto;
+    grid-template-rows: auto auto;
     grid-template-columns: 1fr;
     /* height: 100vh; */
+    margin:0px;
 }
 header {
     background: lightblue;
@@ -16,11 +17,14 @@ header {
 header > *{
     margin-right: 10px;
     margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 main {
+
     background-color: rgb(106, 155, 187);
     display: grid;
-    padding-left: 10px;
+    padding-left: 0px;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -45,6 +49,7 @@ button {
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     font-family: Arial;
+    white-space: nowrap; 
 }
 
 select option:disabled {
@@ -69,3 +74,5 @@ input{
     background-color: #f0f0f0;
     color: #333;
 }
+
+
