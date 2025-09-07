@@ -2,7 +2,7 @@
 
 sudo systemctl daemon-reexec       # systemd neu laden (sicherheitshalber)
 sudo systemctl daemon-reload       # neue Service-Datei einlesen
-sudo systemctl enable rechnungsprogramm.service   # beim Boot starten
+#sudo systemctl enable rechnungsprogramm.service   # beim Boot starten
 sudo systemctl start rechnungsprogramm.service    # jetzt starten
 
 # Status Check:

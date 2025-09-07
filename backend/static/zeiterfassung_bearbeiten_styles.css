@@ -56,12 +56,16 @@
     grid-area: 1/2/2/3;
     /* border: 2px solid rgb(255, 24, 24); */
     margin:0px;
-    padding:0px;
+    padding:3px;
     align-self: end;       /* vertikal nach unten */
     justify-self:right;  /* horizontal zentriert */   
     display: inline-flex;
     align-items: center;
     gap: 5px;   /* Abstand zwischen Label, Input und Button */
+    border: outset 0.01px rgb(197, 197, 197);
+    box-shadow: +2px +2px 5px rgba(0, 0, 0, 0.3);
+    border-right: none;
+    border-bottom: none;
 }
 .zeiterfassung_bearbeiten #zahl {
     width: 7ch;      /* passt sich Inhalt an */
@@ -79,7 +83,9 @@
     padding-bottom: 10px;
     /* border: 2px solid rgb(255, 24, 24); */
 }
-
+.zeiterfassung_bearbeiten #kunde-table th{
+    width: 33%;
+}
 /* Tabelle Zeiteinträge */
 .zeiterfassung_bearbeiten .left #zeiteintraege-table {
     grid-area: 2/1/3/2;
@@ -153,7 +159,7 @@ iframe {
 /* ==================================================
    Tabelle: Zeiteinträge – Zeilen & Spalten
    ================================================== */
-.zeiterfassung_bearbeiten tr.selected {
+.zeiterfassung_bearbeiten #zeiteintraege-table tbody tr.selected {
     background-color: #357bc5 !important; /* Hervorhebung */
 }
 

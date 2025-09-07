@@ -1,0 +1,28 @@
+#rechnungen-table{
+    /* border: 0px solid #ccc; */
+    border-radius: 8px;
+    font-size: 95%;
+    text-align: center;
+}
+#rechnungen-table th{
+    border-bottom: solid 1.5px black;
+}
+.rechnungenMain .left {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    gap: 10px;
+
+}
+
+#rechnungen-table tbody tr:nth-child(even) {
+    background-color: #b6b6b634;
+}
+
+#rechnungen-table tbody tr:hover {
+    background-color: #618a4669;
+}
+#rechnungen-table tr.selected {
+background-color: #802c3ab9 !important; /* Hervorhebung */
+}

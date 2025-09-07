@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 import sqlite3
 import os
 from backend.config import db_path
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 zeiterfassung_bp = Blueprint("zeiterfassung", __name__)
 
-@zeiterfassung_bp.route("/zeiterfassung", methods=["GET", "POST"])
+@zeiterfassung_bp.route("/", methods=["GET", "POST"])
 def zeiterfassung_seite():
     kunden = get_all_kunden()         # Dropdown-Daten
     columns, data = [], []            # Tabellenstruktur
@@ -125,22 +125,37 @@ def bearbeiten():
             zeiterfassungs_id = request.form.get("id")
             datei_name = main(zeiterfassungs_id, 1)
 
-
+        if aktion == "set_satz":
+            with sqlite3.connect(db_path) as conn:
+                zeiterfassungs_id = request.form.get("id")
+                neuer_satz = float(request.form.get("new_satz"))
+                cursor = conn.cursor() 
+                # cursor.execute("UPDATE kunden SET aktueller_stundensatz = ? WHERE id = ( SELECT kunde_id FROM zeiterfassungen WHERE id = ?)", (neuer_satz, zeiterfassungs_id))
+                cursor.execute("UPDATE zeiterfassungen SET stundensatz = ? WHERE id = ?", (neuer_satz, zeiterfassungs_id))
+                cursor.execute("""UPDATE zeiteintraege SET stundensatz = ? WHERE zeiterfassung_id = ?""", (neuer_satz, zeiterfassungs_id))
+                conn.commit()
 
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT k.* FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))
         kunde = cursor.fetchone()
-        cursor.execute("SELECT von, bis FROM zeiterfassungen WHERE id = ?", (zeiterfassungs_id,))
+        cursor.execute("SELECT von, bis, stundensatz FROM zeiterfassungen WHERE id = ?", (zeiterfassungs_id,))
         result = cursor.fetchone()
         if result:
-            von, bis = result
+            von, bis, stundensatz = result
             von=date_from_ISO_to_norml(von)
             bis=date_from_ISO_to_norml(bis)
+
     # GET: Lade die Daten für das Formular
     # z.B. hole aus DB die Zeiterfassung mit der ID
     logger.info(f"Inhalt zeiterfassung_id: {zeiterfassungs_id}")
+    
     columns, data = load_zeiterfassung_by_id(zeiterfassungs_id)
+ 
+    if data == "Fehlermeldung":
+        flash("Fehler: Die Summe der Zeiteinträge stimmt nicht!", "danger")
+        columns, data = [], []  # leere Tabelle anzeigen
+
     logger.info(f"Inhalt von data und columns: {columns, data}")
 
 
@@ -153,5 +168,6 @@ def bearbeiten():
         kunde=kunde,
         datei_name=datei_name,
         zeiterfassung_von=von,
-        zeiterfassung_bis=bis
+        zeiterfassung_bis=bis,
+        stundensatz = stundensatz
         )

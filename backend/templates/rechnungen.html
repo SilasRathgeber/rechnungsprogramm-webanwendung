@@ -1,11 +1,91 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Rechnungen</h1>
+<body>
+    <header id="rechnungen-header" data-kundennummer="{{ kunde_id }}">
+        <a href="{{ url_for('zeiterfassung.zeiterfassung_seite') }}">
+            <input type="hidden" name="kunden_id" value="{{ kunde_id }}">
+            <button> &lt; Erfassungen</button>
+        </form>
+        <a href="{{ url_for('kunden.kunden_seite') }}">
+                <button>&lt;&lt; Kunden</button>
+        </a>
 
-    <!-- templates/rechnung_vorschau.html -->
-     <p>{{datei_name}}</p>
-<iframe src="{{ url_for('static', filename='pdf/' + datei_name) }}"
-        width="20%" height="300px"></iframe>
+        <h2 class="ZE_ueberschrift">
+            {% if kunde_id %}
+                Rechnungen für: <em>{{ knd_name }}</em> Kundennummer: <em>{{ kunde_id }}</em>
+            {% else %}
+                Alle Rechnungen
+            {% endif %}
+        </h2>
+    </header>
+    <main class="rechnungenMain">
+        <div class="left">
+            <form method="POST" action="/rechnungen" id="kundeFilterForm">
+                <input type="hidden" name="aktion" value="filtern">       
+                <select name="kunde_ausw_id" required onchange="this.form.submit();">
+                    <option value="" {% if not kunde_id %}selected{% endif %}>
+                        Alle Rechnungen oder Kunde wählen...
+                    </option>
+                    {% for kunde in kunden %}
+                        <option value="{{ kunde[0] }}" {% if kunde_id == kunde[0]|string %}selected{% endif %}>
+                            {{ kunde[1] }} (ID: {{ kunde[0] }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <table cellpadding="5" cellspacing="0" id="rechnungen-table">
+                <thead>
+                    <tr>
+                        {% for col in table_columns if col != 'projekt' and col != 'honorar' %}
+                        <th>
+                            {% if col == 'id' %}ReNr{% endif %}
+                            {% if col == 'kunde_id' %}KndNr{% endif %}
+                            {% if col == 're_datum' %}Rechnungsdatum{% endif %}
+                            {% if col == 'abrechnungsart' %}Projekt/Zeitabrechnung{% endif %}
+                            {% if col == 'bezahlt' %}bezahlt{% endif %}
+                            {% if col == 'verschickt' %}verschickt{% endif %}
+                            {% if col == 'ausgangsdatum' %}verschickt am{% endif %}
+                            {% if col == 'gesamt' %}gesamt{% endif %}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in table_data %}
+                    <tr data-id="{{ row['id'] }}">
+                        {% for col in table_columns if col != 'projekt' and col != 'honorar' %}
+                        <td>
+                            {% if col == 'bezahlt' %}
+                                {% if row[col] == 1 %}
+                                    ✅
+                                {% else %}
+                                    ❓
+                                {% endif %}
+                            {% elif col == 'verschickt' %}
+                                {% if row[col] == 1 %}
+                                    ✅
+                                {% else %}
+                                    👎
+                                {% endif %}
+                            {% elif col == 'gesamt' %}
+                                {{ "%.2f"|format(row[col])|replace(".", ",") }} €
+                            {% else %}
+                                {{ row[col] }}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="right">
 
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/rechnungen.js') }}"></script>
+</body>
 {% endblock %}

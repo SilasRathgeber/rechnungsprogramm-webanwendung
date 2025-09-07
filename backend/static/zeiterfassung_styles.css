@@ -59,3 +59,30 @@ background-color: #a34051a2 !important; /* Hervorhebung */
     border-top: 0.4px solid rgb(92, 92, 92);
     border-bottom: 0.4px solid rgb(92, 92, 92);
 }
+.badge-container {
+    width: 0;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+/* Badge absolut am Ende der Zeile platzieren */
+.zeiteintraege-badge {
+    position: absolute;
+    right: -17px; /* Abstand vom rechten Rand der Zeile */
+    top: 37%;
+    transform: translateY(-50%);
+    
+    background-color: rgb(141, 3, 3);
+    color: white;
+    font-weight: bold;
+    border-radius: 50% 50% 50% 0%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.8rem;
+    z-index: 10;
+    box-shadow: +4px +2px 5px rgba(0, 0, 0, 0.3);
+}

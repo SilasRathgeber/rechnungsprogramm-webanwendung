@@ -22,6 +22,10 @@ class Invoice:
                 BESCHREIBUNG = None
                 START = None
                 STOP = None
+                anzeige_start = ""
+                anzeige_stop = ""
+                dauer_stunden = Decimal("0.0")
+                stunden_mal_satz = Decimal("0.0")
                 for j, element in enumerate(unterliste):
                     if j==0:
                         if isinstance(element, str):

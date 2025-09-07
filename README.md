@@ -99,3 +99,7 @@ Ideen Datenbankänderungen
 
 wo bin ich stehen geblieben am 23.08.25:
 im template zeiterfassung_bearbeiten.html ein Form erstellen, mit dem man den Stundensatz anpassen kann
+
+das machst du als nächstes:
+- Auswählbarkeit der Rechnungen
+- "Aktion"-Button der neue Seite für einzelne Seite öffnet
