@@ -43,7 +43,7 @@ button {
     padding: 0.7vh 1.1vh;      /* vertikal/horizontal größer */
     font-size: 90%;         /* etwas größere Schrift */
     border-radius: 8px;        /* eckige Kanten */
-    border: 1.5px solid #0000006b;  /* sichtbarer Rahmen */
+    /* border: 1.5px solid #0000006b;   */
     background-color: #b1b1b1ce;
     color: #050505;
     cursor: pointer;

@@ -101,5 +101,11 @@ wo bin ich stehen geblieben am 23.08.25:
 im template zeiterfassung_bearbeiten.html ein Form erstellen, mit dem man den Stundensatz anpassen kann
 
 das machst du als nächstes:
-- Auswählbarkeit der Rechnungen
-- "Aktion"-Button der neue Seite für einzelne Seite öffnet
+[x] Auswählbarkeit der Rechnungen
+[ ] "Aktion"-Button der neue Seite für einzelne Rechnung	 öffnet
+[x] Mit Zeiterfassung erstellen soll auch sofort der Rechnungs-Datensatz erstellt werden.
+[x] neues Feld in rechnungen: Erstellt: ja/nein Dadurch entsteht eine Art Ladebalken von Erstellt - > verschickt -> bezahlt
+[x] Dadurch wir der "Rechnung erstellen" Button obsolet
+[x] Wenn Zeiterfassung gelöscht wird, muss auch Rechnungseintrag gelöscht werden (löschkaskade)
+[x] Wenn man eine Zeiterfassung erstellt wird auch eine Rechnng erstellt aber nicht verknüpft!
+[x] Wenn man eine Rechnung löscht wird die Seite ohne parameter neu aufgerufen schöner wäre wenn der kunde gleich wieder ausgewählt würde oder nur ein fetch asugeführt würde also ohne neuen Seiten aufruf

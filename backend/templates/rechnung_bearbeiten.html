@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <header id="rechnung_bearbeiten-header" data-kundennummer="{{ kunde_id }}">
+        <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
+                <button>&lt; Rechnungen</button>
+        </a>
+
+        <h2 class="ZE_ueberschrift">
+            {% if kunde_id %}
+                Rechnung: <em>{{ rechnungsnummer }}</em>, Kundennummer: <em>{{ kunde_id }}</em>
+            {% else %}
+                Rechnung
+            {% endif %}
+        </h2>
+    </header>
+    <main class="rechnung_bearbeiten">
+        <div class="content_container">
+            <div class="id_block">
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Rechnungsnummer:</td>
+                            <td>{{ rechnung['id'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Kundennummer:</td>
+                            <td>{{ rechnung['kunde_id'] }}</td>
+                        </tr>
+                        <tr>
+                            <td> Zeiterfassungs-ID:</td>
+                            <td>{{ rechnung['zeiterfassung_id'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="projOzeit">
+            {% if rechnung['abrechnungsart'] == 'projekt' %}
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Abrechnungsart:</td>
+                            <td>projekt</td>
+                        </tr>
+                        <tr>
+                            <td>Projekt-Name:</td>
+                            <td>{{ rechnung['projekt'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Honorar:</td>
+                            <td>{{ rechnung['honorar'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% else %}
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Abrechnungsart:</td>
+                            <td>zeit</td>
+                        </tr>
+                        <tr>
+                            <td>Abrechnungszeitraum:</td>
+                            <td>von {{ rechnung['von'] }} bis {{ rechnung['bis'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Stundensatz:</td>
+                            <td>{{ rechnung['stundensatz'] }} €</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            <div class="erstellt_block">
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Erstellt:</td>
+                            <td>
+                                {% if rechnung['erstellt'] == 1 %}
+                                    ✅
+                                {%else %}
+                                    👎
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Rechnungsdatum:</td>
+                            <td>{{ rechnung['re_datum'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="verschickt_block">
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Verschickt:</td>
+                            <td>
+                                {% if rechnung['verschickt'] == 1 %}
+                                    ✅
+                                {%else %}
+                                    👎
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ausgangsdatum:</td>
+                            <td>{{ rechnung['ausgangsdatum'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="bezahlt_block">
+                <table cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>Bezahlt:</td>
+                            <td>
+                                {% if rechnung['bezahlt'] == 1 %}
+                                    ✅
+                                {%else %}
+                                    👎
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Anzahl Positionen:</td>
+                            <td>{{ rechnung['anzahl_zeiteintraege'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Rechnungssumme:</td>
+                            <td>{{ rechnung['summe_gesamt'] }} €</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="erstellt_tool_block">
+                <button>Rechnungsvorschau</button>
+                <button>Rechnung jetzt erstellen</button>
+            </div>
+            <div class="verschickt_tool_block">
+                <button><b>abschicken</b><br><span style="font-size: 200%;">📧</span></button>
+                <form>
+                    <input type="date">
+                    <button>speichern</button>
+                </form>
+            </div>
+            <div class="bezahlt_tool_block">
+                <form>
+                    <select>
+                        <option>bezahlt</option>
+                        <option>doch noch nicht bezahlt</option>
+                    </select>
+                    <button>speichern</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/rechnung_bearbeiten.js') }}"></script>
+</body>
+{% endblock %}

@@ -3,7 +3,7 @@
 sudo systemctl daemon-reexec       # systemd neu laden (sicherheitshalber)
 sudo systemctl daemon-reload       # neue Service-Datei einlesen
 #sudo systemctl enable rechnungsprogramm.service   # beim Boot starten
-sudo systemctl start rechnungsprogramm.service    # jetzt starten
+sudo systemctl start rechnungsprogramm-webanwendung-flask.service    # jetzt starten
 
 # Status Check:
 # sudo systemctl status rechnungsprogramm.service

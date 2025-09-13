@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body class="kunde-bearbeiten">
+    <header>
+    <a href="{{ url_for('kunden.kunden_seite') }}">
+        <button> << Kunden</button>
+    </a>
+    <h2><span style="font-size: 75%; color: rgb(53, 53, 53);">Kunde bearbeiten:</span> {{ kunden_name }}</h2>
+  </header>
+    <main>
+        <div class="spalte">
+            {% set keys = kunde.keys() | list %}
+            <div>
+                {% if keys[0] == 'id' %}ID{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["id"] }}</span>
+            </div>
+            <div>
+                {% if keys[1] == 'name' %}Name{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["name"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[1] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[1] }}">
+                    <button name="aktion" value="name_aendern">Name ändern</button>
+                </form>
+            </div>
+            <div>
+                {% if keys[2] == 'strasse' %}Straße{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["strasse"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[2] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[2] }}">
+                    <button name="aktion" value="strasse_aendern">Straße ändern</button>
+                </form>
+            </div>
+            <div>
+                {% if keys[3] == 'hausnummer' %}Hausnummer{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["hausnummer"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[3] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[3] }}">
+                    <button name="aktion" value="hausnummer_aendern">Hausnummer ändern</button>
+                </form>
+            </div>
+            <div>
+                {% if keys[4] == 'plz' %}Postleitzahl{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["plz"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[4] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[4] }}">
+                    <button name="aktion" value="postleitzahl_aendern">Postleitzahl ändern</button>
+                </form>
+            </div>
+            <div>
+                {% if keys[5] == 'ort' %}Ort{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["ort"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[5] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[5] }}">
+                    <button name="aktion" value="ort_aendern">Ort ändern</button>
+                </form>
+            </div>
+            <div>
+                {% if keys[7] == 'email' %}E-Mail-Adresse{% endif %}:
+                <span class="text_aus_kundentabelle">{{ kunde["email"] }}</span>
+                <form method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <input type="text" placeholder="{{ keys[7] }}" name="neuer_wert" required>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[7] }}">
+                    <button name="aktion" value="email_aendern">E-Mail-Adresse ändern</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+{% endblock %}

@@ -28,7 +28,7 @@
                         Alle Rechnungen oder Kunde wählen...
                     </option>
                     {% for kunde in kunden %}
-                        <option value="{{ kunde[0] }}" {% if kunde_id == kunde[0]|string %}selected{% endif %}>
+                        <option value="{{ kunde[0] }}" {% if kunde_id and kunde_id|string == kunde[0]|string %}selected{% endif %}>
                             {{ kunde[1] }} (ID: {{ kunde[0] }})
                         </option>
                     {% endfor %}
@@ -40,34 +40,60 @@
                     <tr>
                         {% for col in table_columns if col != 'projekt' and col != 'honorar' %}
                         <th>
-                            {% if col == 'id' %}ReNr{% endif %}
-                            {% if col == 'kunde_id' %}KndNr{% endif %}
+                            {% if col == 'id' %}ReNr.{% endif %}
+                            {% if col == 'kunde_id' %}KdNr.{% endif %}
                             {% if col == 're_datum' %}Rechnungsdatum{% endif %}
                             {% if col == 'abrechnungsart' %}Projekt/Zeitabrechnung{% endif %}
                             {% if col == 'bezahlt' %}bezahlt{% endif %}
                             {% if col == 'verschickt' %}verschickt{% endif %}
                             {% if col == 'ausgangsdatum' %}verschickt am{% endif %}
                             {% if col == 'gesamt' %}gesamt{% endif %}
+                            {% if col == 'erstellt' %}erstellt{% endif %}
+                            {% if col == 'zeiterfassung_id' %}ZeEr.{% endif %}
+                            {% if col == 'zeiterfassung_von' %}von{% endif %}
+                            {% if col == 'zeiterfassung_bis' %}bis{% endif %}
+                            {{ col }}
                         </th>
                         {% endfor %}
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for row in table_data %}
-                    <tr data-id="{{ row['id'] }}">
+                    <tr data-rechnung-nr="{{ row['id'] }}" 
+                        data-kunde-id="{{ kunde_id }}"
+                    >
                         {% for col in table_columns if col != 'projekt' and col != 'honorar' %}
                         <td>
                             {% if col == 'bezahlt' %}
                                 {% if row[col] == 1 %}
                                     ✅
                                 {% else %}
-                                    ❓
+                                    👎
+                                {% endif %}
+                            {% elif col ==  'erstellt' %}
+                                {% if row[col] == 1 %}
+                                    ✅
+                                {% else %}
+                                    👎
                                 {% endif %}
                             {% elif col == 'verschickt' %}
                                 {% if row[col] == 1 %}
                                     ✅
                                 {% else %}
                                     👎
+                                {% endif %}
+                            {% elif col == 'ausgangsdatum' %}
+                                {% if row[col] is none or row[col] == '' %}
+                                    -
+                                {% else %}
+                                   {{ row[col] }}
+                                {% endif %}
+                            {% elif col == 're_datum' %}
+                                {% if row[col] is none or row[col] == '' %}
+                                    -
+                                {% else %}
+                                   {{ row[col] }}
                                 {% endif %}
                             {% elif col == 'gesamt' %}
                                 {{ "%.2f"|format(row[col])|replace(".", ",") }} €
@@ -76,15 +102,18 @@
                             {% endif %}
                         </td>
                         {% endfor %}
+                        <td class="zeilen-buttons-td"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+
         </div>
         <div class="right">
 
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url_for('static', filename='js/common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/rechnungen.js') }}"></script>
 </body>

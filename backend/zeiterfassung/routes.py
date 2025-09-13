@@ -36,10 +36,23 @@ def zeiterfassung_seite():
 
             if kunde_ausw_id and start and end:
                 with sqlite3.connect(db_path) as conn:
-                    conn.execute(
-                        "INSERT INTO zeiterfassungen (kunde_id, von, bis) VALUES (?, ?, ?)",
-                        (kunde_ausw_id, start, end)
-                    )
+                    cur = conn.cursor()
+
+                    # 1. Rechnung anlegen
+                    cur.execute("""
+                        INSERT INTO rechnungen (kunde_id, abrechnungsart, projekt, honorar)
+                        VALUES (?, ?, ?, ?)
+                    """, (kunde_ausw_id, "zeit", None, None))
+
+                    rechnung_id = cur.lastrowid   # hier bekommst du die neue ID
+
+                    # 2. Zeiterfassung einfügen und die rechnung_id verwenden
+                    cur.execute("""
+                        INSERT INTO zeiterfassungen (kunde_id, rechnung_id, von, bis)
+                        VALUES (?, ?, ?, ?)
+                    """, (kunde_ausw_id, rechnung_id, start, end))
+
+                    conn.commit()
                 columns, data = get_zeiterfassungen_fuer_kunden(kunde_ausw_id)
 
         elif aktion == "löschErfassung":
@@ -96,11 +109,12 @@ def bearbeiten():
             end = datetime.strptime(end_zeit, fmt)
             dauer = end - start
             stunden = dauer.total_seconds() / 3600
+            print(f"stunden: {stunden}")
 
             # Stundensatz aus zeiterfassungen lesen
             with sqlite3.connect(db_path) as conn:
                 cursor = conn.cursor()  # <- MUSS innerhalb des Blocks sein
-                cursor.execute("SELECT k.aktueller_stundensatz FROM kunden k JOIN zeiterfassungen z ON z.kunde_id = k.id WHERE z.id = ?", (zeiterfassungs_id,))
+                cursor.execute("SELECT stundensatz FROM zeiterfassungen WHERE id = ?", (zeiterfassungs_id,))
                 result = cursor.fetchone()
                 logger.info(f"Ergebnis der Datenabfrage für stundensatz: {result}")
                 if result is None:
@@ -111,8 +125,8 @@ def bearbeiten():
                 gesamt = round(stunden * stundensatz, 2)
                 stunden_round=round(stunden, 1)
                 cursor.execute(
-                    "INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden, gesamt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (zeiterfassungs_id, datum, start_zeit, end_zeit, beschreibung, stunden_round, gesamt)
+                    "INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden, stundensatz, gesamt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (zeiterfassungs_id, datum, start_zeit, end_zeit, beschreibung, stunden_round, stundensatz, gesamt)
                 )
 
         if aktion == "EintragLöschen":

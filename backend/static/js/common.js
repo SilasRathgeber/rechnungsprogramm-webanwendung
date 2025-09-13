@@ -19,7 +19,7 @@ function setBackgroundColor(kundennummer) {
     }
 
     
-    const kundenbereich = document.querySelector("#erfassung-header, #erfassung_bearbeiten-header, #rechnungen-header");
+    const kundenbereich = document.querySelector("#erfassung-header, #erfassung_bearbeiten-header, #rechnungen-header, #rechnung_bearbeiten-header");
     const upperMain = document.getElementById("upper-main");
 
     if (kundenbereich) kundenbereich.style.backgroundColor = color;

@@ -253,13 +253,13 @@ iframe {
         height: 100%;
     }
     iframe {
-    max-width: 590px;
-    width: 100%; /* statt 1fr */
-    height: 900px;
-    /* transform-origin: top left; */
-    /* border: none; */
-    display: block;
-    margin: 0 auto;
-}
+        max-width: 590px;
+        width: 100%; /* statt 1fr */
+        height: 900px;
+        /* transform-origin: top left; */
+        /* border: none; */
+        display: block;
+        margin: 0 auto;
+    }
     
 }

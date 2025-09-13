@@ -1,8 +1,11 @@
+
+
 #rechnungen-table{
     /* border: 0px solid #ccc; */
     border-radius: 8px;
     font-size: 95%;
     text-align: center;
+    max-width: 100%;
 }
 #rechnungen-table th{
     border-bottom: solid 1.5px black;
@@ -11,11 +14,60 @@
     margin-left: 10px;
     display: flex;
     flex-direction: column;
-    max-width: 50%;
+    /* max-width: 50%; */
+    width: 80%;
     gap: 10px;
 
 }
+.zeilen-buttons-td{
+    /* position: absolute; */
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 35px;
+    padding: 0;
+    right:18%;
+    /* gap: 2px; */
+}
+#rechnungen-table .zeilen-buttons-td button{
+    padding: 0px 3px 0px 3px;
+    background-color: rgb(170, 170, 170);
+    /* border: None; */
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+    border: 0;
+}
+@media (max-width: 1130px) {
+    .rechnungenMain .left {
+        width: 100%;
+    }
+    #rechnungen-table{
+        max-width: 95%;
+    }
+    .zeilen-buttons-td{
+        height: 50px !important;
+        display: flex;
+        align-items: center;   
+    }
+    #rechnungen-table button{
+        padding: 0.7vh 1.1vh;     
+        font-size: 100%;         
+        border-radius: 0px;       
+        border: 1.5px solid #000000;  
+        background-color: #b1b1b1;
+        color: #050505;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        font-family: Arial;
+        white-space: nowrap; 
 
+        
+    }
+    #rechnungen-table tr.selected {
+        height: 50px;
+    }
+}
 #rechnungen-table tbody tr:nth-child(even) {
     background-color: #b6b6b634;
 }
@@ -24,5 +76,6 @@
     background-color: #618a4669;
 }
 #rechnungen-table tr.selected {
-background-color: #802c3ab9 !important; /* Hervorhebung */
+    background-color: #802c3ab9 !important; /* Hervorhebung */
+    height: 35px;
 }
