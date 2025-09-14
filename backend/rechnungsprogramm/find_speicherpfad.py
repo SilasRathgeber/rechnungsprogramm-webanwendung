@@ -4,7 +4,7 @@ from datetime import date
 
 
 
-ONEDRIVE = "/mnt/OneDrive"
+ONEDRIVE = "/mnt/onedrive"
 GEWERBE = os.path.join(ONEDRIVE, "Eigene Dokumente", "Kleingewerbe - Silas Rathgeber IT-Dienstleistungen")
 AUSGANGSRECHNUNGEN = os.path.join(GEWERBE, "Ausgangsrechnungen")
 
@@ -14,7 +14,7 @@ def check_pfad(pfad):
     Gibt den Pfad zurück.
     """
     try:
-        os.makedirs(os.path.dirname(pfad))
+        os.makedirs(pfad, exist_ok=True)
         return pfad
     except Exception as e:
         print(f"Pfad konnte nicht erstellt werden: {e}")

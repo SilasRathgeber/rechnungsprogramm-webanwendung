@@ -1,18 +1,20 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, send_file, abort
 import sqlite3
 import os
 from backend.config import db_path
-from backend.common import get_kundenname, getRechnungenWithOrWithout_KundenId, get_all_kunden, deleteRechnungen, get_kundennr_via_reNr, get_rechnung_via_reNr
+from backend.common import get_kundenname, getRechnungenWithOrWithout_KundenId, get_all_kunden, deleteRechnungen, get_kundennr_via_reNr, get_rechnung_via_reNr, set_rechnung_erstellt, get_kunde, set_rechnung_versendet
 from backend.rechnungsprogramm.main import main
+from backend.mail_script import send_mail
+from datetime import date
 
 rechnungen_bp = Blueprint("rechnungen", __name__)
 
 @rechnungen_bp.route("/rechnungen", methods=["GET", "POST"])
 def rechnungen_seite():
-    datei_name = None
     kunde_id = None
     table_columns = None
     table_data = None
+    datei_name = None
     
     if request.method == "POST":
         print("POST FORM DATA:", request.form)
@@ -96,16 +98,75 @@ def rechnungen_seite():
 
 @rechnungen_bp.route("/rechnungen/<int:rechnungsnummer>/bearbeiten", methods=["GET", "POST"])
 def rechnung_bearbeiten(rechnungsnummer):
-    # kunde_id = request.args.get("kunde_id")
+    dateiName = None
+    datei_name_vorschau = None
+    rel_path = None
+
     if request.method == "POST":
         aktion = request.form.get("aktion")
+        if aktion == "RechnungVorschau":
+            zeiterfassungs_id = request.form.get("id")
+            datei_name_vorschau, pfad, rechnungsdatum = main(zeiterfassungs_id, 1)
+        if aktion == "RechnungErstellen":
+            zeiterfassungs_id = request.form.get("id")
+            reNr = request.form.get("reId")
+            dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
+            # name = datei_name.rsplit('/', 1)[1]
+            set_rechnung_erstellt(reNr, dateiName, pfad, rechnungsdatum)
+        if aktion == "sendEmail":
+            mailInhalt = request.form.get("mailInhalt")
+            message = mailInhalt
+            rechnung = get_rechnung_via_reNr(rechnungsnummer)
+            dateipfad = rechnung['dateipfad']
+            kunde = get_kunde(rechnung['kunde_id'])
+            empfänger = kunde['email']
+            betreff = f"Rechnung {rechnungsnummer} Zeitraum vom {rechnung['von']} bis {rechnung['bis']}"
+            success = send_mail(dateipfad, message, empfänger, betreff)
+
+            if success:
+                set_rechnung_versendet(rechnungsnummer)
+
     
 
     rechnung = get_rechnung_via_reNr(rechnungsnummer)
+    if rechnung['erstellt'] == 1:
+        # Prüfe ob unter dem Pfad, der in der Datenbank gespeichert ist, auch eine zugehörige PDF vorhand ist wenn ja setze 
+        # datei_name so, dass die Datei sofort angezeigt werden kann
+        pfad = rechnung['dateipfad']
+        
+        if pfad is not None:
+            if os.path.isfile(pfad):
+                print("Datei existiert ✅")
+                PDF_FOLDER = "/mnt/onedrive/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen"
+                rel_path = os.path.relpath(pfad, PDF_FOLDER)
+            else:
+                print("Datei existiert nicht ❌")
+  
+
+            
+
     kunde_id = get_kundennr_via_reNr(rechnungsnummer)
+    kunde = get_kunde(kunde_id)
     return render_template(
         "rechnung_bearbeiten.html",
         rechnungsnummer=rechnungsnummer,
         kunde_id=kunde_id,
         rechnung=rechnung,
+        datei_name=dateiName,
+        datei_name_vorschau=datei_name_vorschau,
+        rel_path=rel_path,
+        kunde=kunde
     )
+
+
+pdf_bp = Blueprint("pdf", __name__)
+
+PDF_FOLDER = "/mnt/onedrive/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen"
+@pdf_bp.route("/pdf/<path:filename>")
+def serve_pdf(filename):
+    file_path = os.path.join(PDF_FOLDER, filename)
+
+    if not os.path.isfile(file_path):
+        abort(404)
+
+    return send_file(file_path, mimetype="application/pdf")

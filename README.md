@@ -102,10 +102,22 @@ im template zeiterfassung_bearbeiten.html ein Form erstellen, mit dem man den St
 
 das machst du als nächstes:
 [x] Auswählbarkeit der Rechnungen
-[ ] "Aktion"-Button der neue Seite für einzelne Rechnung	 öffnet
+[x] "Aktion"-Button der neue Seite für einzelne Rechnung	 öffnet
 [x] Mit Zeiterfassung erstellen soll auch sofort der Rechnungs-Datensatz erstellt werden.
 [x] neues Feld in rechnungen: Erstellt: ja/nein Dadurch entsteht eine Art Ladebalken von Erstellt - > verschickt -> bezahlt
 [x] Dadurch wir der "Rechnung erstellen" Button obsolet
 [x] Wenn Zeiterfassung gelöscht wird, muss auch Rechnungseintrag gelöscht werden (löschkaskade)
 [x] Wenn man eine Zeiterfassung erstellt wird auch eine Rechnng erstellt aber nicht verknüpft!
 [x] Wenn man eine Rechnung löscht wird die Seite ohne parameter neu aufgerufen schöner wäre wenn der kunde gleich wieder ausgewählt würde oder nur ein fetch asugeführt würde also ohne neuen Seiten aufruf
+[x] die rechnungsnummer wird im rechnungsgenerator immer noch per log-datei erstellt. Das muss geändert werden. -> per sql via zeiterfassungs_id die zugehörige rechnungs_id ermitteln
+[x] pfad nach OneDrive muss angepasst werden
+[x] Speicherpfad in Datenbank hinterlegen? als Attribut? Dann könnte der Speicherpfad immer eingelesen werden und überprüft werden
+[x] Wenn Rechnung erstellt wurde ist die Vorschau-funktion nicht mehr möglich sondern es wird immer die original-datei im iframe angezeigt
+[ ] Wenn Rechnung verschickt wurde, darf das löschen nicht mehr möglich sein.
+[ ] Datumsangaben aus Datenbank umwandeln in europäisches Format
+[ ] Popup für E-Mail senden. Mit Möglichkeit, den Text anzupassen oder neues Attribut 'Anrede' in Kundendatenbank
+[ ] Funktion zum Einfügen eines Speicherpfads für alte Mails möglicherweise auch mit PopUP
+[ ] Löschen-Button auf der bearebeiten-Seite
+[ ] Speicherfunktion für Ausgangsdatum erstellen (rechnung bearbeiten seite)
+[ ] Bezahlt-funktion ertellen (rechnung bearbeiten seite)
+[ ] Bevorzugte Anrede als Attribut der Tabelle kunden hinzufügen, und beim Absenden der Email in den Standardtext alsl Variable einfügen

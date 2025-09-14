@@ -1,7 +1,7 @@
 import sqlite3
 from flask import render_template
 from backend.config import db_path
-from datetime import datetime
+from datetime import datetime, date
 
 def get_all_kunden():
     conn = sqlite3.connect(db_path)
@@ -252,3 +252,22 @@ def get_rechnung_via_reNr(rechnungsnummer):
         return dict(result)  # z.B. kunde["name"]
     else:
         return None
+
+
+def set_rechnung_erstellt(rechnungsnummer, name, pfad, rechnungsdatum):
+    conn = sqlite3.connect(db_path)
+    # conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rechnungen SET erstellt = 1, dateiname = ?, dateipfad = ?, re_datum = ? WHERE id = ?", (name, pfad, rechnungsdatum, rechnungsnummer,))
+    conn.commit()
+    conn.close()
+    
+
+def set_rechnung_versendet(rechnungsnummer):
+    heute = date.today()
+    conn = sqlite3.connect(db_path)
+    # conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rechnungen SET verschickt = 1, ausgangsdatum = ? WHERE id = ?", (heute, rechnungsnummer,))
+    conn.commit()
+    conn.close()

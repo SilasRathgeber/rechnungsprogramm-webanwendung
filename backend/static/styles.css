@@ -76,3 +76,20 @@ input{
 }
 
 
+button[disabled] {
+    filter: blur(1px);
+    opacity: 0.6;   /* ausgegraut */
+    cursor: not-allowed; /* typischer "verboten"-Cursor */
+}
+
+.popup{
+    display:none; 
+    position:fixed; 
+    top:50%; 
+    left:50%; 
+    transform:translate(-50%,-50%);
+    padding:20px; 
+    background:white; 
+    border:1px solid black; 
+    z-index:1000;
+}

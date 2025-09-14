@@ -21,8 +21,8 @@ def main(zeiterfassungs_id, vorschau: int):
     registriere_schriftarten()
     if vorschau == 1:
         rechnungsnummer = "0"
-    elif vorschau == 0:
-        rechnungsnummer = generate_rechnungsnummer()
+    else:
+        rechnungsnummer = generate_rechnungsnummer(zeiterfassungs_id)
     jetzt = datetime.now()
     rechnungsdatum = jetzt.date()
     zeit_protokoll = TimeReport.from_sql(zeiterfassungs_id)
@@ -35,9 +35,9 @@ def main(zeiterfassungs_id, vorschau: int):
     standard_schriftart = "Carlito"
     font_table_head = "CarlitoB"
     rechnung = Invoice(kunde, zeit_protokoll, rechnungsdatum)
-    datei_name = erstelle_rechnung(vorschau, kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
+    datei_name, pfad = erstelle_rechnung(vorschau, kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
 
-    return datei_name
+    return datei_name, pfad, rechnungsdatum
 
 if __name__ == "__main__":
     main()

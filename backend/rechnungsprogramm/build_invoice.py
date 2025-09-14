@@ -1,3 +1,4 @@
+import os
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
@@ -7,7 +8,7 @@ from .table_machine import generate_invoice_head, generate_invoice_content
 from .build_template import on_the_first_page, on_later_pages
 from .generate_pdf_name import generate_file_name
 from .customer import Customer
-from .find_speicherpfad import *
+from .find_speicherpfad import find_pfad
 
 def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
@@ -43,7 +44,7 @@ def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_info
     flowables = [tabelle1, spacer1, tabelle2, spacer2, para]
     doc.build(flowables, onFirstPage=on_the_first_page, onLaterPages=on_later_pages)
 
-    return datei_name
+    return datei_name, pfad
 
 if __name__ == "__main__":
     erstelle_rechnung()

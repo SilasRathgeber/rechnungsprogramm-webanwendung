@@ -8,6 +8,19 @@ const EDIT_BUTTON_ID = 'editButton';
 const HEADER_ID = 'rechnung_bearbeiten-header';
 
 
+function emailTrigger(){
+    const senden_button = getElementById('mail-senden-button')
+
+    senden_button.addEventListener('click', (e) => handleSendClick(e))
+
+}
+    
+function handleSendClick(){
+    
+}
+
+
+
 // =====================
 // Initialisierung
 // =====================
