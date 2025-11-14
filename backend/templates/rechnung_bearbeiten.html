@@ -3,27 +3,36 @@
 {% block content %}
 <body>
     <header id="rechnung_bearbeiten-header" data-kundennummer="{{ kunde_id }}">
-        <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
-                <button>&lt; Rechnungen</button>
-        </a>
-
+        <form method="POST">
+            <input type="hidden" name="remindSelectedkunde" value="{{ remindSelectedkunde }}">
+            <button type="submit" name="aktion" value="zurueck">&lt; Rechnungen</button>
+        </form>
         <h2 class="ZE_ueberschrift">
             {% if kunde_id %}
-                Rechnung: <em>{{ rechnungsnummer }}</em>, Kundennummer: <em>{{ kunde_id }}</em>
+                {{ kunde['name'] }}, Rechnung: <em>{{ rechnung['rechnungsnummer'] }}</em>
             {% else %}
                 Rechnung
             {% endif %}
         </h2>
     </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
     <main class="rechnung_bearbeiten">
         <div class="linke-seite">
             <div class="content_container">
                 <div class="id_block">
-                    <table cellpadding="5">
+                    <table id="minitabelle-links-oben" cellpadding="5">
                         <tbody>
                             <tr>
                                 <td>Rechnungsnummer:</td>
-                                <td>{{ rechnung['id'] }}</td>
+                                <td>{{ rechnung['rechnungsnummer'] }}</td>
                             </tr>
                             <tr>
                                 <td>Kundennummer:</td>
@@ -74,7 +83,7 @@
                     {% endif %}
                 </div>
                 <div class="erstellt_block">
-                    <table cellpadding="5">
+                    <table id="minitabelle-erstellt" cellpadding="5">
                         <tbody>
                             <tr>
                                 <td>Erstellt:</td>
@@ -86,25 +95,23 @@
                                     {% endif %}
                                 </td>
                             </tr>
-                            {% if rechnung['erstellt'] == 1 %}
-                                <tr>
-                                    <td>Rechnungsdatum:</td>
-                                    <td>{{ rechnung['re_datum'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Dateiname:</td>
-                                    <td>{{ rechnung['dateiname'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Ablageverzeichnis:</td>
-                                    <td>{{ rechnung['dateipfad'] }}</td>
-                                </tr>
-                            {% endif %}
+                            <tr>
+                                <td>Rechnungsdatum:</td>
+                                <td>{{ rechnung['re_datum'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Dateiname:</td>
+                                <td>{{ rechnung['dateiname'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Ablageverzeichnis:</td>
+                                <td>{{ rechnung['dateipfad'] }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="verschickt_block">
-                    <table cellpadding="5">
+                    <table id="verschickt-tabelle" cellpadding="5">
                         <tbody>
                             <tr>
                                 <td>Verschickt:</td>
@@ -149,53 +156,110 @@
                 </div>
                 <div class="erstellt_tool_block">
                     {% if rechnung['erstellt'] == 0 %}
-                    <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', rechnungsnummer=rechnungsnummer) }}">
+                    <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
+                        <input type="hidden" name="remindSelectedkunde" value="{{ selectedKundeReminder }}">
                         <button type="submit" name="aktion" value="RechnungVorschau">Rechnungsvorschau</button>
                     </form>
                     {% endif %}
-                    <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', rechnungsnummer=rechnungsnummer) }}">
+                    <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
                         <input type="hidden" name="reId" value="{{ rechnung['id'] }}">
-                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" value="RechnungErstellen">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
+                        <button  type="submit" name="aktion" value="RechnungErstellen">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
+                         <!-- {% if rechnung['verschickt'] == 1 %}disabled{% endif %} -->
                     </form>
                 </div>
                 <div class="verschickt_tool_block">
                     <button 
                         type="button"
                         onclick="document.querySelector('.popup').style.display='block'" 
-                        id="mail-senden-button" {% if rechnung['verschickt'] == 1 or rechnung['erstellt'] == 0 %}disabled{% endif %}
+                        id="mail-senden-button" 
                         >
+                        <!-- {% if rechnung['verschickt'] == 1 or rechnung['erstellt'] == 0 %}disabled{% endif %} -->
                         <b>abschicken</b><br><span style="font-size: 200%;">📧</span>
                     </button>
-                    <form>
-                        <input type="date">
-                        <button>speichern</button>
-                    </form>
                 </div>
                 <div class="bezahlt_tool_block">
-                    <form>
-                        <select>
-                            <option>bezahlt</option>
-                            <option>doch noch nicht bezahlt</option>
+                    <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                        <select name="zahlung">
+                            <option value="" disabled selected>-- Bitte wählen --</option>
+                            <option value="bezahlt">bezahlt</option>
+                            <option value="doch noch nicht bezahlt">doch noch nicht bezahlt</option>
                         </select>
-                        <button {% if rechnung['verschickt'] == 0 %}disabled{% endif %}>speichern</button>
+                        <button type="submit" name="aktion" value="zahlung" {% if rechnung['verschickt'] == 0 %}disabled{% endif %}>speichern</button>
                     </form>
                 </div>
+                <div id="kommentar-container">
+                    <div id="kommentar-form">
+                        <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                            <label for="textarea-kommentar">Kommentar:</label>
+                            <textarea name="kommentar-text" id="textarea-kommentar">{{ rechnung['kommentar'] or "" }}</textarea>
+                            <button type="submit" name="aktion" value="kommentar">speichern</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            
             <div class="popup" id="email-popup">
                 <p>Mail an: {{ kunde['email'] }}</p>
-                <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', rechnungsnummer=rechnungsnummer) }}">
-                    <textarea name="mailInhalt" id="email-textfeld">Hallo,
+                <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
+                    <textarea name="mailInhalt" id="email-textfeld">{% if kunde['vorlage'] is none %}Hallo,
                         
 Im Anhang die Rechnung für den Zeitraum siehe Betreff.
 
-Beste Grü0e
+Beste Grüße
 
-Silas Rathgeber</textarea>
+Silas Rathgeber{% else %}{{ kunde['vorlage'] }}{% endif %}</textarea>
                     <button type="button" onclick="document.querySelector('.popup').style.display='none'">Schließen</button>
                     <button type="submit" name="aktion" value="sendEmail" onclick="document.querySelector('.popup').style.display='none'">Senden</button>
                 </form>
+            </div>
+            <div id="rechnungs-nr-popup" class="popup">
+                <h3 style="margin: 0px;">Rechnungsnummer ändern</h3>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <p>Rechnungnummer:</p>
+                    <p><b>{{ rechnung['rechnungsnummer'] }}</b></p>
+                </div>
+                <div style="display: grid; grid-template-rows: 50% 50%; gap: 10px;">
+                    <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
+                        <input type="text" name="neue-rechnungsnummer"> 
+                        <input type="hidden" name="aktuelle-rechnungsnummer" value="{{ rechnungsnummer }}">
+                        <button type="submit" name="aktion" value="rechnungsnummerAendern">speichern</button>
+                    </form> 
+                    <button style="width: 20%; min-width: 40px; margin-bottom: 10px; margin-left: auto; margin-right: auto;" onclick="closePopup('rechnungs-nr-popup')">Schließen</button>
+                </div>
+            </div>
+            <div id="speicherort-popup" class="popup">
+                <h3 style="margin: 0px; margin-bottom: 20px;">Bestehende PDF-Datei zuordnen:</h3>
+                <div style="display: grid; grid-template-rows: 50% 50%; gap: 10px;">
+                    <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                        <select name="dateiname" required>
+                            <option value="" disabled selected>-- Bitte wählen --</option>
+                            {% for o in ordner %}
+                            <option value="{{ o }}">{{ o }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" name="aktion" value="dateipfad_setzen">Öffnen</button>
+                    </form>
+                </div>
+                <h3 style="margin: 0px; margin-bottom: 20px;">Rechnungsdatum ändern:</h3>
+                <div style="display: grid; grid-template-rows: 50% 50%; gap: 10px;">
+                    <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                        <input name="re_datum_neu" type="date">
+                        <button type="submit" name="aktion" value="re_datum_aendern">speichern</button>
+                    </form>
+                </div>
+                <button onclick="closePopup('speicherort-popup')">Schließen</button>
+            </div>
+            <div id="ausgangsdatum-popup" class="popup">
+                <h3 style="margin: 0px; margin-bottom: 20px;">Ausgangsdatum erfassen:</h3>
+                <div style="display: grid; grid-template-rows: 50% 50%; gap: 10px;">
+                    <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                        <input name="ausgangsdatum" type="date">
+                        <button type="submit" name="aktion" value="ausgangsdatum-setzen">speichern</button>
+                    </form>
+                </div>
+                <button onclick="closePopup('ausgangsdatum-popup')">Schließen</button>
             </div>
         </div>
         <div class="rechte-seite">
@@ -216,4 +280,5 @@ Silas Rathgeber</textarea>
     <script src="{{ url_for('static', filename='js/common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/rechnung_bearbeiten.js') }}"></script>
 </body>
+
 {% endblock %}

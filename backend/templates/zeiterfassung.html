@@ -3,21 +3,21 @@
 {% block content %}
 <body class="zeiterfassung">
     <header id="erfassung-header" data-kundennummer="{{ kunde_ausw_id|default(1000) }}">
-        <a href="{{ url_for('kunden.kunden_seite') }}">
-            <button>&lt; Kunden</button>
-        </a>
         <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
             <button>Rechnungen &gt;</button>
         </a>
-        <h2>Abrechnungeserfassungen {% if kunden_name %}von {{ kunden_name or '' }}{% endif %}</h2>
+        <h2 class="ZE_ueberschrift">Abrechnungeserfassungen {% if kunden_name %}von {{ kunden_name or '' }}{% endif %}</h2>
+        <a class="right-buttons" href="{{ url_for('kunden.kunden_seite') }}">
+            <button>Kunden</button>
+        </a>
     </header>
     <main>
         <div id="upper-main" class="upper-main">
             <form method="POST" action="/" id="kundeFilterForm">
                 <input type="hidden" name="aktion" value="filtern">       
-                <select name="kunde_ausw_id" required onchange="if(this.value) this.form.submit();">
-                    <option value="" disabled {% if not kunde_ausw_id %}selected{% endif %}>
-                        Bitte Kunden wählen...
+                <select name="kunde_ausw_id" required onchange="this.form.submit();">
+                    <option value="" {% if not kunde_ausw_id %}selected{% endif %}>
+                        Alle Kunden ...
                     </option>
                     {% for kunde in kunden %}
                         <option value="{{ kunde[0] }}" {% if kunde_ausw_id == kunde[0]|string %}selected{% endif %}>

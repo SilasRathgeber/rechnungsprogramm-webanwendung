@@ -8,11 +8,24 @@ body {
     /* height: 100vh; */
     margin:0px;
 }
+header button{
+    border-radius: 0px;
+    background-color: #96969677;
+    font-weight: bolder;
+}
 header {
     background: lightblue;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 10% auto 10%;
     align-items: center;
+}
+.right-buttons{
+    margin-left:auto;
+    margin-right: 10px;
+}
+.ZE_ueberschrift{
+    margin-left: auto;
+    margin-right: auto;
 }
 header > *{
     margin-right: 10px;
@@ -88,8 +101,9 @@ button[disabled] {
     top:50%; 
     left:50%; 
     transform:translate(-50%,-50%);
-    padding:20px; 
-    background:white; 
-    border:1px solid black; 
+    padding:10px; 
+    background:rgba(255, 255, 255, 0); 
+    border: 2px solid rgb(39, 35, 35);
     z-index:1000;
+    width: 100%
 }

@@ -20,6 +20,10 @@
     height: max-content;
     justify-self: center;
     overflow: hidden;
+    
+}
+
+.content_container table td{
     background: #b4b4b4e7;
 }
 
@@ -33,6 +37,11 @@
 .content_container td:first-child    { border-left: none; }
 .content_container td:last-child     { border-right: none; }
 
+
+.content_container table td.no-style{
+    border: none !important;
+    background: none !important;
+}
 .content_container{
     margin-top: 20px;
     grid-row: 2;
@@ -41,7 +50,30 @@
     /* grid-template-rows: repeat(3, auto);   */
     grid-auto-rows: auto;
     width: 100%;
-    border-right: 2.5px solid rgba(51, 51, 51, 0.733);
+    border-right: 5px solid rgba(51, 51, 51, 0.733);
+}
+#kommentar-container{
+    grid-column: 1/4;
+    width: 100%;
+    display: flex;
+    border-top: 3px solid rgba(44, 44, 44, 0.452);
+    
+}
+#kommentar-container #kommentar-form{
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 24px;
+
+    
+}
+#kommentar-container #kommentar-form #textarea-kommentar{
+    width: 100%;
+    height: 80px;
+    resize: none;
+}
+#kommentar-container #kommentar-form >*{
+    margin-bottom: 10px;
 }
 .id_block{
     grid-column: 1;
@@ -116,12 +148,14 @@
     padding: 0px 10px 0px 10px;
     align-items:end;
     height: 100%;
+    align-items: center;
+    margin-bottom: 10%;
 }
 
 .verschickt_block, 
 .bezahlt_block,
 .erstellt_block{
-    border-top: 3px dashed rgb(44, 44, 44);
+    border-top: 3px solid rgba(44, 44, 44, 0.452);
     padding: 30px 10px 0px 10px;
 }
 
@@ -131,11 +165,28 @@
     border-left: 3px solid rgba(44, 44, 44, 0.452);
 }
 
+.content_container .projOzeit table,
+.content_container .id_block table,
 .content_container .bezahlt_block table,
 .content_container .verschickt_block table,
 .content_container .erstellt_block table {
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
     border: 2px groove grey;
+}
+
+@keyframes wackeln {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(2deg); }
+  50%  { transform: rotate(-2deg); }
+  75%  { transform: rotate(1deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.content_container .verschickt_block table:hover,
+.content_container .id_block table:hover,
+.content_container , .erstellt_block table:hover{
+    animation: wackeln 0.13s ease-in-out; /* Dauer und Geschwindigkeit */
+    cursor: pointer;
 }
 
 .content_container .bezahlt_block table td,
@@ -176,6 +227,8 @@
     width: 400px;
     text-align: center;
     gap:20px;
+    background-color: #f7f7f7;
+    border-radius: 15px;
 }
 #email-popup form > *{
     margin: 5px;
@@ -185,4 +238,33 @@
     width: 350px;
     resize: none;
 
+}
+
+#rechnungs-nr-popup, #speicherort-popup, #ausgangsdatum-popup {
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 100%;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+
+@media (max-width: 1535px) {
+    .rechnung_bearbeiten {
+        display: grid;
+        grid-template-columns: 100%;
+    }
+    .rechte-seite{
+        grid-column: 1;
+        margin-top: 10px;
+        border-top: 5px solid rgba(51, 51, 51, 0.733);
+    }
+    .content_container {
+        border-right: 0px solid rgba(51, 51, 51, 0.733);
+    }
 }

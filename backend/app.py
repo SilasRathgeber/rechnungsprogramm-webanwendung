@@ -1,10 +1,14 @@
 from flask import Flask, request, render_template, redirect, url_for
 import sqlite3
+from backend import database_config as db
 import os
 from backend.kunden.routes import kunden_bp
 from backend.zeiterfassung.routes import zeiterfassung_bp
 from backend.rechnungen.routes import rechnungen_bp, pdf_bp
 import logging
+
+
+
 logging.basicConfig(level=logging.INFO)
 
 

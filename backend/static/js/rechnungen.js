@@ -11,12 +11,12 @@ const HEADER_ID = 'rechnungen-header';
 // Hilfsfunktionen
 // =====================
 
-function createThreePointButton(reNr, kundeId){
+function createThreePointButton(reNr, kundeId, kundennummer){
     const button = document.createElement("button");
     button.textContent= "...";
     button.type= "button";
     button.classList.add("row-buttons")
-    button.addEventListener("click", (e) => handleMenueClick(e, reNr, kundeId));
+    button.addEventListener("click", (e) => handleMenueClick(e, reNr, kundeId, kundennummer));
     return button;
 }
 function createDeleteButton(reNr, kundeId) {
@@ -28,11 +28,11 @@ function createDeleteButton(reNr, kundeId) {
     return button;
 }
 
-function handleMenueClick(e, reNr, kundeId) {
+function handleMenueClick(e, reNr, kundeId, kundennummer) {
     e.preventDefault();
     e.stopPropagation();
 
-    submitMenueForm(reNr, kundeId);
+    submitMenueForm(reNr, kundeId, kundennummer);
 }
 function handleDeleteClick(e, reNr, kundeId) {
     e.preventDefault();
@@ -52,8 +52,9 @@ function handleDeleteClick(e, reNr, kundeId) {
     });
 }
 
-function submitMenueForm(reNr, kundeId){
+function submitMenueForm(reNr, kundeId, kundennummer){
     const form = document.createElement("form");
+    const header = document.getElementById(HEADER_ID);
     form.method = "POST";
     form.action = "/rechnungen";
     form.style.display = "none";
@@ -61,8 +62,11 @@ function submitMenueForm(reNr, kundeId){
     const inputs = [
         { name: "reNr", value: reNr },
         { name: "aktion", value: "rechnung_detail" },
-        { name: "kundenId", value: kundeId }
+        { name: "kundenId", value: kundeId },
+        { name: "selectedKundeReminder", value: kundennummer }
     ];
+
+    
 
     inputs.forEach(({ name, value }) => {
         const input = document.createElement("input");
@@ -102,7 +106,7 @@ function submitDeleteForm(reNr, kundeId) {
 // =====================
 // Tabellenzeilen-Auswahl
 // =====================
-function initTableSelection() {
+function initTableSelection(kundennummer) {
     const table = document.getElementById(TABLE_ID);
     if (!table) return;
 
@@ -124,11 +128,11 @@ function initTableSelection() {
             const kundeId = row.dataset.kundeId;
             const buttonsCell = row.querySelector('.zeilen-buttons-td');
 
-            // Löschen-Button einfügen
+            // Löschen-Button und Dreipunkt-Button einfügen
             if (buttonsCell) {
                 const deleteBtn = createDeleteButton(reNr, kundeId);
                 buttonsCell.appendChild(deleteBtn);
-                const menueBtn = createThreePointButton(reNr, kundeId);
+                const menueBtn = createThreePointButton(reNr, kundeId, kundennummer);
                 buttonsCell.appendChild(menueBtn);
             }
 
@@ -139,12 +143,43 @@ function initTableSelection() {
 }
 
 // =====================
+// Feststellen, welcher Kunde ausgewählt ist
+// =====================
+
+function getSelectedSelect(){
+    const kundeSelect = document.querySelector("#kundeFilterForm select[name='kunde_ausw_id']");
+
+    if (kundeSelect) {
+        // aktueller Wert (falls schon ausgewählt)
+        console.log("Aktuell ausgewählt:", kundeSelect.value);
+
+        // bei Änderung merken
+        kundeSelect.addEventListener("change", (event) => {
+            const selectedValue = event.target.value;
+            console.log("Neu ausgewählt:", selectedValue);
+
+            // z.B. in localStorage merken:
+            localStorage.setItem("ausgewaehlterKunde", selectedValue);
+        });
+    }
+
+    return(kundeSelect.value)
+
+}
+
+// =====================
 // Initialisierung
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById(HEADER_ID);
     let kundennummer = header?.dataset.kundennummer ? parseInt(header.dataset.kundennummer, 10) : undefined;
 
+
+    selectedCustomer = getSelectedSelect();
+
+    console.log("ausgewählter Kunde:", selectedCustomer);
+    console.log("kundennummer", kundennummer);
+
     setBackgroundColor(kundennummer);
-    initTableSelection();
+    initTableSelection(kundennummer);
 });

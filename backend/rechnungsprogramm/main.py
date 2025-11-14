@@ -7,6 +7,8 @@ from .generate_rechnungsnummer import generate_rechnungsnummer
 from .customer import Customer
 from .time_report import TimeReport
 from .invoice import Invoice
+import time
+
 
 def get_excel_file_name():
     if len(sys.argv) != 2:
@@ -35,7 +37,13 @@ def main(zeiterfassungs_id, vorschau: int):
     standard_schriftart = "Carlito"
     font_table_head = "CarlitoB"
     rechnung = Invoice(kunde, zeit_protokoll, rechnungsdatum)
+
+    start = time.time()
+    print(f"[DEBUG] Start Endpoint: {start}")
+
     datei_name, pfad = erstelle_rechnung(vorschau, kunde, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head)
+
+    print(f"[DEBUG] Nach PDF-Erzeugung: {time.time() - start:.2f}s")
 
     return datei_name, pfad, rechnungsdatum
 

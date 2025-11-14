@@ -3,13 +3,13 @@
 {% block content %}
 <body class="kunden">
     <header>
-        <a href="{{ url_for('zeiterfassung.zeiterfassung_seite') }}">
+        <a class="left-buttons" href="{{ url_for('zeiterfassung.zeiterfassung_seite') }}">
             <button>Erfassungen ></button>
         </a>
-        <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
+        <h2 class="ZE_ueberschrift">Kunden</h2>
+        <a class="right-buttons" href="{{ url_for('rechnungen.rechnungen_seite') }}">
             <button>Rechnungen &gt;</button>
         </a>
-        <h2>Kunden</h2>
     </header>
     <main>
         <form method="POST" action="/kunden">
@@ -57,9 +57,10 @@
             <option value="{{ kunde[0] }}">{{ kunde[1] }} (ID: {{ kunde[0] }})</option>
             {% endfor %}
         </select>
-        <button type="submit" name="aktion" value="loeschen">Kunde löschen</button>
+        <button id="kunde_loesche_button" type="submit" name="aktion" value="loeschen">Kunde löschen</button>
         <button type="submit" name="aktion" value="bearbeiten">Kunde bearbeiten</button>
         </form>
     </main>
+    <script src="{{ url_for('static', filename='js/kunden.js') }}"></script>
 </body>
 {% endblock %}

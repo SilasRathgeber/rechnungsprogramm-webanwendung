@@ -57,7 +57,7 @@ def kunde_bearbeiten(kunde_id):
 
         def set_kunde_property(kunden_id, feld, neuer_wert):
 
-            erlaubte_felder = ["name", "strasse", "hausnummer", "plz", "ort", "aktueller_stundensatz", "email"]
+            erlaubte_felder = ["name", "strasse", "hausnummer", "plz", "ort", "aktueller_stundensatz", "email", "vorlage"]
             if feld not in erlaubte_felder:
                 raise ValueError("Ungültiges Feld!")
 

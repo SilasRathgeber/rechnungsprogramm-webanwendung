@@ -6,7 +6,7 @@ from backend.config import db_path
 def generate_rechnungsnummer(zeiterfassungs_id):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("SELECT rechnung_id FROM zeiterfassungen WHERE id = ?", (zeiterfassungs_id,))
+    cursor.execute("SELECT r.rechnungsnummer FROM zeiterfassungen z JOIN rechnungen r ON z.rechnung_id = r.id WHERE z.id = ?", (zeiterfassungs_id,))
     result = cursor.fetchone()  # nur einen Datensatz holen
     conn.close()
     rechnungsnummer = f"{result[0]:04}"

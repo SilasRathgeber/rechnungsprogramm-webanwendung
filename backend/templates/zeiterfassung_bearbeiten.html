@@ -7,12 +7,6 @@
             <input type="hidden" name="kunden_id" value="{{ kunde[0] }}">
             <button> &lt; Erfassungen</button>
         </form>
-        <a href="{{ url_for('kunden.kunden_seite') }}">
-            <button>Kunden</button>
-        </a>
-        <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
-            <button>Rechnungen &gt;</button>
-        </a>
         <h2 class="ZE_ueberschrift">ID: <em>{{ zeiterfassungs_id }}</em> für: <em>{{ kunde[1] }}</em> von: <em>{{ zeiterfassung_von }}</em> bis: <em>{{ zeiterfassung_bis }}</em></h2>
     </header>
     <main>

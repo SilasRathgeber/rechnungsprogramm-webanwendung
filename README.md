@@ -114,7 +114,7 @@ das machst du als nächstes:
 [x] Speicherpfad in Datenbank hinterlegen? als Attribut? Dann könnte der Speicherpfad immer eingelesen werden und überprüft werden
 [x] Wenn Rechnung erstellt wurde ist die Vorschau-funktion nicht mehr möglich sondern es wird immer die original-datei im iframe angezeigt
 [ ] Wenn Rechnung verschickt wurde, darf das löschen nicht mehr möglich sein.
-[ ] Datumsangaben aus Datenbank umwandeln in europäisches Format
+[x] Datumsangaben aus Datenbank umwandeln in europäisches Format
 [ ] Popup für E-Mail senden. Mit Möglichkeit, den Text anzupassen oder neues Attribut 'Anrede' in Kundendatenbank
 [ ] Funktion zum Einfügen eines Speicherpfads für alte Mails möglicherweise auch mit PopUP
 [ ] Löschen-Button auf der bearebeiten-Seite

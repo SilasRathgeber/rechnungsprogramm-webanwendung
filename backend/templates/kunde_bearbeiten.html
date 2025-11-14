@@ -75,6 +75,16 @@
                     <button name="aktion" value="email_aendern">E-Mail-Adresse ändern</button>
                 </form>
             </div>
+            <div>
+                {% if keys[8] == 'vorlage' %}Email-Text{% endif %}:
+                <!-- <span class="text_aus_kundentabelle">{{ kunde["vorlage"] }}</span> -->
+                <form  method="POST" action="{{ url_for('kunden.kunde_bearbeiten', kunde_id=kunde_id) }}">
+                    <textarea rows="20" cols="70" placeholder="{{ kunde["vorlage"] }}" name="neuer_wert">{{ kunde["vorlage"] }}</textarea>
+                    <input type="hidden" name="kunden_id" value="{{kunde_id}}">
+                    <input type="hidden" name="feld" value="{{ keys[8] }}">
+                    <button name="aktion" value="email-text-aendern">Email-Text ändern</button>
+                </form>
+            </div>
         </div>
     </main>
 </body>

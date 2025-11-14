@@ -1,19 +1,22 @@
-from flask import Blueprint, request, render_template, redirect, url_for, send_file, abort
+from flask import Blueprint, request, render_template, redirect, url_for, send_file, abort, flash
 import sqlite3
 import os
 from backend.config import db_path
-from backend.common import get_kundenname, getRechnungenWithOrWithout_KundenId, get_all_kunden, deleteRechnungen, get_kundennr_via_reNr, get_rechnung_via_reNr, set_rechnung_erstellt, get_kunde, set_rechnung_versendet
+from backend.common import *
 from backend.rechnungsprogramm.main import main
 from backend.mail_script import send_mail
 from datetime import date
+from werkzeug.utils import secure_filename
+import time
 
 rechnungen_bp = Blueprint("rechnungen", __name__)
 
 @rechnungen_bp.route("/rechnungen", methods=["GET", "POST"])
 def rechnungen_seite():
-    kunde_id = None
-    table_columns = None
-    table_data = None
+    # kunde_id = None
+    table_columns = []
+    table_data = []
+    knd_name = None
     datei_name = None
     
     if request.method == "POST":
@@ -22,65 +25,52 @@ def rechnungen_seite():
         print("Aktion:", aktion)
 
         if aktion == "filtern":
-            kunde_id = request.form.get("kunde_ausw_id")
-            if kunde_id:
-                # if not kunde_id:
-                #     table_columns, table_data = getRechnungenWithOrWithout_KundenId()
-                # else:
-                print(f"kunde_id bevor die Rechnunge geholt werden { kunde_id }")
-                table_columns, table_data = getRechnungenWithOrWithout_KundenId(kunde_id)
-                print(f"Aus POST aus atkion:filtern rechnungen - > {table_columns}")
-                if kunde_id == "":
-                    table_columns, table_data = getRechnungenWithOrWithout_KundenId()
-
-            else:
-                table_columns, table_data = getRechnungenWithOrWithout_KundenId()
+            kunde_id = request.form.get("kunde_ausw_id") or None
+            print(f"Aus 'filtern' im hidden steht: {kunde_id}")
+            return redirect(url_for("rechnungen.rechnungen_seite", 
+                kunde_id=kunde_id,
+            ))
 
         elif aktion == "rechnung_loeschen":
-            rechnungsnummer = request.form.get("reNr")
+            rechnung_id = request.form.get("reNr")
             kunde_id = request.form.get("kundenId")
 
-            print(f"Aus 'rechnung_loeschen' im hidden steht: {kunde_id}")
-            print(f"Aus 'rechnung_loeschen' im hidden steht: {rechnungsnummer}")
+            deleteRechnungen(rechnung_id)
+
+            if kunde_id == "None":
+                return redirect(url_for("rechnungen.rechnungen_seite"))
+            else:
+                return redirect(url_for("rechnungen.rechnungen_seite", 
+                    kunde_id=kunde_id,
+                ))
             
-            deleteRechnungen(rechnungsnummer)
-            return redirect(url_for("rechnungen.rechnungen_seite", kunde_id=kunde_id))
-            # table_columns, table_data = getRechnungenWithOrWithout_KundenId(kunde_id)
-
         elif aktion == "rechnung_detail":
-            rechnungsnummer = request.form.get("reNr")
-            kunde_id = request.form.get("kundenId")
+            id = request.form.get("reNr")
+            remindSelectedkunde = request.form.get("kundenId")
 
-            print(f"Aus 'rechnung_detail' im hidden steht: {kunde_id}")
-            print(f"Aus 'rechnung_detail' im hidden steht: {rechnungsnummer}")
+            print(f"Aus 'rechnung_detail' im hidden steht: {remindSelectedkunde}")
+            print(f"Aus 'rechnung_detail' im hidden steht: {id}")
 
-            if kunde_id and rechnungsnummer:
+            if remindSelectedkunde and id:
                 return redirect(url_for(
                     "rechnungen.rechnung_bearbeiten",
-                    rechnungsnummer=rechnungsnummer, 
+                    id=id, 
+                    remindSelectedkunde= remindSelectedkunde,
                     ))
 
-            # return redirect(url_for("rechnungen.rechnungen_seite", kunde_id=kunde_id))
-
-        elif aktion == "RechnungSchreiben":
-            kunde_id = request.form.get("kunde")
-            erfassungs_id = request.form.get("erfassungsId")
-            table_columns, table_data = getRechnungenWithOrWithout_KundenId(kunde_id)
-            
-            
- 
-    
-
     elif request.method == "GET":
-        kunde_id = request.args.get("kunde", None)
-        table_columns, table_data = getRechnungenWithOrWithout_KundenId(kunde_id or None)
-        print(f"Aus GET aus rechnungen - > {table_columns}")
+        selectedKundeReminder = request.args.get("selectedKundeReminder", None)
+        if selectedKundeReminder == "None":
+            selectedKundeReminder = None
+        kunde_id = request.args.get("kunde_id", None)
+        kunden_filter = kunde_id or selectedKundeReminder
+        table_columns, table_data = getRechnungenWithOrWithout_KundenId(kunden_filter)
+        if kunde_id:
+            knd_name = get_kundenname(kunde_id)
+        else:
+            knd_name = None
 
-
-    if kunde_id:
-        knd_name = get_kundenname(kunde_id)
-    else:
-        knd_name = "Unbekannt"
+        print(f"Aus GET aus kunde_id - > {kunde_id}")
 
     kunden = get_all_kunden()
     
@@ -96,67 +86,215 @@ def rechnungen_seite():
     )
 
 
-@rechnungen_bp.route("/rechnungen/<int:rechnungsnummer>/bearbeiten", methods=["GET", "POST"])
-def rechnung_bearbeiten(rechnungsnummer):
+@rechnungen_bp.route("/rechnungen/<id>/bearbeiten", methods=["GET", "POST"])
+def rechnung_bearbeiten(id):
+    # --- Initialwerte für Template ---
     dateiName = None
     datei_name_vorschau = None
     rel_path = None
+    selectedKundeReminder = request.args.get("remindSelectedkunde")
+    rechnung = get_rechnung_via_reNr(id)
+    if rechnung is None:
+        flash(f"Rechnung {id} wurde nicht gefunden.", "error")
+        return redirect(url_for("rechnungen.uebersicht"))
+    dateiName = rechnung['dateiname']
+    PDF_FOLDER = "/mnt/onedrive/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen"
+    rechnungsdatum = rechnung['re_datum']
+    rechnungszeitraum_von = rechnung['von']
+    datum_obj_re_von = datetime.strptime(rechnungszeitraum_von, "%d.%m.%Y")
+    jahr = datum_obj_re_von.year
+    pdf_pfad_mit_jahr = os.path.join(PDF_FOLDER, str(jahr))
 
+    # --- POST: Aktionen bearbeiten ---
     if request.method == "POST":
         aktion = request.form.get("aktion")
+
+        if aktion == "rechnungsnummerAendern":
+            neue_rechnungsnummer = request.form.get("neue-rechnungsnummer")
+            aktuelle_rechnungsnummer = request.form.get("aktuelle-rechnungsnummer")
+            ergebnis = set_rechnungs_id_if_valid(neue_rechnungsnummer, id)
+
+            if ergebnis == "error":
+                flash("Diese Rechnungsnummer ist bereits vergeben!", "error")
+                # Zurück auf dieselbe Seite, alte Rechnungsnummer bleibt sichtbar
+                return redirect(url_for(
+                    "rechnungen.rechnung_bearbeiten",
+                    id=id,
+                    remindSelectedkunde=selectedKundeReminder
+                ))
+            else:
+                # Erfolgreich geändert → Redirect auf neue Rechnungsnummer
+                flash("Rechnungsnummer erfolgreich geändert", "success")
+                return redirect(url_for(
+                    "rechnungen.rechnung_bearbeiten",
+                    id=id,
+                    remindSelectedkunde=selectedKundeReminder
+                ))
+
+
+        # 🔹 Vorschau anzeigen (kein Redirect, weil keine dauerhafte Änderung)
         if aktion == "RechnungVorschau":
             zeiterfassungs_id = request.form.get("id")
+            
+
+
             datei_name_vorschau, pfad, rechnungsdatum = main(zeiterfassungs_id, 1)
-        if aktion == "RechnungErstellen":
-            zeiterfassungs_id = request.form.get("id")
-            reNr = request.form.get("reId")
-            dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
-            # name = datei_name.rsplit('/', 1)[1]
-            set_rechnung_erstellt(reNr, dateiName, pfad, rechnungsdatum)
-        if aktion == "sendEmail":
-            mailInhalt = request.form.get("mailInhalt")
-            message = mailInhalt
-            rechnung = get_rechnung_via_reNr(rechnungsnummer)
-            dateipfad = rechnung['dateipfad']
-            kunde = get_kunde(rechnung['kunde_id'])
-            empfänger = kunde['email']
-            betreff = f"Rechnung {rechnungsnummer} Zeitraum vom {rechnung['von']} bis {rechnung['bis']}"
-            success = send_mail(dateipfad, message, empfänger, betreff)
-
-            if success:
-                set_rechnung_versendet(rechnungsnummer)
-
-    
-
-    rechnung = get_rechnung_via_reNr(rechnungsnummer)
-    if rechnung['erstellt'] == 1:
-        # Prüfe ob unter dem Pfad, der in der Datenbank gespeichert ist, auch eine zugehörige PDF vorhand ist wenn ja setze 
-        # datei_name so, dass die Datei sofort angezeigt werden kann
-        pfad = rechnung['dateipfad']
-        
-        if pfad is not None:
-            if os.path.isfile(pfad):
-                print("Datei existiert ✅")
-                PDF_FOLDER = "/mnt/onedrive/Eigene Dokumente/Kleingewerbe - Silas Rathgeber IT-Dienstleistungen/Ausgangsrechnungen"
-                rel_path = os.path.relpath(pfad, PDF_FOLDER)
-            else:
-                print("Datei existiert nicht ❌")
-  
 
             
 
-    kunde_id = get_kundennr_via_reNr(rechnungsnummer)
+            selectedKundeReminder = request.args.get("remindSelectedkunde") or request.form.get("remindSelectedkunde")
+
+            # Sicherer Dateiname (verhindert ../ und Sonderzeichen)
+            safe_name = secure_filename(datei_name_vorschau)
+            # Danach direkt Template rendern (also GET-Teil hier inline ausführen)
+            rechnung = get_rechnung_via_reNr(id)
+            kunde_id = get_kundennr_via_reNr(id)
+            kunde = get_kunde(kunde_id)
+
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder,
+                vorschau="1",
+                # datei_name_vorschau=safe_name,
+                datei_name_vorschau=datei_name_vorschau
+            ))
+
+
+        # 🔹 Rechnung endgültig erstellen (mit Redirect)
+        elif aktion == "RechnungErstellen":
+            zeiterfassungs_id = request.form.get("id")
+            reNr = request.form.get("reId")
+            dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
+            set_rechnung_erstellt(reNr, dateiName, pfad, rechnungsdatum)
+
+            # Nach dem POST → Redirect auf dieselbe Seite (GET)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+
+        # 🔹 E-Mail versenden (mit Redirect)
+        elif aktion == "sendEmail":
+            mailInhalt = request.form.get("mailInhalt")
+            rechnung = get_rechnung_via_reNr(id)
+            dateipfad = rechnung['dateipfad']
+            kunde = get_kunde(rechnung['kunde_id'])
+            empfänger = kunde['email']
+            betreff = f"Rechnung {rechnung['rechnungsnummer']}, {rechnung['von']} - {rechnung['bis']}"
+            success = send_mail(dateipfad, mailInhalt, empfänger, betreff)
+
+            if success:
+                set_rechnung_versendet(id)
+
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+
+        elif aktion == "zurueck":
+            if selectedKundeReminder == "None":
+                return redirect(url_for("rechnungen.rechnungen_seite"))
+            else:
+                return redirect(url_for("rechnungen.rechnungen_seite", 
+                    kunde_id=selectedKundeReminder,
+                ))
+
+        elif aktion == "dateipfad_setzen":
+            dateiName = request.form.get("dateiname")
+            
+            # Sicherheitscheck: Nur Dateiname, keine Pfad-Komponenten
+            dateiname = os.path.basename(dateiName)
+            
+            datei_pfad_plus_name = os.path.join(pdf_pfad_mit_jahr, dateiName)
+            
+            # Prüfen ob Datei wirklich im erlaubten Ordner liegt
+            if not datei_pfad_plus_name.startswith(os.path.abspath(pdf_pfad_mit_jahr)):
+                return "Ungültiger Dateipfad", 400
+            
+            # Optional: Prüfen ob Datei existiert
+            if not os.path.exists(datei_pfad_plus_name):
+                return "Datei nicht gefunden", 404
+            
+            set_rechnungspfad(rechnung['id'], datei_pfad_plus_name, dateiName)
+            
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                datei_name=dateiName,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+        
+        elif aktion == "re_datum_aendern":
+            neues_rechnungsdatum = request.form.get("re_datum_neu")
+            set_neues_rechnungsdatum(id, neues_rechnungsdatum)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+        elif aktion == "ausgangsdatum-setzen":
+            ausgangsdatum = request.form.get("ausgangsdatum")
+            set_neues_ausgangsdatum(id, ausgangsdatum)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+        elif aktion== "zahlung":
+            zahlungsstatus = request.form.get("zahlung")
+            set_zahlungsstatus(id, zahlungsstatus)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+        elif aktion== "kommentar":
+            kommentar = request.form.get("kommentar-text")
+            set_kommentar(id, kommentar)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+
+
+    # --- GET: Seite laden und anzeigen ---
+    preview_flag = request.args.get("vorschau")
+    datei_name_vorschau = request.args.get("datei_name_vorschau")
+    selectedKundeReminder = selectedKundeReminder or request.args.get("remindSelectedkunde")
+
+    # Wenn PDF vorhanden, relativen Pfad bestimmen
+    if rechnung and rechnung['erstellt'] == 1:
+        pfad = rechnung['dateipfad']
+        if pfad and os.path.isfile(pfad):
+            print("Datei existiert ✅")
+            rel_path = os.path.relpath(pfad, PDF_FOLDER)
+        else:
+            print("Datei existiert nicht ❌")
+
+    pdfs = [f for f in os.listdir(pdf_pfad_mit_jahr) 
+        if f.endswith('.pdf')]
+
+    kunde_id = get_kundennr_via_reNr(id)
     kunde = get_kunde(kunde_id)
+
+    # --- Template rendern ---
     return render_template(
         "rechnung_bearbeiten.html",
-        rechnungsnummer=rechnungsnummer,
+        id=id,
         kunde_id=kunde_id,
         rechnung=rechnung,
         datei_name=dateiName,
         datei_name_vorschau=datei_name_vorschau,
         rel_path=rel_path,
-        kunde=kunde
+        kunde=kunde,
+        selectedKundeReminder=selectedKundeReminder,
+        ordner=pdfs
     )
+
 
 
 pdf_bp = Blueprint("pdf", __name__)

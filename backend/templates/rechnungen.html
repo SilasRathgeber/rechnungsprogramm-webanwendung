@@ -6,11 +6,8 @@
         <a href="{{ url_for('zeiterfassung.zeiterfassung_seite') }}">
             <input type="hidden" name="kunden_id" value="{{ kunde_id }}">
             <button> &lt; Erfassungen</button>
-        </form>
-        <a href="{{ url_for('kunden.kunden_seite') }}">
-                <button>&lt;&lt; Kunden</button>
         </a>
-
+        </form>
         <h2 class="ZE_ueberschrift">
             {% if kunde_id %}
                 Rechnungen für: <em>{{ knd_name }}</em> Kundennummer: <em>{{ kunde_id }}</em>
@@ -18,6 +15,9 @@
                 Alle Rechnungen
             {% endif %}
         </h2>
+        <a class="right-buttons" href="{{ url_for('kunden.kunden_seite') }}">
+            <button>Kunden</button>
+        </a>
     </header>
     <main class="rechnungenMain">
         <div class="left">
@@ -40,7 +40,7 @@
                     <tr>
                         {% for col in table_columns if col != 'projekt' and col != 'honorar' %}
                         <th>
-                            {% if col == 'id' %}ReNr.{% endif %}
+                            {% if col == 'rechnungsnummer' %}ReNr.{% endif %}
                             {% if col == 'kunde_id' %}KdNr.{% endif %}
                             {% if col == 're_datum' %}Rechnungsdatum{% endif %}
                             {% if col == 'abrechnungsart' %}Projekt/Zeitabrechnung{% endif %}
@@ -52,7 +52,7 @@
                             {% if col == 'zeiterfassung_id' %}ZeEr.{% endif %}
                             {% if col == 'zeiterfassung_von' %}von{% endif %}
                             {% if col == 'zeiterfassung_bis' %}bis{% endif %}
-                            {{ col }}
+                            <!-- {{ col }} -->
                         </th>
                         {% endfor %}
                         <th></th>

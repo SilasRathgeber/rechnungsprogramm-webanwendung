@@ -25,10 +25,10 @@ def zeiterfassung_seite():
         kunden_name = get_kundenname(kunde_ausw_id)
 
         if aktion == "filtern":
-            if kunde_ausw_id:
-                columns, data = get_zeiterfassungen_fuer_kunden(kunde_ausw_id)
+            if kunde_ausw_id == "" or kunde_ausw_id is None:
+                columns, data = get_zeiterfassungen_fuer_kunden()
             else:
-                columns, data = get_all_zeiterfassungen()
+                columns, data = get_zeiterfassungen_fuer_kunden(kunde_ausw_id)
 
         elif aktion == "neuErfassung":
             start = request.form.get("StartDatum")
@@ -40,9 +40,9 @@ def zeiterfassung_seite():
 
                     # 1. Rechnung anlegen
                     cur.execute("""
-                        INSERT INTO rechnungen (kunde_id, abrechnungsart, projekt, honorar)
-                        VALUES (?, ?, ?, ?)
-                    """, (kunde_ausw_id, "zeit", None, None))
+                        INSERT INTO rechnungen (kunde_id, abrechnungsart, projekt, honorar, rechnungsnummer)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (kunde_ausw_id, "zeit", None, None, naechste_rechnungsnummer_ermitteln()))
 
                     rechnung_id = cur.lastrowid   # hier bekommst du die neue ID
 
@@ -69,9 +69,11 @@ def zeiterfassung_seite():
 
     if request.method == "GET":
         kunde_ausw_id = request.args.get("kunden_id")
+        
+        columns, data = get_zeiterfassungen_fuer_kunden()
 
         if kunde_ausw_id:
-            columns, data = get_zeiterfassungen_fuer_kunden(kunde_ausw_id)
+            
             kunden_name = get_kundenname(kunde_ausw_id)
             
     return render_template(
@@ -123,7 +125,7 @@ def bearbeiten():
                 stundensatz = result[0]
 
                 gesamt = round(stunden * stundensatz, 2)
-                stunden_round=round(stunden, 1)
+                stunden_round=round(stunden, 3)
                 cursor.execute(
                     "INSERT INTO zeiteintraege (zeiterfassung_id, datum, startzeit, endzeit, beschreibung, stunden, stundensatz, gesamt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (zeiterfassungs_id, datum, start_zeit, end_zeit, beschreibung, stunden_round, stundensatz, gesamt)
