@@ -95,6 +95,8 @@
 .erstellt_block{
     grid-column:1;
     grid-row: 2;
+    /* width: 100%; */
+    overflow-x: auto;
 }
 .verschickt_block{
     grid-column:2;
@@ -182,6 +184,7 @@
   100% { transform: rotate(0deg); }
 }
 
+.content_container .projOzeit table:hover,
 .content_container .verschickt_block table:hover,
 .content_container .id_block table:hover,
 .content_container , .erstellt_block table:hover{
@@ -240,7 +243,7 @@
 
 }
 
-#rechnungs-nr-popup, #speicherort-popup, #ausgangsdatum-popup {
+#rechnungs-nr-popup, #speicherort-popup, #ausgangsdatum-popup, #zeitraum-popup {
     background: #f7f7f7;
     padding: 10px;
     border-radius: 10px;
@@ -267,4 +270,30 @@
     .content_container {
         border-right: 0px solid rgba(51, 51, 51, 0.733);
     }
+    .rechte-seite iframe {
+        max-width: 590px;
+        width: 100%; /* statt 1fr */
+        height: 900px;
+        /* transform-origin: top left; */
+        /* border: none; */
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.erstellt_block #minitabelle-erstellt{
+    max-width: 100%;
+    width: 95%;          /* Tabelle füllt Container */
+    table-layout: fixed;    
+}
+
+.erstellt_block #minitabelle-erstellt td, th{
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.erstellt_block #minitabelle-erstellt #zelle-dateipfad,
+.erstellt_block #minitabelle-erstellt #zelle-dateiname{
+    font-size:smaller;
 }

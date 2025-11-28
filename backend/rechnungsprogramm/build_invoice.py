@@ -9,6 +9,7 @@ from .build_template import on_the_first_page, on_later_pages
 from .generate_pdf_name import generate_file_name
 from .customer import Customer
 from .find_speicherpfad import find_pfad
+from .numbered_canvas_class import *
 
 def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
@@ -42,7 +43,8 @@ def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_info
     para = Paragraph(f"Zahlbar ohne Abzüge innerhalb von 14 Tagen nach Erhalt der Rechnung<br/>Als Kleinunternehmer im Sinne von § 19 Abs. 1 UStG wird keine Umsatzsteuer berechnet.<br/>Ich bedanke mich für Ihren Auftrag und freue mich auf die weitere Zusammenarbeit.", text_unter_tabelle)
     spacer2 = Spacer(1, 10 * mm)
     flowables = [tabelle1, spacer1, tabelle2, spacer2, para]
-    doc.build(flowables, onFirstPage=on_the_first_page, onLaterPages=on_later_pages)
+    doc.build(flowables, onFirstPage=on_the_first_page, onLaterPages=on_later_pages, canvasmaker=NumberedCanvas)
+
 
     return datei_name, pfad
 

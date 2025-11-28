@@ -8,6 +8,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from .config import *
 
+
 # PDF-Datei erzeugen
 def zeichne_briefpapier(c, doc):
     # Füllfarbe setzen
@@ -79,7 +80,6 @@ def zeichne_briefpapier(c, doc):
     x_end_loch = x_start + 15
     y_pos_loch = (297-148.5) * mm
     c.line(x_start, y_pos_loch, x_end_loch, y_pos_loch)
-
     c.restoreState()
 
 def zeichne_betreff(c, doc):
@@ -104,6 +104,8 @@ def on_the_first_page(c, doc):
 
 def on_later_pages(c, doc):
     zeichne_briefpapier(c, doc)
+
+
 
 if __name__ == "__main__":
     zeichne_briefpapier()

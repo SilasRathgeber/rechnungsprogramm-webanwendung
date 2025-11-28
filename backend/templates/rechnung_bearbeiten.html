@@ -47,7 +47,7 @@
                 </div>
                 <div class="projOzeit">
                 {% if rechnung['abrechnungsart'] == 'projekt' %}
-                    <table cellpadding="5">
+                    <table  cellpadding="5">
                         <tbody>
                             <tr>
                                 <td>Abrechnungsart:</td>
@@ -64,7 +64,7 @@
                         </tbody>
                     </table>
                     {% else %}
-                    <table cellpadding="5">
+                    <table id="minitabelle-rechts-oben" cellpadding="5">
                         <tbody>
                             <tr>
                                 <td>Abrechnungsart:</td>
@@ -101,11 +101,11 @@
                             </tr>
                             <tr>
                                 <td>Dateiname:</td>
-                                <td>{{ rechnung['dateiname'] }}</td>
+                                <td id="zelle-dateiname">{{ rechnung['dateiname'] }}</td>
                             </tr>
                             <tr>
                                 <td>Ablageverzeichnis:</td>
-                                <td>{{ rechnung['dateipfad'] }}</td>
+                                <td id="zelle-dateipfad">{{ rechnung['dateipfad'] }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -165,14 +165,13 @@
                     <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
                         <input type="hidden" name="reId" value="{{ rechnung['id'] }}">
-                        <button  type="submit" name="aktion" value="RechnungErstellen">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
+                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" value="RechnungErstellen">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
                          <!-- {% if rechnung['verschickt'] == 1 %}disabled{% endif %} -->
                     </form>
                 </div>
                 <div class="verschickt_tool_block">
                     <button 
-                        type="button"
-                        onclick="document.querySelector('.popup').style.display='block'" 
+                        type="button" 
                         id="mail-senden-button" 
                         >
                         <!-- {% if rechnung['verschickt'] == 1 or rechnung['erstellt'] == 0 %}disabled{% endif %} -->
@@ -260,6 +259,19 @@ Silas Rathgeber{% else %}{{ kunde['vorlage'] }}{% endif %}</textarea>
                     </form>
                 </div>
                 <button onclick="closePopup('ausgangsdatum-popup')">Schließen</button>
+            </div>
+            <div id="zeitraum-popup" class="popup">
+                <h3 style="margin: 0px; margin-bottom: 20px;">Abrechnungszeitraum anpassen:</h3>
+                <div style="display: grid; grid-template-rows: 50% 50%; gap: 10px;">
+                    <form action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}" method="POST">
+                        <label>Abrechnung von</label>
+                        <input name="von" type="date">
+                        <label>Abrechnung bis</label>
+                        <input name="bis" type="date">
+                        <button type="submit" name="aktion" value="neuen-abrechnungszeitraum">speichern</button>
+                    </form>
+                </div>
+                <button onclick="closePopup('zeitraum-popup')">Schließen</button>
             </div>
         </div>
         <div class="rechte-seite">

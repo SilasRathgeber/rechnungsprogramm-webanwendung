@@ -142,7 +142,7 @@ def generate_invoice_content(rechnung: Invoice, kunde: Customer, standard_schrif
         zeile = [
             Paragraph(table_content_raw[i][0], style_beschreibung), 
             Paragraph(table_content_raw[i][1], data_content), 
-            Paragraph(table_content_raw[i][2], data_content),
+            Paragraph(f"{float(table_content_raw[i][2]):.2f}".replace(".", ","), data_content),
             Paragraph(table_content_raw[i][3], data_content)
         ]
         tabellen_struktur.append(zeile)

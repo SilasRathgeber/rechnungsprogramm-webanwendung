@@ -113,11 +113,27 @@ das machst du als nächstes:
 [x] pfad nach OneDrive muss angepasst werden
 [x] Speicherpfad in Datenbank hinterlegen? als Attribut? Dann könnte der Speicherpfad immer eingelesen werden und überprüft werden
 [x] Wenn Rechnung erstellt wurde ist die Vorschau-funktion nicht mehr möglich sondern es wird immer die original-datei im iframe angezeigt
-[ ] Wenn Rechnung verschickt wurde, darf das löschen nicht mehr möglich sein.
 [x] Datumsangaben aus Datenbank umwandeln in europäisches Format
-[ ] Popup für E-Mail senden. Mit Möglichkeit, den Text anzupassen oder neues Attribut 'Anrede' in Kundendatenbank
-[ ] Funktion zum Einfügen eines Speicherpfads für alte Mails möglicherweise auch mit PopUP
+[x] Popup für E-Mail senden. Mit Möglichkeit, den Text anzupassen oder neues Attribut 'Anrede' in Kundendatenbank
+[x] Funktion zum Einfügen eines Speicherpfads für alte Mails möglicherweise auch mit PopUP
+[x] Speicherfunktion für Ausgangsdatum erstellen (rechnung bearbeiten seite)
+[x] Bezahlt-funktion ertellen (rechnung bearbeiten seite)
+[x] Bevorzugte Anrede als Attribut der Tabelle kunden hinzufügen, und beim Absenden der Email in den Standardtext alsl Variable einfügen
+[x] Abrechnungszeitraum nachträglich ändern
+[x] Seitenzahlen auf der Rechnung 
+[x] Komma bei €/h auf der Rechnung
+[ ] Wenn Rechnung verschickt wurde, darf das löschen nicht mehr möglich sein.
 [ ] Löschen-Button auf der bearebeiten-Seite
-[ ] Speicherfunktion für Ausgangsdatum erstellen (rechnung bearbeiten seite)
-[ ] Bezahlt-funktion ertellen (rechnung bearbeiten seite)
-[ ] Bevorzugte Anrede als Attribut der Tabelle kunden hinzufügen, und beim Absenden der Email in den Standardtext alsl Variable einfügen
+[ ] Navigations-Button zur Zeiterfassung und von Zeiterfassung zurück zur Rechnung
+[ ] KundenReminder zwischen Zeiterfassung und rechnungs-Menü
+[ ] Doppelklick auf Datensatz für rechnungbearbeiten
+[ ] Karteikarten für Zeiterfassung und Projektbezogene Abrechnung
+[ ] Abrechnungstabelle zentrieren
+[ ] Bei Popups wenn man irgendwo außerhalb des Popups klickt verschwindet das Popup
+[ ] mehrere Zeiterfassungen einer Rechnung zuordnen
+[ ] Entwicklungsversion von laufender Version trennen
+[ ] Beim Hinzufügen von Zeiteintraegen den gültigkeitsbereich der Auswählbaren Tage auf den Abrechnungszeitraum
+[ ] Rechnungsnummer erst dann vergeben, wenn auf "Rechnung jetzt erstellen" geklickt wird
+[ ] Pfalzmarken hellgrauer machen
+[ ] Kunden-Auswahl-Übergabe zwischen Rechnung und Zeiterfassung sowie zwischen Zeiterfassung und Zeiterfassung bearbeiten
+[ ] In Zeiterfassungen filtern nach "Zeiterfassungen, die noch nicht abgerechnet wurden"

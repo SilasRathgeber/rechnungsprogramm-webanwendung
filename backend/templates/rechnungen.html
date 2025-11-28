@@ -83,6 +83,12 @@
                                 {% else %}
                                     👎
                                 {% endif %}
+                            {% elif col == 'rechnungsnummer' %}
+                                {% if row[col] == None %}
+                                    🚫
+                                {% else %}
+                                   {{row[col]}}
+                                {% endif %}
                             {% elif col == 'ausgangsdatum' %}
                                 {% if row[col] is none or row[col] == '' %}
                                     -

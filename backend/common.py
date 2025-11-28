@@ -179,7 +179,9 @@ def getRechnungenWithOrWithout_KundenId(kundennummer=None):
             GROUP BY z.rechnung_id
         ) AS ze_sum ON ze_sum.rechnung_id = r.id
         WHERE r.kunde_id = ?
-        ORDER BY CAST(r.rechnungsnummer AS INTEGER) DESC;
+        ORDER BY 
+            CASE WHEN r.rechnungsnummer IS NULL THEN 0 ELSE 1 END,
+            CAST(r.rechnungsnummer AS INTEGER) DESC;
         """, (kundennummer,))
     else:
         c.execute("""
@@ -206,7 +208,9 @@ def getRechnungenWithOrWithout_KundenId(kundennummer=None):
             LEFT JOIN zeiteintraege ze ON ze.zeiterfassung_id = z.id
             GROUP BY z.rechnung_id
         ) AS ze_sum ON ze_sum.rechnung_id = r.id
-        ORDER BY CAST(r.rechnungsnummer AS INTEGER) DESC;
+        ORDER BY 
+            CASE WHEN r.rechnungsnummer IS NULL THEN 0 ELSE 1 END,
+            CAST(r.rechnungsnummer AS INTEGER) DESC;
         """)
     rows = c.fetchall()
     conn.close()
@@ -265,10 +269,10 @@ def get_rechnung_via_reNr(rechnungsnummer):
         return None
 
 
-def set_rechnung_erstellt(rechnungsnummer, name, pfad, rechnungsdatum):
+def set_rechnung_erstellt(id, rechnungsnummer, name, pfad, rechnungsdatum):
     conn = db.get_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE rechnungen SET erstellt = 1, dateiname = ?, dateipfad = ?, re_datum = ? WHERE id = ?", (name, pfad, rechnungsdatum, rechnungsnummer,))
+    cursor.execute("UPDATE rechnungen SET rechnungsnummer = ?, erstellt = 1, dateiname = ?, dateipfad = ?, re_datum = ? WHERE id = ?", (rechnungsnummer, name, pfad, rechnungsdatum, id,))
     conn.commit()
     conn.close()
 
@@ -421,6 +425,17 @@ def set_kommentar(rechnungs_id, kommentar):
     cursor.execute(
         "UPDATE rechnungen SET kommentar = ? WHERE id = ?",
         (kommentar, rechnungs_id)
+    )
+    conn.commit()
+    conn.close()
+
+
+def set_neuen_abrechnungszeitraum(id, von, bis):
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE zeiterfassungen SET von = ?, bis = ? WHERE rechnung_id = ?",
+        (von, bis, id)
     )
     conn.commit()
     conn.close()

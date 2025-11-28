@@ -42,7 +42,7 @@ def zeiterfassung_seite():
                     cur.execute("""
                         INSERT INTO rechnungen (kunde_id, abrechnungsart, projekt, honorar, rechnungsnummer)
                         VALUES (?, ?, ?, ?, ?)
-                    """, (kunde_ausw_id, "zeit", None, None, naechste_rechnungsnummer_ermitteln()))
+                    """, (kunde_ausw_id, "zeit", None, None, None))
 
                     rechnung_id = cur.lastrowid   # hier bekommst du die neue ID
 

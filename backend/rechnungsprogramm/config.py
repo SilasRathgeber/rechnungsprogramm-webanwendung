@@ -67,7 +67,7 @@ DEFAULT_CONFIG = {
     "firmen_steuer_nr": "00 000 00000",
     "firmen_ust_id": "DE000000000",
     "firmen_iban": "DE00 0000 0000 0000 0000 00",
-    "firmen_bic": "GENODEF1M01",
+    "firmen_bic": "BYLADEM1LAH",
     "firmen_kreditinstitut": "Musterbank"
 }
 

@@ -164,9 +164,9 @@ def rechnung_bearbeiten(id):
         # 🔹 Rechnung endgültig erstellen (mit Redirect)
         elif aktion == "RechnungErstellen":
             zeiterfassungs_id = request.form.get("id")
-            reNr = request.form.get("reId")
+            # reNr = request.form.get("reId")
             dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
-            set_rechnung_erstellt(reNr, dateiName, pfad, rechnungsdatum)
+            set_rechnung_erstellt(id, naechste_rechnungsnummer_ermitteln(), dateiName, pfad, rechnungsdatum)
 
             # Nach dem POST → Redirect auf dieselbe Seite (GET)
             return redirect(url_for(
@@ -254,6 +254,15 @@ def rechnung_bearbeiten(id):
         elif aktion== "kommentar":
             kommentar = request.form.get("kommentar-text")
             set_kommentar(id, kommentar)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+        elif aktion== "neuen-abrechnungszeitraum":
+            von = request.form.get("von")
+            bis = request.form.get("bis")
+            set_neuen_abrechnungszeitraum(id, von, bis)
             return redirect(url_for(
                 "rechnungen.rechnung_bearbeiten",
                 id=id,
