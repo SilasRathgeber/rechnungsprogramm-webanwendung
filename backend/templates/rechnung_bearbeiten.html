@@ -165,7 +165,7 @@
                     <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
                         <input type="hidden" name="reId" value="{{ rechnung['id'] }}">
-                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" value="RechnungErstellen">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
+                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" value="RechnungUeberschreiben">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
                          <!-- {% if rechnung['verschickt'] == 1 %}disabled{% endif %} -->
                     </form>
                 </div>

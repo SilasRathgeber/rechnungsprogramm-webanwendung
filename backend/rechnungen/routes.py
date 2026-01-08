@@ -165,10 +165,22 @@ def rechnung_bearbeiten(id):
         elif aktion == "RechnungErstellen":
             zeiterfassungs_id = request.form.get("id")
             # reNr = request.form.get("reId")
+            die_rechnungsnummer = naechste_rechnungsnummer_ermitteln()
+            set_rechnungsnummer(id, die_rechnungsnummer)
             dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
-            set_rechnung_erstellt(id, naechste_rechnungsnummer_ermitteln(), dateiName, pfad, rechnungsdatum)
+            set_rechnung_erstellt(id, dateiName, pfad, rechnungsdatum)
 
             # Nach dem POST → Redirect auf dieselbe Seite (GET)
+            return redirect(url_for(
+                "rechnungen.rechnung_bearbeiten",
+                id=id,
+                remindSelectedkunde=selectedKundeReminder
+            ))
+
+        elif aktion == "RechnungUeberschreiben":
+            zeiterfassungs_id = request.form.get("id")
+            dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
+            set_rechnung_erstellt(id, dateiName, pfad, rechnungsdatum)
             return redirect(url_for(
                 "rechnungen.rechnung_bearbeiten",
                 id=id,

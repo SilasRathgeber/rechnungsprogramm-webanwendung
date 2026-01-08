@@ -51,7 +51,7 @@ class Invoice:
                     start_dt = datetime.combine(date.today(), START)
                     stop_dt = datetime.combine(date.today(), STOP)
                     dauer = stop_dt - start_dt
-                    dauer_stunden = Decimal(str(dauer.total_seconds() / 3600))
+                    dauer_stunden = (Decimal(dauer.total_seconds()) / Decimal(3600)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
                     satz = Decimal(str(self.stundensatz))
                     stunden_mal_satz = (satz * dauer_stunden).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
                     anzeige_start = START.strftime("%H:%M")
@@ -63,7 +63,7 @@ class Invoice:
                     f"{BESCHREIBUNG}<br/><font color=#A6A6A6 size=8>{TAGESDATUM} {anzeige_start} - {anzeige_stop} Uhr</font>",
                     f"{dauer_stunden}".replace(".",","),
                     f"{self.time_report.stundensatz}",
-                    f"{stunden_mal_satz:.2f} €".replace(".",",")
+                    f"{stunden_mal_satz} €".replace(".",",")
                 ]
                 tabelle.append(zeile)
         print(f"STUNDEN GESAMT: {self.total_hours}")

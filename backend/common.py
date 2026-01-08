@@ -92,7 +92,7 @@ def load_zeiterfassung_by_id(id):
     cursor = conn.cursor()
 
     # Zeiteinträge abrufen
-    cursor.execute("SELECT * FROM zeiteintraege WHERE zeiterfassung_id = ?", (id,))
+    cursor.execute("SELECT * FROM zeiteintraege WHERE zeiterfassung_id = ? ORDER BY datum ASC", (id,))
     columns = [desc[0] for desc in cursor.description]
     rows = cursor.fetchall()
     data = []
@@ -101,8 +101,8 @@ def load_zeiterfassung_by_id(id):
         row_dict = dict(row)
 
         # gesamt berechnen und auf 2 Nachkommastellen runden
-        print(f"aus load_zeiterfassung_by_id({row_dict['id']}) - > stundensatz {row_dict['stundensatz']}")
-        print(f"aus load_zeiterfassung_by_id({row_dict['id']}) - > stunden: {row_dict['stunden']}")
+        # print(f"aus load_zeiterfassung_by_id({row_dict['id']}) - > stundensatz {row_dict['stundensatz']}")
+        # print(f"aus load_zeiterfassung_by_id({row_dict['id']}) - > stunden: {row_dict['stunden']}")
         korrektes_gesamt = round(row_dict["stundensatz"] * row_dict["stunden"], 2)
         print(f"korrektes_gesamt: {korrektes_gesamt}")
         # falls der Wert abweicht, DB aktualisieren
@@ -269,10 +269,17 @@ def get_rechnung_via_reNr(rechnungsnummer):
         return None
 
 
-def set_rechnung_erstellt(id, rechnungsnummer, name, pfad, rechnungsdatum):
+def set_rechnung_erstellt(id, name, pfad, rechnungsdatum):
     conn = db.get_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE rechnungen SET rechnungsnummer = ?, erstellt = 1, dateiname = ?, dateipfad = ?, re_datum = ? WHERE id = ?", (rechnungsnummer, name, pfad, rechnungsdatum, id,))
+    cursor.execute("UPDATE rechnungen SET erstellt = 1, dateiname = ?, dateipfad = ?, re_datum = ? WHERE id = ?", (name, pfad, rechnungsdatum, id,))
+    conn.commit()
+    conn.close()
+
+def set_rechnungsnummer(id, rechnungsnummer):
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rechnungen SET rechnungsnummer = ? WHERE id = ?", (rechnungsnummer, id,))
     conn.commit()
     conn.close()
 

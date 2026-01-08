@@ -1,6 +1,8 @@
 import os
 import calendar
 from datetime import date
+import locale
+
 
 
 
@@ -21,13 +23,31 @@ def check_pfad(pfad):
         return None
 
 
+MONATSNAMEN_DE = [
+    "",  # dummy für Index 0
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember"
+]
+
 def find_pfad(rechnungsdatum: date) -> str:
     """
     Erzeugt einen Pfadstring aus einem Datum-Tupel (jahr, monat),
     wobei der Monat als Name ausgegeben wird.
     """
+    monat = rechnungsdatum.month
+    monat_name = f"{monat}. {MONATSNAMEN_DE[monat]}"
+
     jahr = rechnungsdatum.year
-    monat_name = calendar.month_name[rechnungsdatum.month]  # gibt z.B. "August"
 
     pfad = os.path.join(AUSGANGSRECHNUNGEN, str(jahr), monat_name)
     check_pfad(pfad)

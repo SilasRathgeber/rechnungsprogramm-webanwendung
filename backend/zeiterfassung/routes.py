@@ -136,10 +136,6 @@ def bearbeiten():
                 conn.execute(
                     "DELETE FROM zeiteintraege WHERE id = ?", (zeiteintrag_id,)
                 )
-        
-        if aktion == "RechnungVorschau":
-            zeiterfassungs_id = request.form.get("id")
-            datei_name = main(zeiterfassungs_id, 1)
 
         if aktion == "set_satz":
             with sqlite3.connect(db_path) as conn:
@@ -187,3 +183,80 @@ def bearbeiten():
         zeiterfassung_bis=bis,
         stundensatz = stundensatz
         )
+
+
+from flask import request, jsonify
+from datetime import datetime
+
+zeiterfassung_ajax = Blueprint("zeiterfassung_ajax", __name__)
+
+@zeiterfassung_ajax.route("/update_row", methods=["POST"])
+def update_row():
+    data = request.json["row_data"]
+
+    entry_id       = data[0]
+    datum          = data[1]
+    start          = data[2]
+    end            = data[3]
+    beschreibung   = data[4]
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    # 1) Zeiterfassung-ID + Stundensatz holen
+    cur.execute("""
+        SELECT zeiterfassung_id, stundensatz 
+        FROM zeiteintraege 
+        WHERE id = ?
+    """, (entry_id,))
+    row = cur.fetchone()
+
+    if not row:
+        return jsonify({"status": "error", "msg": "Eintrag nicht gefunden"}), 404
+
+    zeiterfassung_id, stundensatz = row
+
+    # Falls stundensatz noch NULL ist → aus zeiterfassungen holen
+    if stundensatz is None:
+        cur.execute("""
+            SELECT stundensatz 
+            FROM zeiterfassungen 
+            WHERE id = ?
+        """, (zeiterfassung_id,))
+        ss_row = cur.fetchone()
+        stundensatz = ss_row[0] if ss_row else 0.0
+
+    # 2) Stunden berechnen
+    try:
+        t_start = datetime.strptime(start, "%H:%M")
+        t_end   = datetime.strptime(end, "%H:%M")
+
+        diff = (t_end - t_start).total_seconds() / 3600  # Stunden in Dezimal
+        if diff < 0:
+            diff = 0  # Fallback falls jemand versehentlich 23:00–01:00 eingibt
+    except:
+        diff = 0
+
+    # 3) Gesamtpreis berechnen
+    gesamt = diff * float(stundensatz)
+
+    # 4) UPDATE durchführen
+    cur.execute("""
+        UPDATE zeiteintraege
+        SET datum = ?, 
+            startzeit = ?, 
+            endzeit = ?, 
+            beschreibung = ?, 
+            stunden = ?, 
+            stundensatz = ?, 
+            gesamt = ?
+        WHERE id = ?
+    """, (datum, start, end, beschreibung, diff, stundensatz, gesamt, entry_id))
+
+    conn.commit()
+
+    return jsonify({
+        "status": "ok",
+        "stunden": diff,
+        "gesamt": gesamt
+    })

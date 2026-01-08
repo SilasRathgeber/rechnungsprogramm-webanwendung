@@ -3,7 +3,7 @@ import sqlite3
 from backend import database_config as db
 import os
 from backend.kunden.routes import kunden_bp
-from backend.zeiterfassung.routes import zeiterfassung_bp
+from backend.zeiterfassung.routes import zeiterfassung_bp, zeiterfassung_ajax
 from backend.rechnungen.routes import rechnungen_bp, pdf_bp
 import logging
 
@@ -18,6 +18,7 @@ app.register_blueprint(kunden_bp)
 app.register_blueprint(zeiterfassung_bp)
 app.register_blueprint(rechnungen_bp)
 app.register_blueprint(pdf_bp)
+app.register_blueprint(zeiterfassung_ajax)
 app.debug = True
 
 if __name__ == '__main__':
