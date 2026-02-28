@@ -6,7 +6,7 @@
         <a href="{{ url_for('rechnungen.rechnungen_seite') }}">
             <button>Rechnungen &gt;</button>
         </a>
-        <h2 class="ZE_ueberschrift">Abrechnungeserfassungen {% if kunden_name %}von {{ kunden_name or '' }}{% endif %}</h2>
+        <h2 class="ZE_ueberschrift">Abrechnungserfassungen {% if kunden_name %}von {{ kunden_name or '' }}{% endif %}</h2>
         <a class="right-buttons" href="{{ url_for('kunden.kunden_seite') }}">
             <button>Kunden</button>
         </a>
@@ -39,7 +39,7 @@
                             <input type="date" id="startDate" name="StartDatum" required>
                             <input type="date" id="endDate" name="EndDatum" required>
                             <input type="hidden" name="kunde_ausw_id" value="{{ kunde_ausw_id }}">
-                            <button type="submit" name="aktion" value="neuErfassung"  id="newErfassung">Erstellen</button>
+                            <button type="submit" name="aktion" value="neuErfassung"  id="newErfassung">Abrechnung erstellen</button>
                         </form>
                         <form id="loescheZeitform" method="POST" action="/">
                             <input type="hidden" name="id" id="selectedIdInputLoesche" value="">

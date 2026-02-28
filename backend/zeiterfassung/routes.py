@@ -179,9 +179,9 @@ def bearbeiten():
         zeiterfassungs_id=zeiterfassungs_id, 
         kunde=kunde,
         datei_name=datei_name,
-        zeiterfassung_von=von,
-        zeiterfassung_bis=bis,
-        stundensatz = stundensatz
+        # zeiterfassung_von=von,
+        # zeiterfassung_bis=bis,
+        # stundensatz = stundensatz
         )
 
 

@@ -6,11 +6,8 @@ CREATE TABLE IF NOT EXISTS "kunden" (
     hausnummer TEXT,
     plz TEXT,
     ort TEXT,
-    aktueller_stundensatz REAL, 
-    email TEXT, 
-    vorlage TEXT
-);
-
+    aktueller_stundensatz REAL
+, email TEXT, vorlage TEXT);
 CREATE TABLE zeiterfassungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     kunde_id INTEGER NOT NULL,
@@ -21,7 +18,6 @@ CREATE TABLE zeiterfassungen (
     FOREIGN KEY (kunde_id) REFERENCES kunden(id),
     FOREIGN KEY (rechnung_id) REFERENCES rechnungen(id) ON DELETE CASCADE
 );
-
 CREATE TABLE zeiteintraege (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     zeiterfassung_id INTEGER NOT NULL,
@@ -34,7 +30,6 @@ CREATE TABLE zeiteintraege (
     gesamt REAL,
     FOREIGN KEY (zeiterfassung_id) REFERENCES zeiterfassungen(id) ON DELETE CASCADE
 );
-
 CREATE TABLE IF NOT EXISTS "rechnungen" (
     id INTEGER PRIMARY KEY,
     kunde_id INTEGER NOT NULL,
@@ -56,5 +51,4 @@ CREATE TABLE IF NOT EXISTS "rechnungen" (
         (abrechnungsart = 'zeit' AND honorar IS NULL AND projekt IS NULL)
     )
 );
-
 CREATE UNIQUE INDEX idx_rechnungen_rechnungsnummer ON rechnungen(rechnungsnummer);

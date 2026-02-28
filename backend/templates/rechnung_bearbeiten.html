@@ -155,6 +155,10 @@
                     </table>
                 </div>
                 <div class="erstellt_tool_block">
+                    <form id="editForm" method="GET" action="/zeiterfassung/bearbeiten">
+                        <input type="hidden" name="id" id="selectedIdInput" value="{{ rechnung['zeiterfassung_id'] }}">
+                        <button type="submit" id="editButton">Zeiterfassung bearbeiten</button>
+                    </form>
                     {% if rechnung['erstellt'] == 0 %}
                     <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
@@ -165,7 +169,7 @@
                     <form method="POST" action="{{ url_for('rechnungen.rechnung_bearbeiten', id=id) }}">
                         <input type="hidden" name="id" value="{{ rechnung['zeiterfassung_id'] }}">
                         <input type="hidden" name="reId" value="{{ rechnung['id'] }}">
-                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" value="RechnungUeberschreiben">{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
+                        <button {% if rechnung['verschickt'] == 1 %}disabled{% endif %}  type="submit" name="aktion" {% if rechnung['erstellt'] == 1 %}value="RechnungUeberschreiben"{% else  %}value="RechnungErstellen"{% endif %}>{% if rechnung['erstellt'] == 1 %}Rechnung jetzt überschreiben{% else  %}Rechnung jetzt erstellen{% endif %}</button>
                          <!-- {% if rechnung['verschickt'] == 1 %}disabled{% endif %} -->
                     </form>
                 </div>

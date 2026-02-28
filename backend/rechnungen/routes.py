@@ -163,10 +163,12 @@ def rechnung_bearbeiten(id):
 
         # 🔹 Rechnung endgültig erstellen (mit Redirect)
         elif aktion == "RechnungErstellen":
+            print("Aus ROUTE RechnungErstellen (anfang)")
+            rechnungs_id = request.form.get("reId")
             zeiterfassungs_id = request.form.get("id")
             # reNr = request.form.get("reId")
             die_rechnungsnummer = naechste_rechnungsnummer_ermitteln()
-            set_rechnungsnummer(id, die_rechnungsnummer)
+            set_rechnungsnummer(rechnungs_id, die_rechnungsnummer)
             dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
             set_rechnung_erstellt(id, dateiName, pfad, rechnungsdatum)
 
@@ -179,6 +181,7 @@ def rechnung_bearbeiten(id):
 
         elif aktion == "RechnungUeberschreiben":
             zeiterfassungs_id = request.form.get("id")
+            rechnungs_id = request.form.get("reId")
             dateiName, pfad, rechnungsdatum = main(zeiterfassungs_id, 2)
             set_rechnung_erstellt(id, dateiName, pfad, rechnungsdatum)
             return redirect(url_for(
@@ -295,6 +298,10 @@ def rechnung_bearbeiten(id):
             rel_path = os.path.relpath(pfad, PDF_FOLDER)
         else:
             print("Datei existiert nicht ❌")
+
+    # Ordner anlegen, falls er nicht existiert
+    if not os.path.isdir(pdf_pfad_mit_jahr):
+        os.makedirs(pdf_pfad_mit_jahr)
 
     pdfs = [f for f in os.listdir(pdf_pfad_mit_jahr) 
         if f.endswith('.pdf')]

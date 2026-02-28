@@ -15,9 +15,11 @@ background-color: #a34051a2 !important; /* Hervorhebung */
     grid-template-columns: 1fr;
     grid-template-rows: 100px, auto;
 }
-.zeiterfassung main >*{
-    margin-left: 20px;
+.zeiterfassung .upper-main >*{
+    margin-left: auto;
+    margin-right: auto;
 }
+
 .zeiterfassung .upper-main{
     grid-area: 1/1/2/2;
     display: flex;
@@ -49,6 +51,8 @@ background-color: #a34051a2 !important; /* Hervorhebung */
 }
 .zeiterfassung #zeiterfassung-table{
     border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
 }
 .zeiterfassung #zeiterfassung-table th{
     border-left: 0.2px;

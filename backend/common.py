@@ -251,7 +251,7 @@ def get_rechnung_via_reNr(rechnungsnummer):
             z.bis,
             z.stundensatz,
             COUNT(e.id) AS anzahl_zeiteintraege,
-            COALESCE(SUM(e.gesamt), 0) AS summe_gesamt
+            ROUND(COALESCE(SUM(e.gesamt), 0), 2) AS summe_gesamt
         FROM rechnungen r
         LEFT JOIN zeiterfassungen z 
             ON r.id = z.rechnung_id
@@ -277,6 +277,7 @@ def set_rechnung_erstellt(id, name, pfad, rechnungsdatum):
     conn.close()
 
 def set_rechnungsnummer(id, rechnungsnummer):
+    print(f'AUS set_rechnungsnummer: das ist "id": {id} und das ist "rechnungsnummer": {rechnungsnummer}')
     conn = db.get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE rechnungen SET rechnungsnummer = ? WHERE id = ?", (rechnungsnummer, id,))
