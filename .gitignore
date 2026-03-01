@@ -17,3 +17,7 @@ meine_venv/
 # wird von python erstellt wenn "pip install -e ."
 
 build/
+
+
+# Vorschaudatei
+backend/static/pdf/Vorschaudatei.pdf
