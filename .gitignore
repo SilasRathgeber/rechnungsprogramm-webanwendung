@@ -3,11 +3,17 @@
 __pycache__/
 *.pyc
 *.py[cod]
+
+
 # Virtuelle Umgebung (passt, wenn dein Ordner z.B. 'venv' heißt)
 venv/
 meine_venv/
+
 
 # Editor/IDE Ordner (kannst du weglassen, wenn du willst)
 .vscode/
 .idea/
 
+# wird von python erstellt wenn "pip install -e ."
+
+build/
