@@ -29,6 +29,8 @@ ANCIZAR_SERIF_B = FONT_DIR / "AncizarSerif-Bold.ttf"
 KANIT_B_I = FONT_DIR / "Kanit-BoldItalic.ttf"
 
 
+
+
 # Wo steht die Kundennummer in der Exceldatei "Liste_Kunden.xlsx"?
 KDNRX = 2
 KDNRY = 2
@@ -69,7 +71,8 @@ DEFAULT_CONFIG = {
     "firmen_iban": "DE00 0000 0000 0000 0000 00",
     "firmen_bic": "BYLADEM1LAH",
     "firmen_kreditinstitut": "Musterbank"
-}
+    "vorschau_pfad": "backend/static/pdf/Vorschaudatei.pdf",
+    }
 
 
 # Falls nötig, Verzeichnis & Dateien erzeugen
@@ -108,6 +111,7 @@ FIRMEN_UST_ID = CONFIG["firmen_ust_id"]
 FIRMEN_IBAN = CONFIG["firmen_iban"]
 FIRMEN_BIC = CONFIG["firmen_bic"]
 FIRMEN_KREDITINSTITUT = CONFIG["firmen_kreditinstitut"]
+VORSCHAU_PFAD = CONFIG["vorschau_pfad"]
 
 
 # Exceldatei erzeugen, falls in der config.json noch der Default-Pfad angegeben ist und falls sie noch nicht vorhanden ist (gleiches für die log-Datei)

@@ -14,9 +14,9 @@ from .numbered_canvas_class import *
 def erstelle_rechnung(vorschau: int, kunde: Customer, rechnung, report_head_infos, rechnungsnummer, standard_schriftart, font_table_head):
     
     if vorschau == 1:
-        datei_name = "Vorschaudatei.pdf"
-        os.makedirs("backend/static/pdf/", exist_ok=True)
-        pfad= f"backend/static/pdf/{datei_name}"
+        pfad = VORSCHAU_PFAD
+        datei_name = os.path.basename(pfad)  # extrahiert "Vorschaudatei.pdf" aus dem Pfad
+        os.makedirs(os.path.dirname(pfad), exist_ok=True)
     else:    
         datei_name = generate_file_name(rechnungsnummer, report_head_infos)
         base_pfad = find_pfad(rechnung.rechnungsdatum)
