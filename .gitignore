@@ -21,3 +21,6 @@ build/
 
 # Vorschaudatei
 backend/static/pdf/Vorschaudatei.pdf
+
+# Notizen für die Entwicklung
+NOTES.md
